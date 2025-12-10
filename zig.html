@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zig TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Zig theme */
+        :root {
+            --accent: #f7a41d;
+            --accent-glow: rgba(247, 164, 29, 0.15);
+        }
+
+        .logo-icon {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        .card h4::before {
+            content: '⚡';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">Z</div>
+            </div>
+            <h1>Zig <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Zig programming language. Everything you need to know, distilled.</p>
+            <div class="version-badge">v0.15.1 — November 2025</div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#what">What is Zig?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#control">Control Flow</a></li>
+                <li><a href="#errors">Errors</a></li>
+                <li><a href="#memory">Memory</a></li>
+                <li><a href="#comptime">Comptime</a></li>
+                <li><a href="#structs">Structs</a></li>
+                <li><a href="#stdlib">Std Library</a></li>
+                <li><a href="#build">Build System</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Zig? -->
+            <section id="what">
+                <h2>What is Zig?</h2>
+                <p>Zig is a systems programming language designed to be a "better C" — simpler, safer, and more maintainable while remaining just as fast. It compiles to native code and can interoperate with C libraries seamlessly.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>No Hidden Control Flow</h4>
+                        <p>No operator overloading, no hidden allocations, no implicit function calls. What you see is what you get.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Compile-Time Execution</h4>
+                        <p>Run any function at compile time with <code>comptime</code>. No macros needed — just regular Zig code.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Manual Memory</h4>
+                        <p>No garbage collector. You control allocations explicitly with allocator interfaces.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Cross-Compilation</h4>
+                        <p>First-class cross-compilation to 50+ targets. Build for any platform from any platform.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="zig"><span class="kw">const</span> std = <span class="builtin">@import</span>(<span class="str">"std"</span>);
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">main</span>() <span class="type">void</span> {
+    std.debug.<span class="fn">print</span>(<span class="str">"Hello, {s}!\n"</span>, .{<span class="str">"world"</span>});
+}</pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="zig"><span class="cmt">// Constants (immutable)</span>
+<span class="kw">const</span> x: <span class="type">i32</span> = <span class="num">42</span>;
+<span class="kw">const</span> y = <span class="num">42</span>;         <span class="cmt">// type inferred</span>
+
+<span class="cmt">// Variables (mutable)</span>
+<span class="kw">var</span> z: <span class="type">i32</span> = <span class="num">0</span>;
+z += <span class="num">1</span>;
+
+<span class="cmt">// Undefined (uninitialized)</span>
+<span class="kw">var</span> buf: [<span class="num">256</span>]<span class="type">u8</span> = <span class="kw">undefined</span>;</pre>
+
+                <h3>Functions</h3>
+                <pre data-lang="zig"><span class="kw">fn</span> <span class="fn">add</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) <span class="type">i32</span> {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Public function (exported)</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">multiply</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) <span class="type">i32</span> {
+    <span class="kw">return</span> a * b;
+}
+
+<span class="cmt">// Function that can fail</span>
+<span class="kw">fn</span> <span class="fn">divide</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) !<span class="type">i32</span> {
+    <span class="kw">if</span> (b == <span class="num">0</span>) <span class="kw">return</span> <span class="kw">error</span>.DivisionByZero;
+    <span class="kw">return</span> <span class="builtin">@divTrunc</span>(a, b);
+}</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Category</th>
+                            <th>Types</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>Signed Integers</td>
+                            <td><code>i8, i16, i32, i64, i128, isize</code></td>
+                            <td>Also arbitrary: <code>i7</code>, <code>i123</code>, etc.</td>
+                        </tr>
+                        <tr>
+                            <td>Unsigned Integers</td>
+                            <td><code>u8, u16, u32, u64, u128, usize</code></td>
+                            <td>Also arbitrary: <code>u3</code>, <code>u48</code>, etc.</td>
+                        </tr>
+                        <tr>
+                            <td>Floats</td>
+                            <td><code>f16, f32, f64, f80, f128</code></td>
+                            <td>IEEE 754 floats</td>
+                        </tr>
+                        <tr>
+                            <td>Boolean</td>
+                            <td><code>bool</code></td>
+                            <td><code>true</code> or <code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td>Void</td>
+                            <td><code>void</code></td>
+                            <td>Zero-sized type</td>
+                        </tr>
+                        <tr>
+                            <td>Comptime</td>
+                            <td><code>comptime_int, comptime_float</code></td>
+                            <td>Arbitrary precision at compile time</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Arrays & Slices</h3>
+                <pre data-lang="zig"><span class="cmt">// Fixed-size array</span>
+<span class="kw">const</span> arr: [<span class="num">5</span>]<span class="type">i32</span> = .{ <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span> };
+
+<span class="cmt">// Slice (pointer + length)</span>
+<span class="kw">const</span> slice: []<span class="kw">const</span> <span class="type">i32</span> = arr[<span class="num">1</span>..<span class="num">4</span>];  <span class="cmt">// {2, 3, 4}</span>
+
+<span class="cmt">// String literals are []const u8</span>
+<span class="kw">const</span> str: []<span class="kw">const</span> <span class="type">u8</span> = <span class="str">"hello"</span>;
+
+<span class="cmt">// Sentinel-terminated (null-terminated)</span>
+<span class="kw">const</span> c_str: [*:<span class="num">0</span>]<span class="kw">const</span> <span class="type">u8</span> = <span class="str">"hello"</span>;</pre>
+
+                <h3>Optionals</h3>
+                <pre data-lang="zig"><span class="cmt">// Optional type: can be null</span>
+<span class="kw">var</span> maybe: ?<span class="type">i32</span> = <span class="num">42</span>;
+maybe = <span class="kw">null</span>;
+
+<span class="cmt">// Unwrap with orelse</span>
+<span class="kw">const</span> value = maybe <span class="kw">orelse</span> <span class="num">0</span>;
+
+<span class="cmt">// Unwrap with if</span>
+<span class="kw">if</span> (maybe) |val| {
+    std.debug.<span class="fn">print</span>(<span class="str">"Got: {}\n"</span>, .{val});
+}</pre>
+
+                <h3>Pointers</h3>
+                <pre data-lang="zig"><span class="kw">var</span> x: <span class="type">i32</span> = <span class="num">42</span>;
+
+<span class="cmt">// Single-item pointer</span>
+<span class="kw">const</span> ptr: *<span class="type">i32</span> = &x;
+ptr.* = <span class="num">100</span>;  <span class="cmt">// dereference</span>
+
+<span class="cmt">// Many-item pointer (unknown length)</span>
+<span class="kw">const</span> many: [*]<span class="type">i32</span> = &arr;
+
+<span class="cmt">// Optional pointer</span>
+<span class="kw">var</span> opt_ptr: ?*<span class="type">i32</span> = <span class="kw">null</span>;
+opt_ptr = &x;</pre>
+            </section>
+
+            <!-- Control Flow -->
+            <section id="control">
+                <h2>Control Flow</h2>
+
+                <h3>If / Else</h3>
+                <pre data-lang="zig"><span class="kw">const</span> result = <span class="kw">if</span> (x > <span class="num">0</span>) <span class="str">"positive"</span> <span class="kw">else</span> <span class="str">"non-positive"</span>;
+
+<span class="kw">if</span> (optional_value) |value| {
+    <span class="cmt">// value is unwrapped here</span>
+} <span class="kw">else</span> {
+    <span class="cmt">// optional was null</span>
+}</pre>
+
+                <h3>While</h3>
+                <pre data-lang="zig"><span class="kw">var</span> i: <span class="type">usize</span> = <span class="num">0</span>;
+<span class="kw">while</span> (i < <span class="num">10</span>) : (i += <span class="num">1</span>) {
+    <span class="cmt">// loop body</span>
+}
+
+<span class="cmt">// With optional unwrapping</span>
+<span class="kw">while</span> (iterator.<span class="fn">next</span>()) |item| {
+    <span class="cmt">// process item</span>
+}</pre>
+
+                <h3>For</h3>
+                <pre data-lang="zig"><span class="cmt">// Iterate over slice/array</span>
+<span class="kw">for</span> (items) |item| {
+    std.debug.<span class="fn">print</span>(<span class="str">"{}\n"</span>, .{item});
+}
+
+<span class="cmt">// With index</span>
+<span class="kw">for</span> (items, <span class="num">0</span>..) |item, i| {
+    std.debug.<span class="fn">print</span>(<span class="str">"[{}] = {}\n"</span>, .{i, item});
+}
+
+<span class="cmt">// Range (0 to 9)</span>
+<span class="kw">for</span> (<span class="num">0</span>..<span class="num">10</span>) |i| {
+    _ = i;
+}</pre>
+
+                <h3>Switch</h3>
+                <pre data-lang="zig"><span class="kw">const</span> result = <span class="kw">switch</span> (x) {
+    <span class="num">0</span> => <span class="str">"zero"</span>,
+    <span class="num">1</span>...<span class="num">9</span> => <span class="str">"single digit"</span>,
+    <span class="num">10</span>, <span class="num">100</span> => <span class="str">"ten or hundred"</span>,
+    <span class="kw">else</span> => <span class="str">"other"</span>,
+};
+
+<span class="cmt">// Capture value</span>
+<span class="kw">switch</span> (tagged_union) {
+    .some_tag => |value| <span class="fn">process</span>(value),
+    <span class="kw">else</span> => {},
+}</pre>
+
+                <h3>Labeled Blocks</h3>
+                <pre data-lang="zig"><span class="kw">const</span> result = blk: {
+    <span class="kw">if</span> (condition) <span class="kw">break</span> :blk <span class="num">42</span>;
+    <span class="kw">break</span> :blk <span class="num">0</span>;
+};</pre>
+            </section>
+
+            <!-- Errors -->
+            <section id="errors">
+                <h2>Error Handling</h2>
+                <p>Zig uses explicit error unions instead of exceptions. Errors are values, not control flow.</p>
+
+                <h3>Error Unions</h3>
+                <pre data-lang="zig"><span class="cmt">// Define error set</span>
+<span class="kw">const</span> FileError = <span class="kw">error</span> {
+    NotFound,
+    PermissionDenied,
+    EndOfFile,
+};
+
+<span class="cmt">// Function returning error union</span>
+<span class="kw">fn</span> <span class="fn">readFile</span>(path: []<span class="kw">const</span> <span class="type">u8</span>) FileError![]<span class="type">u8</span> {
+    <span class="kw">if</span> (path.len == <span class="num">0</span>) <span class="kw">return</span> <span class="kw">error</span>.NotFound;
+    <span class="cmt">// ...</span>
+}
+
+<span class="cmt">// Inferred error set</span>
+<span class="kw">fn</span> <span class="fn">process</span>() !<span class="type">void</span> {
+    <span class="cmt">// ! means inferred error set</span>
+}</pre>
+
+                <h3>Handling Errors</h3>
+                <pre data-lang="zig"><span class="cmt">// try: propagate error up</span>
+<span class="kw">const</span> data = <span class="kw">try</span> <span class="fn">readFile</span>(<span class="str">"config.txt"</span>);
+
+<span class="cmt">// catch: handle error</span>
+<span class="kw">const</span> data = <span class="fn">readFile</span>(<span class="str">"config.txt"</span>) <span class="kw">catch</span> |err| {
+    std.debug.<span class="fn">print</span>(<span class="str">"Error: {}\n"</span>, .{err});
+    <span class="kw">return</span>;
+};
+
+<span class="cmt">// catch with default value</span>
+<span class="kw">const</span> data = <span class="fn">readFile</span>(<span class="str">"config.txt"</span>) <span class="kw">catch</span> <span class="str">"default"</span>;
+
+<span class="cmt">// if-else with error capture</span>
+<span class="kw">if</span> (<span class="fn">readFile</span>(<span class="str">"config.txt"</span>)) |data| {
+    <span class="cmt">// success</span>
+} <span class="kw">else</span> |err| {
+    <span class="cmt">// handle error</span>
+}</pre>
+
+                <h3>defer & errdefer</h3>
+                <pre data-lang="zig"><span class="kw">fn</span> <span class="fn">process</span>() !<span class="type">void</span> {
+    <span class="kw">const</span> file = <span class="kw">try</span> <span class="fn">openFile</span>();
+    <span class="kw">defer</span> file.<span class="fn">close</span>();  <span class="cmt">// Always runs on scope exit</span>
+
+    <span class="kw">const</span> buffer = <span class="kw">try</span> allocator.<span class="fn">alloc</span>(<span class="type">u8</span>, <span class="num">1024</span>);
+    <span class="kw">errdefer</span> allocator.<span class="fn">free</span>(buffer);  <span class="cmt">// Only runs on error</span>
+
+    <span class="kw">try</span> <span class="fn">riskyOperation</span>();  <span class="cmt">// If this fails, buffer is freed</span>
+    <span class="cmt">// If we get here, buffer is NOT freed (success path)</span>
+}</pre>
+
+                <div class="tip">
+                    <code>defer</code> statements execute in reverse order. Use them to ensure cleanup happens even when errors occur.
+                </div>
+            </section>
+
+            <!-- Memory -->
+            <section id="memory">
+                <h2>Memory Management</h2>
+                <p>Zig has no garbage collector. You manage memory explicitly using allocator interfaces.</p>
+
+                <h3>Allocators</h3>
+                <pre data-lang="zig"><span class="kw">const</span> std = <span class="builtin">@import</span>(<span class="str">"std"</span>);
+
+<span class="cmt">// General purpose allocator (recommended)</span>
+<span class="kw">var</span> gpa = std.heap.GeneralPurposeAllocator(.{}){};
+<span class="kw">defer</span> _ = gpa.<span class="fn">deinit</span>();
+<span class="kw">const</span> allocator = gpa.<span class="fn">allocator</span>();
+
+<span class="cmt">// Allocate single item</span>
+<span class="kw">const</span> ptr = <span class="kw">try</span> allocator.<span class="fn">create</span>(MyStruct);
+<span class="kw">defer</span> allocator.<span class="fn">destroy</span>(ptr);
+
+<span class="cmt">// Allocate array/slice</span>
+<span class="kw">const</span> slice = <span class="kw">try</span> allocator.<span class="fn">alloc</span>(<span class="type">u8</span>, <span class="num">1024</span>);
+<span class="kw">defer</span> allocator.<span class="fn">free</span>(slice);</pre>
+
+                <h3>Common Allocators</h3>
+                <dl class="concept-list">
+                    <div class="concept">
+                        <dt>GeneralPurposeAllocator</dt>
+                        <dd>Default choice. Tracks leaks in debug mode. Thread-safe.</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>ArenaAllocator</dt>
+                        <dd>Fast bump allocator. Free everything at once. Great for request handling.</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>FixedBufferAllocator</dt>
+                        <dd>Allocate from a fixed buffer. No syscalls. Stack-friendly.</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>page_allocator</dt>
+                        <dd>Direct OS pages. Use for large allocations or as backing for other allocators.</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <!-- Comptime -->
+            <section id="comptime">
+                <h2>Compile-Time Execution</h2>
+                <p>Zig's <code>comptime</code> lets you run any code at compile time. This replaces macros and enables powerful metaprogramming.</p>
+
+                <h3>Basic Comptime</h3>
+                <pre data-lang="zig"><span class="cmt">// Compute at compile time</span>
+<span class="kw">const</span> factorial = <span class="kw">comptime</span> blk: {
+    <span class="kw">var</span> result: <span class="type">u64</span> = <span class="num">1</span>;
+    <span class="kw">for</span> (<span class="num">1</span>..<span class="num">11</span>) |i| {
+        result *= i;
+    }
+    <span class="kw">break</span> :blk result;  <span class="cmt">// 3628800</span>
+};
+
+<span class="cmt">// Array size from comptime</span>
+<span class="kw">const</span> size = <span class="kw">comptime</span> <span class="fn">calculateSize</span>();
+<span class="kw">var</span> buffer: [size]<span class="type">u8</span> = <span class="kw">undefined</span>;</pre>
+
+                <h3>Generic Functions</h3>
+                <pre data-lang="zig"><span class="kw">fn</span> <span class="fn">max</span>(<span class="kw">comptime</span> T: <span class="type">type</span>, a: T, b: T) T {
+    <span class="kw">return</span> <span class="kw">if</span> (a > b) a <span class="kw">else</span> b;
+}
+
+<span class="kw">const</span> result = <span class="fn">max</span>(<span class="type">i32</span>, <span class="num">5</span>, <span class="num">10</span>);  <span class="cmt">// 10</span></pre>
+
+                <h3>Type Reflection</h3>
+                <pre data-lang="zig"><span class="kw">fn</span> <span class="fn">printFields</span>(<span class="kw">comptime</span> T: <span class="type">type</span>) <span class="type">void</span> {
+    <span class="kw">const</span> info = <span class="builtin">@typeInfo</span>(T);
+    <span class="kw">inline</span> <span class="kw">for</span> (info.<span class="builtin">@"struct"</span>.fields) |field| {
+        std.debug.<span class="fn">print</span>(<span class="str">"Field: {s}\n"</span>, .{field.name});
+    }
+}</pre>
+
+                <h3>Comptime String Operations</h3>
+                <pre data-lang="zig"><span class="cmt">// String concatenation (comptime only)</span>
+<span class="kw">const</span> greeting = <span class="str">"Hello, "</span> ++ <span class="str">"World!"</span>;
+
+<span class="cmt">// Array repetition (comptime only)</span>
+<span class="kw">const</span> dashes = <span class="str">"-"</span> ** <span class="num">40</span>;  <span class="cmt">// "----------------------------------------"</span></pre>
+
+                <div class="warning">
+                    <code>++</code> and <code>**</code> operators only work at compile time. For runtime string operations, use <code>std.mem</code> functions.
+                </div>
+            </section>
+
+            <!-- Structs -->
+            <section id="structs">
+                <h2>Structs & More</h2>
+
+                <h3>Structs</h3>
+                <pre data-lang="zig"><span class="kw">const</span> Point = <span class="kw">struct</span> {
+    x: <span class="type">f32</span>,
+    y: <span class="type">f32</span>,
+
+    <span class="cmt">// Method</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">distance</span>(self: Point, other: Point) <span class="type">f32</span> {
+        <span class="kw">const</span> dx = self.x - other.x;
+        <span class="kw">const</span> dy = self.y - other.y;
+        <span class="kw">return</span> <span class="builtin">@sqrt</span>(dx * dx + dy * dy);
+    }
+
+    <span class="cmt">// Associated function (no self)</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">origin</span>() Point {
+        <span class="kw">return</span> .{ .x = <span class="num">0</span>, .y = <span class="num">0</span> };
+    }
+};
+
+<span class="kw">const</span> p = Point{ .x = <span class="num">3</span>, .y = <span class="num">4</span> };
+<span class="kw">const</span> dist = p.<span class="fn">distance</span>(Point.<span class="fn">origin</span>());</pre>
+
+                <h3>Enums</h3>
+                <pre data-lang="zig"><span class="kw">const</span> Color = <span class="kw">enum</span> {
+    red,
+    green,
+    blue,
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">isWarm</span>(self: Color) <span class="type">bool</span> {
+        <span class="kw">return</span> self == .red;
+    }
+};
+
+<span class="kw">const</span> c: Color = .green;</pre>
+
+                <h3>Tagged Unions</h3>
+                <pre data-lang="zig"><span class="kw">const</span> Value = <span class="kw">union</span>(<span class="kw">enum</span>) {
+    int: <span class="type">i64</span>,
+    float: <span class="type">f64</span>,
+    string: []<span class="kw">const</span> <span class="type">u8</span>,
+    none,
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">format</span>(self: Value) []<span class="kw">const</span> <span class="type">u8</span> {
+        <span class="kw">return</span> <span class="kw">switch</span> (self) {
+            .int => <span class="str">"integer"</span>,
+            .float => <span class="str">"float"</span>,
+            .string => <span class="str">"string"</span>,
+            .none => <span class="str">"none"</span>,
+        };
+    }
+};
+
+<span class="kw">const</span> v = Value{ .int = <span class="num">42</span> };</pre>
+            </section>
+
+            <!-- Standard Library -->
+            <section id="stdlib">
+                <h2>Standard Library Highlights</h2>
+
+                <h3>Common Imports</h3>
+                <pre data-lang="zig"><span class="kw">const</span> std = <span class="builtin">@import</span>(<span class="str">"std"</span>);
+
+<span class="cmt">// Commonly used</span>
+<span class="kw">const</span> mem = std.mem;           <span class="cmt">// Memory utilities</span>
+<span class="kw">const</span> fmt = std.fmt;           <span class="cmt">// Formatting</span>
+<span class="kw">const</span> fs = std.fs;             <span class="cmt">// File system</span>
+<span class="kw">const</span> heap = std.heap;         <span class="cmt">// Allocators</span>
+<span class="kw">const</span> ArrayList = std.ArrayList;</pre>
+
+                <h3>ArrayList</h3>
+                <pre data-lang="zig"><span class="kw">var</span> list = std.ArrayList(<span class="type">i32</span>).<span class="fn">init</span>(allocator);
+<span class="kw">defer</span> list.<span class="fn">deinit</span>();
+
+<span class="kw">try</span> list.<span class="fn">append</span>(<span class="num">42</span>);
+<span class="kw">try</span> list.<span class="fn">appendSlice</span>(&.{ <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> });
+
+<span class="kw">for</span> (list.items) |item| {
+    std.debug.<span class="fn">print</span>(<span class="str">"{}\n"</span>, .{item});
+}</pre>
+
+                <h3>HashMap</h3>
+                <pre data-lang="zig"><span class="kw">var</span> map = std.StringHashMap(<span class="type">i32</span>).<span class="fn">init</span>(allocator);
+<span class="kw">defer</span> map.<span class="fn">deinit</span>();
+
+<span class="kw">try</span> map.<span class="fn">put</span>(<span class="str">"answer"</span>, <span class="num">42</span>);
+
+<span class="kw">if</span> (map.<span class="fn">get</span>(<span class="str">"answer"</span>)) |value| {
+    std.debug.<span class="fn">print</span>(<span class="str">"Found: {}\n"</span>, .{value});
+}</pre>
+
+                <h3>File I/O</h3>
+                <pre data-lang="zig"><span class="cmt">// Read entire file</span>
+<span class="kw">const</span> data = <span class="kw">try</span> std.fs.<span class="fn">cwd</span>().<span class="fn">readFileAlloc</span>(
+    allocator,
+    <span class="str">"file.txt"</span>,
+    <span class="num">1024</span> * <span class="num">1024</span>,  <span class="cmt">// max size</span>
+);
+<span class="kw">defer</span> allocator.<span class="fn">free</span>(data);
+
+<span class="cmt">// Write file</span>
+<span class="kw">const</span> file = <span class="kw">try</span> std.fs.<span class="fn">cwd</span>().<span class="fn">createFile</span>(<span class="str">"out.txt"</span>, .{});
+<span class="kw">defer</span> file.<span class="fn">close</span>();
+<span class="kw">try</span> file.<span class="fn">writeAll</span>(<span class="str">"Hello!"</span>);</pre>
+            </section>
+
+            <!-- Build System -->
+            <section id="build">
+                <h2>Build System</h2>
+
+                <h3>Quick Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Run directly</span>
+zig run main.zig
+
+<span class="cmt"># Build executable</span>
+zig build-exe main.zig
+
+<span class="cmt"># Build with optimizations</span>
+zig build-exe -O ReleaseFast main.zig
+
+<span class="cmt"># Run tests</span>
+zig test test.zig
+
+<span class="cmt"># Initialize project</span>
+zig init</pre>
+
+                <h3>build.zig (Minimal)</h3>
+                <pre data-lang="zig"><span class="kw">const</span> std = <span class="builtin">@import</span>(<span class="str">"std"</span>);
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">build</span>(b: *std.Build) <span class="type">void</span> {
+    <span class="kw">const</span> exe = b.<span class="fn">addExecutable</span>(.{
+        .name = <span class="str">"myapp"</span>,
+        .root_source_file = b.<span class="fn">path</span>(<span class="str">"src/main.zig"</span>),
+        .target = b.<span class="fn">standardTargetOptions</span>(.{}),
+        .optimize = b.<span class="fn">standardOptimizeOption</span>(.{}),
+    });
+
+    b.<span class="fn">installArtifact</span>(exe);
+
+    <span class="kw">const</span> run_cmd = b.<span class="fn">addRunArtifact</span>(exe);
+    <span class="kw">const</span> run_step = b.<span class="fn">step</span>(<span class="str">"run"</span>, <span class="str">"Run the app"</span>);
+    run_step.<span class="fn">dependOn</span>(&run_cmd.step);
+}</pre>
+
+                <h3>Cross-Compilation</h3>
+                <pre data-lang="shell"><span class="cmt"># Build for Windows from Linux/macOS</span>
+zig build -Dtarget=x86_64-windows
+
+<span class="cmt"># Build for Linux from anywhere</span>
+zig build -Dtarget=x86_64-linux-gnu
+
+<span class="cmt"># Build for macOS</span>
+zig build -Dtarget=aarch64-macos</pre>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Zig TLDR — Last updated December 2025 for Zig 0.15.1<br>
+                <a href="https://ziglang.org" target="_blank">Official Docs</a> ·
+                <a href="https://ziglang.org/documentation/master/" target="_blank">Language Reference</a> ·
+                <a href="https://zig.guide" target="_blank">Zig Guide</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

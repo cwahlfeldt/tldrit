@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Python theme */
+        :root {
+            --accent: #3776ab;
+            --accent-glow: rgba(55, 118, 171, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 8px;
+        }
+
+        .card h4::before {
+            content: '🐍';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">Py</div>
+            </div>
+            <h1>Python <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Python programming language. Simple, powerful, and readable.</p>
+            <div class="version-badge">v3.13 — December 2025</div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#what">What is Python?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <li><a href="#errors">Errors</a></li>
+                <li><a href="#comprehensions">Comprehensions</a></li>
+                <li><a href="#files">Files & I/O</a></li>
+                <li><a href="#modules">Modules</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Python? -->
+            <section id="what">
+                <h2>What is Python?</h2>
+                <p>Python is a high-level, interpreted programming language emphasizing code readability and simplicity. It supports multiple paradigms: procedural, object-oriented, and functional programming.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Readable Syntax</h4>
+                        <p>Clean, English-like syntax with significant whitespace. Code that's easy to write and easier to read.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Dynamic Typing</h4>
+                        <p>No type declarations needed. Variables are assigned at runtime with automatic type inference.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Batteries Included</h4>
+                        <p>Comprehensive standard library. From web servers to regex to JSON parsing, it's all built in.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Versatile Ecosystem</h4>
+                        <p>Massive package ecosystem via pip. Data science, web dev, automation, AI — Python does it all.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="python"><span class="fn">print</span>(<span class="str">"Hello, world!"</span>)</pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="python"><span class="cmt"># Dynamic typing, no declaration needed</span>
+x = <span class="num">42</span>
+y = <span class="num">3.14</span>
+name = <span class="str">"Alice"</span>
+is_valid = <span class="kw">True</span>
+
+<span class="cmt"># Multiple assignment</span>
+a, b, c = <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>
+x = y = z = <span class="num">0</span>
+
+<span class="cmt"># Type hints (optional, for static analysis)</span>
+age: <span class="type">int</span> = <span class="num">25</span>
+price: <span class="type">float</span> = <span class="num">19.99</span>
+username: <span class="type">str</span> = <span class="str">"bob"</span></pre>
+
+                <h3>Comments</h3>
+                <pre data-lang="python"><span class="cmt"># Single line comment</span>
+
+<span class="str">"""
+Multi-line string literal
+Often used as multi-line comments
+Also used for docstrings
+"""</span></pre>
+
+                <h3>Operators</h3>
+                <pre data-lang="python"><span class="cmt"># Arithmetic</span>
+<span class="num">10</span> + <span class="num">3</span>      <span class="cmt"># 13 (addition)</span>
+<span class="num">10</span> - <span class="num">3</span>      <span class="cmt"># 7 (subtraction)</span>
+<span class="num">10</span> * <span class="num">3</span>      <span class="cmt"># 30 (multiplication)</span>
+<span class="num">10</span> / <span class="num">3</span>      <span class="cmt"># 3.333... (float division)</span>
+<span class="num">10</span> // <span class="num">3</span>     <span class="cmt"># 3 (floor division)</span>
+<span class="num">10</span> % <span class="num">3</span>      <span class="cmt"># 1 (modulo)</span>
+<span class="num">10</span> ** <span class="num">3</span>     <span class="cmt"># 1000 (exponentiation)</span>
+
+<span class="cmt"># Comparison</span>
+x == y      <span class="cmt"># equal</span>
+x != y      <span class="cmt"># not equal</span>
+x &lt; y       <span class="cmt"># less than</span>
+x &lt;= y      <span class="cmt"># less than or equal</span>
+
+<span class="cmt"># Logical</span>
+<span class="kw">and</span>, <span class="kw">or</span>, <span class="kw">not</span>
+
+<span class="cmt"># Identity & membership</span>
+x <span class="kw">is</span> y        <span class="cmt"># same object</span>
+x <span class="kw">is not</span> y    <span class="cmt"># different object</span>
+x <span class="kw">in</span> collection
+x <span class="kw">not in</span> collection</pre>
+
+                <h3>Control Flow</h3>
+                <pre data-lang="python"><span class="cmt"># if/elif/else</span>
+<span class="kw">if</span> x &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"positive"</span>)
+<span class="kw">elif</span> x &lt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"negative"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"zero"</span>)
+
+<span class="cmt"># Ternary operator</span>
+result = <span class="str">"even"</span> <span class="kw">if</span> x % <span class="num">2</span> == <span class="num">0</span> <span class="kw">else</span> <span class="str">"odd"</span>
+
+<span class="cmt"># while loop</span>
+<span class="kw">while</span> x &lt; <span class="num">10</span>:
+    <span class="fn">print</span>(x)
+    x += <span class="num">1</span>
+
+<span class="cmt"># for loop</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
+    <span class="fn">print</span>(i)  <span class="cmt"># 0, 1, 2, 3, 4</span>
+
+<span class="kw">for</span> item <span class="kw">in</span> collection:
+    <span class="fn">print</span>(item)
+
+<span class="cmt"># break, continue, pass</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="kw">if</span> i == <span class="num">3</span>:
+        <span class="kw">continue</span>  <span class="cmt"># skip to next iteration</span>
+    <span class="kw">if</span> i == <span class="num">7</span>:
+        <span class="kw">break</span>      <span class="cmt"># exit loop</span>
+    <span class="kw">pass</span>           <span class="cmt"># do nothing (placeholder)</span></pre>
+
+                <h3>match Statement (Python 3.10+)</h3>
+                <pre data-lang="python"><span class="cmt"># Structural pattern matching</span>
+<span class="kw">match</span> status:
+    <span class="kw">case</span> <span class="num">200</span>:
+        <span class="fn">print</span>(<span class="str">"OK"</span>)
+    <span class="kw">case</span> <span class="num">404</span>:
+        <span class="fn">print</span>(<span class="str">"Not Found"</span>)
+    <span class="kw">case</span> _:
+        <span class="fn">print</span>(<span class="str">"Unknown"</span>)
+
+<span class="cmt"># Match with patterns</span>
+<span class="kw">match</span> point:
+    <span class="kw">case</span> (x, <span class="num">0</span>):
+        <span class="fn">print</span>(<span class="str">f"On x-axis at {x}"</span>)
+    <span class="kw">case</span> (<span class="num">0</span>, y):
+        <span class="fn">print</span>(<span class="str">f"On y-axis at {y}"</span>)
+    <span class="kw">case</span> (x, y):
+        <span class="fn">print</span>(<span class="str">f"Point at ({x}, {y})"</span>)</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Data Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Example</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>int</td>
+                            <td><code>42</code>, <code>-17</code>, <code>0xFF</code></td>
+                            <td>Arbitrary precision integers</td>
+                        </tr>
+                        <tr>
+                            <td>float</td>
+                            <td><code>3.14</code>, <code>2.0e-8</code></td>
+                            <td>Double precision (64-bit)</td>
+                        </tr>
+                        <tr>
+                            <td>bool</td>
+                            <td><code>True</code>, <code>False</code></td>
+                            <td>Subclass of int</td>
+                        </tr>
+                        <tr>
+                            <td>str</td>
+                            <td><code>"hello"</code>, <code>'world'</code></td>
+                            <td>Immutable Unicode strings</td>
+                        </tr>
+                        <tr>
+                            <td>NoneType</td>
+                            <td><code>None</code></td>
+                            <td>Null value</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Strings</h3>
+                <pre data-lang="python"><span class="cmt"># String literals</span>
+s1 = <span class="str">"double quotes"</span>
+s2 = <span class="str">'single quotes'</span>
+s3 = <span class="str">"""triple quotes
+for multi-line strings"""</span>
+
+<span class="cmt"># String formatting</span>
+name = <span class="str">"Alice"</span>
+age = <span class="num">30</span>
+
+<span class="cmt"># f-strings (preferred, Python 3.6+)</span>
+msg = <span class="str">f"</span><span class="str">{name}</span><span class="str"> is </span><span class="str">{age}</span><span class="str"> years old"</span>
+msg = <span class="str">f"</span><span class="str">{</span>age + <span class="num">1</span><span class="str">}</span><span class="str">"</span>  <span class="cmt"># expressions work</span>
+
+<span class="cmt"># .format() method</span>
+msg = <span class="str">"{} is {} years old"</span>.<span class="fn">format</span>(name, age)
+
+<span class="cmt"># % formatting (old style)</span>
+msg = <span class="str">"%s is %d years old"</span> % (name, age)
+
+<span class="cmt"># Common string methods</span>
+s.<span class="fn">upper</span>()           <span class="cmt"># UPPERCASE</span>
+s.<span class="fn">lower</span>()           <span class="cmt"># lowercase</span>
+s.<span class="fn">strip</span>()           <span class="cmt"># remove whitespace</span>
+s.<span class="fn">split</span>(<span class="str">","</span>)         <span class="cmt"># split into list</span>
+<span class="str">","</span>.<span class="fn">join</span>(items)    <span class="cmt"># join list into string</span>
+s.<span class="fn">replace</span>(<span class="str">"a"</span>, <span class="str">"b"</span>) <span class="cmt"># replace substring</span>
+s.<span class="fn">startswith</span>(<span class="str">"Hi"</span>)
+s.<span class="fn">endswith</span>(<span class="str">".txt"</span>)
+s.<span class="fn">find</span>(<span class="str">"sub"</span>)        <span class="cmt"># index or -1</span>
+<span class="str">"sub"</span> <span class="kw">in</span> s          <span class="cmt"># membership test</span>
+
+<span class="cmt"># String slicing</span>
+s[<span class="num">0</span>]      <span class="cmt"># first character</span>
+s[-<span class="num">1</span>]     <span class="cmt"># last character</span>
+s[<span class="num">1</span>:<span class="num">4</span>]   <span class="cmt"># slice from index 1 to 3</span>
+s[:<span class="num">5</span>]    <span class="cmt"># first 5 characters</span>
+s[<span class="num">5</span>:]    <span class="cmt"># from index 5 to end</span>
+s[::-<span class="num">1</span>]  <span class="cmt"># reverse string</span></pre>
+
+                <h3>Type Conversion</h3>
+                <pre data-lang="python"><span class="cmt"># Convert between types</span>
+<span class="fn">int</span>(<span class="str">"42"</span>)          <span class="cmt"># str to int</span>
+<span class="fn">float</span>(<span class="str">"3.14"</span>)       <span class="cmt"># str to float</span>
+<span class="fn">str</span>(<span class="num">42</span>)            <span class="cmt"># any to str</span>
+<span class="fn">bool</span>(<span class="num">1</span>)            <span class="cmt"># any to bool</span>
+
+<span class="cmt"># Falsy values: False, None, 0, 0.0, "", [], {}, ()</span>
+<span class="cmt"># Everything else is truthy</span></pre>
+            </section>
+
+            <!-- Collections -->
+            <section id="collections">
+                <h2>Collections</h2>
+
+                <h3>Lists (Mutable, Ordered)</h3>
+                <pre data-lang="python"><span class="cmt"># Create list</span>
+fruits = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>]
+numbers = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+mixed = [<span class="num">1</span>, <span class="str">"hello"</span>, <span class="num">3.14</span>, <span class="kw">True</span>]
+
+<span class="cmt"># Access & modify</span>
+fruits[<span class="num">0</span>]              <span class="cmt"># "apple" (indexing)</span>
+fruits[-<span class="num">1</span>]             <span class="cmt"># "cherry" (negative indexing)</span>
+fruits[<span class="num">1</span>:<span class="num">3</span>]           <span class="cmt"># ["banana", "cherry"] (slicing)</span>
+fruits[<span class="num">0</span>] = <span class="str">"orange"</span>  <span class="cmt"># modify</span>
+
+<span class="cmt"># Common methods</span>
+fruits.<span class="fn">append</span>(<span class="str">"grape"</span>)     <span class="cmt"># add to end</span>
+fruits.<span class="fn">insert</span>(<span class="num">1</span>, <span class="str">"kiwi"</span>)  <span class="cmt"># insert at index</span>
+fruits.<span class="fn">remove</span>(<span class="str">"banana"</span>)   <span class="cmt"># remove first occurrence</span>
+item = fruits.<span class="fn">pop</span>()      <span class="cmt"># remove & return last</span>
+item = fruits.<span class="fn">pop</span>(<span class="num">0</span>)     <span class="cmt"># remove & return at index</span>
+fruits.<span class="fn">clear</span>()           <span class="cmt"># remove all</span>
+
+<span class="cmt"># List operations</span>
+<span class="fn">len</span>(fruits)            <span class="cmt"># length</span>
+fruits.<span class="fn">count</span>(<span class="str">"apple"</span>)   <span class="cmt"># count occurrences</span>
+fruits.<span class="fn">index</span>(<span class="str">"cherry"</span>)  <span class="cmt"># find index</span>
+fruits.<span class="fn">sort</span>()            <span class="cmt"># sort in place</span>
+fruits.<span class="fn">reverse</span>()         <span class="cmt"># reverse in place</span>
+<span class="fn">sorted</span>(fruits)         <span class="cmt"># return new sorted list</span>
+
+<span class="cmt"># Concatenation & repetition</span>
+[<span class="num">1</span>, <span class="num">2</span>] + [<span class="num">3</span>, <span class="num">4</span>]       <span class="cmt"># [1, 2, 3, 4]</span>
+[<span class="num">1</span>, <span class="num">2</span>] * <span class="num">3</span>            <span class="cmt"># [1, 2, 1, 2, 1, 2]</span></pre>
+
+                <h3>Tuples (Immutable, Ordered)</h3>
+                <pre data-lang="python"><span class="cmt"># Create tuple</span>
+point = (<span class="num">10</span>, <span class="num">20</span>)
+person = (<span class="str">"Alice"</span>, <span class="num">30</span>, <span class="str">"Engineer"</span>)
+single = (<span class="num">42</span>,)        <span class="cmt"># trailing comma for single element</span>
+
+<span class="cmt"># Unpacking</span>
+x, y = point
+name, age, job = person
+
+<span class="cmt"># Tuples are immutable</span>
+<span class="cmt"># point[0] = 15  # TypeError!</span>
+
+<span class="cmt"># Common operations</span>
+<span class="fn">len</span>(point)
+point.<span class="fn">count</span>(<span class="num">10</span>)
+point.<span class="fn">index</span>(<span class="num">20</span>)</pre>
+
+                <h3>Sets (Mutable, Unordered, Unique)</h3>
+                <pre data-lang="python"><span class="cmt"># Create set</span>
+colors = {<span class="str">"red"</span>, <span class="str">"green"</span>, <span class="str">"blue"</span>}
+numbers = <span class="fn">set</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>])  <span class="cmt"># {1, 2, 3}</span>
+empty = <span class="fn">set</span>()             <span class="cmt"># empty set (not {})</span>
+
+<span class="cmt"># Add & remove</span>
+colors.<span class="fn">add</span>(<span class="str">"yellow"</span>)
+colors.<span class="fn">remove</span>(<span class="str">"red"</span>)      <span class="cmt"># KeyError if not found</span>
+colors.<span class="fn">discard</span>(<span class="str">"purple"</span>)  <span class="cmt"># no error if not found</span>
+colors.<span class="fn">pop</span>()              <span class="cmt"># remove arbitrary element</span>
+
+<span class="cmt"># Set operations</span>
+a = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>}
+b = {<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>}
+
+a | b                  <span class="cmt"># union: {1, 2, 3, 4, 5}</span>
+a & b                  <span class="cmt"># intersection: {3}</span>
+a - b                  <span class="cmt"># difference: {1, 2}</span>
+a ^ b                  <span class="cmt"># symmetric difference: {1, 2, 4, 5}</span>
+<span class="num">1</span> <span class="kw">in</span> a                <span class="cmt"># membership test</span></pre>
+
+                <h3>Dictionaries (Mutable, Key-Value Pairs)</h3>
+                <pre data-lang="python"><span class="cmt"># Create dictionary</span>
+person = {
+    <span class="str">"name"</span>: <span class="str">"Alice"</span>,
+    <span class="str">"age"</span>: <span class="num">30</span>,
+    <span class="str">"city"</span>: <span class="str">"New York"</span>
+}
+
+<span class="cmt"># Access</span>
+person[<span class="str">"name"</span>]          <span class="cmt"># "Alice" (KeyError if missing)</span>
+person.<span class="fn">get</span>(<span class="str">"age"</span>)      <span class="cmt"># 30 (returns None if missing)</span>
+person.<span class="fn">get</span>(<span class="str">"job"</span>, <span class="str">"Unknown"</span>)  <span class="cmt"># default value</span>
+
+<span class="cmt"># Modify</span>
+person[<span class="str">"age"</span>] = <span class="num">31</span>    <span class="cmt"># update</span>
+person[<span class="str">"job"</span>] = <span class="str">"Engineer"</span>  <span class="cmt"># add new key</span>
+<span class="kw">del</span> person[<span class="str">"city"</span>]    <span class="cmt"># remove key</span>
+person.<span class="fn">pop</span>(<span class="str">"age"</span>)      <span class="cmt"># remove & return value</span>
+
+<span class="cmt"># Dictionary methods</span>
+person.<span class="fn">keys</span>()           <span class="cmt"># dict_keys(['name', 'job'])</span>
+person.<span class="fn">values</span>()         <span class="cmt"># dict_values(['Alice', 'Engineer'])</span>
+person.<span class="fn">items</span>()          <span class="cmt"># dict_items([('name', 'Alice'), ...])</span>
+
+<span class="cmt"># Iteration</span>
+<span class="kw">for</span> key <span class="kw">in</span> person:
+    <span class="fn">print</span>(key, person[key])
+
+<span class="kw">for</span> key, value <span class="kw">in</span> person.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="str">f"</span><span class="str">{key}</span><span class="str">: </span><span class="str">{value}</span><span class="str">"</span>)
+
+<span class="cmt"># Merge dictionaries (Python 3.9+)</span>
+d1 = {<span class="str">"a"</span>: <span class="num">1</span>}
+d2 = {<span class="str">"b"</span>: <span class="num">2</span>}
+merged = d1 | d2      <span class="cmt"># {'a': 1, 'b': 2}</span></pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Defining Functions</h3>
+                <pre data-lang="python"><span class="cmt"># Basic function</span>
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="kw">return</span> <span class="str">f"Hello, {name}!"</span>
+
+<span class="cmt"># Default parameters</span>
+<span class="kw">def</span> <span class="fn">power</span>(base, exponent=<span class="num">2</span>):
+    <span class="kw">return</span> base ** exponent
+
+<span class="cmt"># Type hints (optional)</span>
+<span class="kw">def</span> <span class="fn">add</span>(a: <span class="type">int</span>, b: <span class="type">int</span>) -> <span class="type">int</span>:
+    <span class="kw">return</span> a + b
+
+<span class="cmt"># Multiple return values (returns tuple)</span>
+<span class="kw">def</span> <span class="fn">min_max</span>(numbers):
+    <span class="kw">return</span> <span class="fn">min</span>(numbers), <span class="fn">max</span>(numbers)
+
+minimum, maximum = <span class="fn">min_max</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])</pre>
+
+                <h3>Arguments</h3>
+                <pre data-lang="python"><span class="cmt"># *args: variable positional arguments</span>
+<span class="kw">def</span> <span class="fn">sum_all</span>(*args):
+    <span class="kw">return</span> <span class="fn">sum</span>(args)
+
+<span class="fn">sum_all</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)  <span class="cmt"># 10</span>
+
+<span class="cmt"># **kwargs: variable keyword arguments</span>
+<span class="kw">def</span> <span class="fn">print_info</span>(**kwargs):
+    <span class="kw">for</span> key, value <span class="kw">in</span> kwargs.<span class="fn">items</span>():
+        <span class="fn">print</span>(<span class="str">f"</span><span class="str">{key}</span><span class="str">: </span><span class="str">{value}</span><span class="str">"</span>)
+
+<span class="fn">print_info</span>(name=<span class="str">"Alice"</span>, age=<span class="num">30</span>)
+
+<span class="cmt"># Keyword-only arguments (after *)</span>
+<span class="kw">def</span> <span class="fn">divide</span>(a, b, *, precision=<span class="num">2</span>):
+    <span class="kw">return</span> <span class="fn">round</span>(a / b, precision)
+
+<span class="fn">divide</span>(<span class="num">10</span>, <span class="num">3</span>, precision=<span class="num">4</span>)  <span class="cmt"># must use keyword</span></pre>
+
+                <h3>Lambda Functions</h3>
+                <pre data-lang="python"><span class="cmt"># Anonymous functions for simple operations</span>
+square = <span class="kw">lambda</span> x: x ** <span class="num">2</span>
+add = <span class="kw">lambda</span> x, y: x + y
+
+<span class="cmt"># Often used with map, filter, sorted</span>
+numbers = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+squared = <span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> x: x**<span class="num">2</span>, numbers))
+evens = <span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> x: x % <span class="num">2</span> == <span class="num">0</span>, numbers))
+<span class="fn">sorted</span>(students, key=<span class="kw">lambda</span> s: s[<span class="str">"grade"</span>])</pre>
+
+                <h3>Decorators</h3>
+                <pre data-lang="python"><span class="cmt"># Function wrapper that modifies behavior</span>
+<span class="kw">def</span> <span class="fn">timer</span>(func):
+    <span class="kw">def</span> <span class="fn">wrapper</span>(*args, **kwargs):
+        <span class="kw">import</span> time
+        start = time.<span class="fn">time</span>()
+        result = <span class="fn">func</span>(*args, **kwargs)
+        <span class="fn">print</span>(<span class="str">f"Took {time.time() - start:.2f}s"</span>)
+        <span class="kw">return</span> result
+    <span class="kw">return</span> wrapper
+
+<span class="attr">@timer</span>
+<span class="kw">def</span> <span class="fn">slow_function</span>():
+    time.<span class="fn">sleep</span>(<span class="num">1</span>)
+
+<span class="cmt"># Common built-in decorators</span>
+<span class="attr">@staticmethod</span>   <span class="cmt"># method doesn't need self/cls</span>
+<span class="attr">@classmethod</span>    <span class="cmt"># method receives class as first arg</span>
+<span class="attr">@property</span>       <span class="cmt"># getter for computed attribute</span></pre>
+            </section>
+
+            <!-- Classes -->
+            <section id="classes">
+                <h2>Classes & Objects</h2>
+
+                <h3>Defining Classes</h3>
+                <pre data-lang="python"><span class="cmt"># Basic class</span>
+<span class="kw">class</span> <span class="type">Person</span>:
+    <span class="cmt"># Constructor</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, age):
+        <span class="kw">self</span>.name = name
+        <span class="kw">self</span>.age = age
+
+    <span class="cmt"># Instance method</span>
+    <span class="kw">def</span> <span class="fn">greet</span>(<span class="kw">self</span>):
+        <span class="kw">return</span> <span class="str">f"Hi, I'm {self.name}"</span>
+
+    <span class="cmt"># String representation</span>
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="kw">self</span>):
+        <span class="kw">return</span> <span class="str">f"Person({self.name}, {self.age})"</span>
+
+<span class="cmt"># Create instance</span>
+alice = <span class="fn">Person</span>(<span class="str">"Alice"</span>, <span class="num">30</span>)
+<span class="fn">print</span>(alice.<span class="fn">greet</span>())
+<span class="fn">print</span>(alice)  <span class="cmt"># calls __str__</span></pre>
+
+                <h3>Class & Static Methods</h3>
+                <pre data-lang="python"><span class="kw">class</span> <span class="type">Circle</span>:
+    <span class="cmt"># Class variable (shared by all instances)</span>
+    pi = <span class="num">3.14159</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, radius):
+        <span class="kw">self</span>.radius = radius
+
+    <span class="cmt"># Instance method</span>
+    <span class="kw">def</span> <span class="fn">area</span>(<span class="kw">self</span>):
+        <span class="kw">return</span> Circle.pi * <span class="kw">self</span>.radius ** <span class="num">2</span>
+
+    <span class="cmt"># Class method (receives class as first arg)</span>
+    <span class="attr">@classmethod</span>
+    <span class="kw">def</span> <span class="fn">from_diameter</span>(<span class="kw">cls</span>, diameter):
+        <span class="kw">return</span> <span class="fn">cls</span>(diameter / <span class="num">2</span>)
+
+    <span class="cmt"># Static method (no self/cls)</span>
+    <span class="attr">@staticmethod</span>
+    <span class="kw">def</span> <span class="fn">is_valid_radius</span>(radius):
+        <span class="kw">return</span> radius > <span class="num">0</span></pre>
+
+                <h3>Inheritance</h3>
+                <pre data-lang="python"><span class="cmt"># Parent class</span>
+<span class="kw">class</span> <span class="type">Animal</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name):
+        <span class="kw">self</span>.name = name
+
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="kw">self</span>):
+        <span class="kw">pass</span>
+
+<span class="cmt"># Child class</span>
+<span class="kw">class</span> <span class="type">Dog</span>(Animal):
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, breed):
+        <span class="fn">super</span>().<span class="fn">__init__</span>(name)  <span class="cmt"># call parent constructor</span>
+        <span class="kw">self</span>.breed = breed
+
+    <span class="kw">def</span> <span class="fn">speak</span>(<span class="kw">self</span>):
+        <span class="kw">return</span> <span class="str">f"{self.name} says Woof!"</span>
+
+dog = <span class="fn">Dog</span>(<span class="str">"Buddy"</span>, <span class="str">"Golden Retriever"</span>)
+<span class="fn">print</span>(dog.<span class="fn">speak</span>())</pre>
+
+                <h3>Properties & Magic Methods</h3>
+                <pre data-lang="python"><span class="kw">class</span> <span class="type">Rectangle</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, width, height):
+        <span class="kw">self</span>._width = width
+        <span class="kw">self</span>._height = height
+
+    <span class="cmt"># Property getter</span>
+    <span class="attr">@property</span>
+    <span class="kw">def</span> <span class="fn">area</span>(<span class="kw">self</span>):
+        <span class="kw">return</span> <span class="kw">self</span>._width * <span class="kw">self</span>._height
+
+    <span class="cmt"># Property setter</span>
+    <span class="attr">@area.setter</span>
+    <span class="kw">def</span> <span class="fn">area</span>(<span class="kw">self</span>, value):
+        <span class="kw">self</span>._width = value / <span class="kw">self</span>._height
+
+    <span class="cmt"># Operator overloading</span>
+    <span class="kw">def</span> <span class="fn">__add__</span>(<span class="kw">self</span>, other):
+        <span class="kw">return</span> <span class="kw">self</span>.area + other.area
+
+r = <span class="fn">Rectangle</span>(<span class="num">10</span>, <span class="num">5</span>)
+<span class="fn">print</span>(r.area)  <span class="cmt"># 50 (calls getter)</span>
+r.area = <span class="num">100</span>    <span class="cmt"># calls setter</span></pre>
+
+                <div class="tip">
+                    Common magic methods: <code>__init__</code>, <code>__str__</code>, <code>__repr__</code>, <code>__len__</code>, <code>__getitem__</code>, <code>__add__</code>, <code>__eq__</code>
+                </div>
+            </section>
+
+            <!-- Error Handling -->
+            <section id="errors">
+                <h2>Error Handling</h2>
+
+                <h3>Try/Except</h3>
+                <pre data-lang="python"><span class="cmt"># Basic exception handling</span>
+<span class="kw">try</span>:
+    result = <span class="num">10</span> / <span class="num">0</span>
+<span class="kw">except</span> ZeroDivisionError:
+    <span class="fn">print</span>(<span class="str">"Cannot divide by zero"</span>)
+
+<span class="cmt"># Multiple exceptions</span>
+<span class="kw">try</span>:
+    value = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Enter a number: "</span>))
+    result = <span class="num">10</span> / value
+<span class="kw">except</span> ValueError:
+    <span class="fn">print</span>(<span class="str">"Invalid number"</span>)
+<span class="kw">except</span> ZeroDivisionError:
+    <span class="fn">print</span>(<span class="str">"Cannot divide by zero"</span>)
+<span class="kw">except</span> <span class="type">Exception</span> <span class="kw">as</span> e:
+    <span class="fn">print</span>(<span class="str">f"Error: {e}"</span>)
+
+<span class="cmt"># else & finally</span>
+<span class="kw">try</span>:
+    file = <span class="fn">open</span>(<span class="str">"data.txt"</span>)
+<span class="kw">except</span> FileNotFoundError:
+    <span class="fn">print</span>(<span class="str">"File not found"</span>)
+<span class="kw">else</span>:
+    <span class="cmt"># runs if no exception</span>
+    content = file.<span class="fn">read</span>()
+<span class="kw">finally</span>:
+    <span class="cmt"># always runs</span>
+    <span class="kw">if</span> <span class="str">'file'</span> <span class="kw">in</span> <span class="fn">locals</span>():
+        file.<span class="fn">close</span>()</pre>
+
+                <h3>Raising Exceptions</h3>
+                <pre data-lang="python"><span class="cmt"># Raise an exception</span>
+<span class="kw">def</span> <span class="fn">divide</span>(a, b):
+    <span class="kw">if</span> b == <span class="num">0</span>:
+        <span class="kw">raise</span> ValueError(<span class="str">"Divisor cannot be zero"</span>)
+    <span class="kw">return</span> a / b
+
+<span class="cmt"># Custom exceptions</span>
+<span class="kw">class</span> <span class="type">InvalidAgeError</span>(<span class="type">Exception</span>):
+    <span class="kw">pass</span>
+
+<span class="kw">def</span> <span class="fn">set_age</span>(age):
+    <span class="kw">if</span> age &lt; <span class="num">0</span>:
+        <span class="kw">raise</span> InvalidAgeError(<span class="str">"Age cannot be negative"</span>)
+    <span class="kw">return</span> age</pre>
+
+                <h3>Common Exceptions</h3>
+                <dl class="concept-list">
+                    <div class="concept">
+                        <dt>ValueError</dt>
+                        <dd>Invalid value for operation</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>TypeError</dt>
+                        <dd>Wrong type for operation</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>KeyError</dt>
+                        <dd>Dictionary key not found</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>IndexError</dt>
+                        <dd>List index out of range</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>FileNotFoundError</dt>
+                        <dd>File doesn't exist</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>AttributeError</dt>
+                        <dd>Attribute doesn't exist</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <!-- Comprehensions -->
+            <section id="comprehensions">
+                <h2>Comprehensions & Generators</h2>
+
+                <h3>List Comprehensions</h3>
+                <pre data-lang="python"><span class="cmt"># Basic list comprehension</span>
+squares = [x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)]
+
+<span class="cmt"># With condition</span>
+evens = [x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>) <span class="kw">if</span> x % <span class="num">2</span> == <span class="num">0</span>]
+
+<span class="cmt"># Nested comprehension</span>
+matrix = [[i*j <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)] <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]
+
+<span class="cmt"># String manipulation</span>
+words = [<span class="str">"hello"</span>, <span class="str">"world"</span>, <span class="str">"python"</span>]
+upper = [w.<span class="fn">upper</span>() <span class="kw">for</span> w <span class="kw">in</span> words]
+
+<span class="cmt"># Flatten list</span>
+nested = [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>], [<span class="num">5</span>, <span class="num">6</span>]]
+flat = [item <span class="kw">for</span> sublist <span class="kw">in</span> nested <span class="kw">for</span> item <span class="kw">in</span> sublist]</pre>
+
+                <h3>Dict & Set Comprehensions</h3>
+                <pre data-lang="python"><span class="cmt"># Dictionary comprehension</span>
+squares = {x: x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)}
+<span class="cmt"># {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</span>
+
+<span class="cmt"># Invert dictionary</span>
+original = {<span class="str">"a"</span>: <span class="num">1</span>, <span class="str">"b"</span>: <span class="num">2</span>}
+inverted = {v: k <span class="kw">for</span> k, v <span class="kw">in</span> original.<span class="fn">items</span>()}
+
+<span class="cmt"># Set comprehension</span>
+unique = {x % <span class="num">10</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">100</span>)}</pre>
+
+                <h3>Generator Expressions</h3>
+                <pre data-lang="python"><span class="cmt"># Generator (lazy evaluation, memory efficient)</span>
+gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1000000</span>))
+
+<span class="cmt"># Generator function</span>
+<span class="kw">def</span> <span class="fn">fibonacci</span>(n):
+    a, b = <span class="num">0</span>, <span class="num">1</span>
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n):
+        <span class="kw">yield</span> a
+        a, b = b, a + b
+
+<span class="kw">for</span> num <span class="kw">in</span> <span class="fn">fibonacci</span>(<span class="num">10</span>):
+    <span class="fn">print</span>(num)
+
+<span class="cmt"># Infinite generator</span>
+<span class="kw">def</span> <span class="fn">count_up</span>(start=<span class="num">0</span>):
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="kw">yield</span> start
+        start += <span class="num">1</span></pre>
+            </section>
+
+            <!-- Files & I/O -->
+            <section id="files">
+                <h2>Files & I/O</h2>
+
+                <h3>Reading Files</h3>
+                <pre data-lang="python"><span class="cmt"># Read entire file</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"file.txt"</span>, <span class="str">"r"</span>) <span class="kw">as</span> f:
+    content = f.<span class="fn">read</span>()
+
+<span class="cmt"># Read lines into list</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"file.txt"</span>) <span class="kw">as</span> f:
+    lines = f.<span class="fn">readlines</span>()
+
+<span class="cmt"># Read line by line (memory efficient)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"file.txt"</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> line <span class="kw">in</span> f:
+        <span class="fn">print</span>(line.<span class="fn">strip</span>())</pre>
+
+                <h3>Writing Files</h3>
+                <pre data-lang="python"><span class="cmt"># Write (overwrites existing)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">"Hello, world!\n"</span>)
+    f.<span class="fn">writelines</span>([<span class="str">"Line 1\n"</span>, <span class="str">"Line 2\n"</span>])
+
+<span class="cmt"># Append</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">"Appended line\n"</span>)</pre>
+
+                <h3>File Modes & Working with Paths</h3>
+                <pre data-lang="python"><span class="cmt"># File modes</span>
+<span class="str">"r"</span>   <span class="cmt"># read (default)</span>
+<span class="str">"w"</span>   <span class="cmt"># write (overwrites)</span>
+<span class="str">"a"</span>   <span class="cmt"># append</span>
+<span class="str">"r+"</span>  <span class="cmt"># read and write</span>
+<span class="str">"rb"</span>  <span class="cmt"># read binary</span>
+<span class="str">"wb"</span>  <span class="cmt"># write binary</span>
+
+<span class="cmt"># Path operations (pathlib, Python 3.4+)</span>
+<span class="kw">from</span> pathlib <span class="kw">import</span> Path
+
+p = Path(<span class="str">"data/file.txt"</span>)
+<span class="fn">print</span>(p.<span class="fn">exists</span>())       <span class="cmt"># check if exists</span>
+<span class="fn">print</span>(p.<span class="fn">is_file</span>())      <span class="cmt"># is it a file?</span>
+<span class="fn">print</span>(p.name)           <span class="cmt"># "file.txt"</span>
+<span class="fn">print</span>(p.suffix)         <span class="cmt"># ".txt"</span>
+<span class="fn">print</span>(p.parent)         <span class="cmt"># "data"</span>
+
+<span class="cmt"># Read/write with pathlib</span>
+text = p.<span class="fn">read_text</span>()
+p.<span class="fn">write_text</span>(<span class="str">"New content"</span>)
+
+<span class="cmt"># Iterate directory</span>
+<span class="kw">for</span> file <span class="kw">in</span> Path(<span class="str">"."</span>).<span class="fn">glob</span>(<span class="str">"*.py"</span>):
+    <span class="fn">print</span>(file)</pre>
+
+                <h3>JSON & CSV</h3>
+                <pre data-lang="python"><span class="cmt"># JSON</span>
+<span class="kw">import</span> json
+
+data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span class="str">"age"</span>: <span class="num">30</span>}
+
+<span class="cmt"># Write JSON</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"data.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
+    json.<span class="fn">dump</span>(data, f, indent=<span class="num">2</span>)
+
+<span class="cmt"># Read JSON</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"data.json"</span>) <span class="kw">as</span> f:
+    data = json.<span class="fn">load</span>(f)
+
+<span class="cmt"># CSV</span>
+<span class="kw">import</span> csv
+
+<span class="cmt"># Write CSV</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"data.csv"</span>, <span class="str">"w"</span>, newline=<span class="str">""</span>) <span class="kw">as</span> f:
+    writer = csv.<span class="fn">writer</span>(f)
+    writer.<span class="fn">writerow</span>([<span class="str">"Name"</span>, <span class="str">"Age"</span>])
+    writer.<span class="fn">writerow</span>([<span class="str">"Alice"</span>, <span class="num">30</span>])
+
+<span class="cmt"># Read CSV</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"data.csv"</span>) <span class="kw">as</span> f:
+    reader = csv.<span class="fn">reader</span>(f)
+    <span class="kw">for</span> row <span class="kw">in</span> reader:
+        <span class="fn">print</span>(row)</pre>
+            </section>
+
+            <!-- Modules -->
+            <section id="modules">
+                <h2>Modules & Packages</h2>
+
+                <h3>Importing Modules</h3>
+                <pre data-lang="python"><span class="cmt"># Import entire module</span>
+<span class="kw">import</span> math
+<span class="fn">print</span>(math.pi)
+
+<span class="cmt"># Import with alias</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cmt"># Import specific items</span>
+<span class="kw">from</span> math <span class="kw">import</span> pi, sqrt
+<span class="fn">print</span>(pi)
+
+<span class="cmt"># Import all (not recommended)</span>
+<span class="kw">from</span> math <span class="kw">import</span> *</pre>
+
+                <h3>Creating Modules</h3>
+                <pre data-lang="python"><span class="cmt"># mymodule.py</span>
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="kw">return</span> <span class="str">f"Hello, {name}"</span>
+
+<span class="kw">class</span> <span class="type">Calculator</span>:
+    <span class="kw">def</span> <span class="fn">add</span>(<span class="kw">self</span>, a, b):
+        <span class="kw">return</span> a + b
+
+<span class="cmt"># In another file</span>
+<span class="kw">import</span> mymodule
+<span class="fn">print</span>(mymodule.<span class="fn">greet</span>(<span class="str">"Alice"</span>))</pre>
+
+                <h3>Package Structure</h3>
+                <pre data-lang="text">mypackage/
+├── __init__.py      <span class="cmt"># Makes it a package</span>
+├── module1.py
+├── module2.py
+└── subpackage/
+    ├── __init__.py
+    └── module3.py
+
+<span class="cmt"># Import from package</span>
+<span class="kw">from</span> mypackage <span class="kw">import</span> module1
+<span class="kw">from</span> mypackage.subpackage <span class="kw">import</span> module3</pre>
+
+                <h3>Common Standard Library Modules</h3>
+                <pre data-lang="python"><span class="kw">import</span> os           <span class="cmt"># OS interface</span>
+<span class="kw">import</span> sys          <span class="cmt"># System parameters</span>
+<span class="kw">import</span> re           <span class="cmt"># Regular expressions</span>
+<span class="kw">import</span> datetime     <span class="cmt"># Date and time</span>
+<span class="kw">import</span> random       <span class="cmt"># Random numbers</span>
+<span class="kw">import</span> json         <span class="cmt"># JSON encoding/decoding</span>
+<span class="kw">import</span> math         <span class="cmt"># Math functions</span>
+<span class="kw">import</span> collections  <span class="cmt"># Specialized containers</span>
+<span class="kw">import</span> itertools    <span class="cmt"># Iterator tools</span>
+<span class="kw">import</span> functools    <span class="cmt"># Higher-order functions</span></pre>
+
+                <h3>pip & Virtual Environments</h3>
+                <pre data-lang="shell"><span class="cmt"># Install packages</span>
+pip install requests
+pip install pandas numpy matplotlib
+
+<span class="cmt"># Create requirements file</span>
+pip freeze > requirements.txt
+
+<span class="cmt"># Install from requirements</span>
+pip install -r requirements.txt
+
+<span class="cmt"># Virtual environment</span>
+python -m venv venv
+source venv/bin/activate  <span class="cmt"># Linux/Mac</span>
+venv\Scripts\activate     <span class="cmt"># Windows</span>
+deactivate                <span class="cmt"># Exit virtual environment</span></pre>
+
+                <div class="tip">
+                    Always use virtual environments to isolate project dependencies. Use <code>venv</code> (built-in) or <code>virtualenv</code> for this.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Python TLDR — Last updated December 2025 for Python 3.13<br>
+                <a href="https://python.org" target="_blank">Official Site</a> ·
+                <a href="https://docs.python.org/3/" target="_blank">Documentation</a> ·
+                <a href="https://pypi.org" target="_blank">PyPI</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

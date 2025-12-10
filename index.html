@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TLDR.it — Rapid Reference Guides</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Landing page specific styles */
+      header {
+        padding: 120px 0 80px;
+        text-align: center;
+      }
+
+      header::before {
+        top: -50%;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+        width: 800px;
+        height: 800px;
+      }
+
+      .logo {
+        justify-content: center;
+        margin-bottom: 32px;
+      }
+
+      .logo-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: clamp(56px, 10vw, 96px);
+        letter-spacing: -3px;
+        margin-bottom: 24px;
+      }
+
+      .tagline {
+        font-size: 20px;
+        margin: 0 auto;
+      }
+
+      main {
+        padding: 80px 0;
+      }
+
+      h2 {
+        margin-bottom: 16px;
+        text-align: center;
+        border-bottom: none;
+        padding-bottom: 0;
+        display: block;
+      }
+
+      .section-desc {
+        text-align: center;
+        color: var(--text-dim);
+        margin-bottom: 48px;
+        font-size: 16px;
+      }
+
+      /* Guide Cards */
+      .guides {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+      }
+
+      .guide-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        padding: 32px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .guide-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .guide-card.zig {
+        --card-accent: #f7a41d;
+      }
+
+      .guide-card.zig:hover {
+        border-color: #f7a41d;
+        box-shadow: 0 12px 40px rgba(247, 164, 29, 0.15);
+      }
+
+      .guide-card.rust {
+        --card-accent: #f74c00;
+      }
+
+      .guide-card.rust:hover {
+        border-color: #f74c00;
+        box-shadow: 0 12px 40px rgba(247, 76, 0, 0.15);
+      }
+
+      .guide-card.c {
+        --card-accent: #5c6bc0;
+      }
+
+      .guide-card.c:hover {
+        border-color: #5c6bc0;
+        box-shadow: 0 12px 40px rgba(92, 107, 192, 0.15);
+      }
+
+      .guide-card.python {
+        --card-accent: #3776ab;
+      }
+
+      .guide-card.python:hover {
+        border-color: #3776ab;
+        box-shadow: 0 12px 40px rgba(55, 118, 171, 0.15);
+      }
+
+      .guide-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .guide-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--card-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--bg);
+        flex-shrink: 0;
+      }
+
+      .guide-card.zig .guide-icon {
+        clip-path: polygon(
+          50% 0%,
+          100% 25%,
+          100% 75%,
+          50% 100%,
+          0% 75%,
+          0% 25%
+        );
+      }
+
+      .guide-card.rust .guide-icon {
+        border-radius: 12px;
+      }
+
+      .guide-card.c .guide-icon {
+        border-radius: 50%;
+      }
+
+      .guide-card.python .guide-icon {
+        border-radius: 8px;
+      }
+
+      .guide-title {
+        font-family: "Instrument Serif", serif;
+        font-size: 28px;
+        font-weight: 400;
+        color: var(--text);
+      }
+
+      .guide-desc {
+        color: var(--text-dim);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .guide-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+      }
+
+      .guide-version {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        color: var(--card-accent);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 4px 10px;
+        border-radius: 4px;
+      }
+
+      .guide-arrow {
+        margin-left: auto;
+        color: var(--text-dim);
+        font-size: 20px;
+        transition: transform 0.2s, color 0.2s;
+      }
+
+      .guide-card:hover .guide-arrow {
+        transform: translateX(4px);
+        color: var(--card-accent);
+      }
+
+      /* Features */
+      .features {
+        margin-top: 120px;
+        padding-top: 80px;
+        border-top: 1px solid var(--border);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+        margin-top: 48px;
+      }
+
+      .feature {
+        text-align: center;
+        padding: 24px;
+      }
+
+      .feature-icon {
+        font-size: 32px;
+        margin-bottom: 16px;
+      }
+
+      .feature h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text);
+      }
+
+      .feature p {
+        color: var(--text-dim);
+        font-size: 14px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        header {
+          padding: 80px 0 60px;
+        }
+
+        .guides {
+          grid-template-columns: 1fr;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="logo">
+          <div class="logo-icon">;</div>
+        </div>
+        <h1>TLDR<span>.it</span></h1>
+        <p class="tagline">
+          Rapid reference guides for programming languages and tools. Everything
+          you need to know, distilled to the essentials.
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <h2>Available Guides</h2>
+        <p class="section-desc">
+          Click a guide to dive in. Each one covers the essentials to get you
+          productive fast.
+        </p>
+
+        <div class="guides">
+          <a href="zig.html" class="guide-card zig">
+            <div class="guide-header">
+              <div class="guide-icon">Z</div>
+              <span class="guide-title">Zig</span>
+            </div>
+            <p class="guide-desc">
+              A systems programming language designed to be a "better C" —
+              simpler, safer, and more maintainable while remaining just as
+              fast. Manual memory management with allocator interfaces,
+              compile-time execution, and first-class cross-compilation.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v0.15.1</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="rust.html" class="guide-card rust">
+            <div class="guide-header">
+              <div class="guide-icon">R</div>
+              <span class="guide-title">Rust</span>
+            </div>
+            <p class="guide-desc">
+              A systems programming language focused on safety, speed, and
+              concurrency. Achieves memory safety without garbage collection
+              through its ownership system. Fearless concurrency and zero-cost
+              abstractions.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v1.91.1</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="c.html" class="guide-card c">
+            <div class="guide-header">
+              <div class="guide-icon">C</div>
+              <span class="guide-title">C</span>
+            </div>
+            <p class="guide-desc">
+              The foundational systems programming language. Direct memory
+              access, minimal runtime overhead, and maximum control. The
+              language behind operating systems, databases, and embedded
+              systems.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">C23</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="python.html" class="guide-card python">
+            <div class="guide-header">
+              <div class="guide-icon">Py</div>
+              <span class="guide-title">Python</span>
+            </div>
+            <p class="guide-desc">
+              A high-level, interpreted language emphasizing code readability
+              and simplicity. Dynamic typing, comprehensive standard library,
+              and a massive ecosystem. From web development to data science to
+              automation.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v3.13</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="features">
+          <h2>Why TLDR.it?</h2>
+          <p class="section-desc">
+            Quick references designed for developers who learn by doing.
+          </p>
+
+          <div class="feature-grid">
+            <div class="feature">
+              <div class="feature-icon">⚡</div>
+              <h3>Fast to Scan</h3>
+              <p>
+                No fluff. Every section is designed to be scanned quickly when
+                you need a syntax refresher.
+              </p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">📋</div>
+              <h3>Copy-Paste Ready</h3>
+              <p>
+                Code examples are complete and runnable. Copy, paste, and modify
+                for your use case.
+              </p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🎯</div>
+              <h3>Essentials Only</h3>
+              <p>
+                Covers 90% of what you'll use daily. Links to official docs for
+                the deep dives.
+              </p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">🌙</div>
+              <h3>Dark Mode Native</h3>
+              <p>Easy on the eyes during those late-night coding sessions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          TLDR.it — Rapid reference guides for developers<br />
+          Built with care. No frameworks, no dependencies, just HTML & CSS.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

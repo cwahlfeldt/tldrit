@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Rust theme */
+        :root {
+            --accent: #f74c00;
+            --accent-glow: rgba(247, 76, 0, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 12px;
+        }
+
+        .card h4::before {
+            content: '🦀';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">R</div>
+            </div>
+            <h1>Rust <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Rust programming language. Memory safety without garbage collection.</p>
+            <div class="version-badge">v1.91.1 — December 2025</div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#what">What is Rust?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#ownership">Ownership</a></li>
+                <li><a href="#structs">Structs & Enums</a></li>
+                <li><a href="#traits">Traits</a></li>
+                <li><a href="#errors">Errors</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#iterators">Iterators</a></li>
+                <li><a href="#cargo">Cargo</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Rust? -->
+            <section id="what">
+                <h2>What is Rust?</h2>
+                <p>Rust is a systems programming language focused on safety, speed, and concurrency. It achieves memory safety without garbage collection through its ownership system.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Memory Safety</h4>
+                        <p>Guarantees memory safety at compile time. No null pointers, no dangling references, no data races.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Zero-Cost Abstractions</h4>
+                        <p>High-level features compile to efficient low-level code. You don't pay for what you don't use.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fearless Concurrency</h4>
+                        <p>The type system prevents data races. Write concurrent code with confidence.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Great Tooling</h4>
+                        <p>Cargo for package management, rustfmt for formatting, clippy for linting. Batteries included.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="rust"><span class="kw">fn</span> <span class="fn">main</span>() {
+    <span class="macro">println!</span>(<span class="str">"Hello, world!"</span>);
+}</pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="rust"><span class="cmt">// Immutable by default</span>
+<span class="kw">let</span> x: <span class="type">i32</span> = <span class="num">42</span>;
+<span class="kw">let</span> y = <span class="num">42</span>;         <span class="cmt">// type inferred</span>
+
+<span class="cmt">// Mutable variables</span>
+<span class="kw">let</span> <span class="kw">mut</span> z = <span class="num">0</span>;
+z += <span class="num">1</span>;
+
+<span class="cmt">// Constants (must have type annotation)</span>
+<span class="kw">const</span> MAX_POINTS: <span class="type">u32</span> = <span class="num">100_000</span>;
+
+<span class="cmt">// Shadowing</span>
+<span class="kw">let</span> x = <span class="num">5</span>;
+<span class="kw">let</span> x = x + <span class="num">1</span>;  <span class="cmt">// x is now 6</span></pre>
+
+                <h3>Functions</h3>
+                <pre data-lang="rust"><span class="kw">fn</span> <span class="fn">add</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) -> <span class="type">i32</span> {
+    a + b  <span class="cmt">// no semicolon = return value</span>
+}
+
+<span class="cmt">// With explicit return</span>
+<span class="kw">fn</span> <span class="fn">divide</span>(a: <span class="type">f64</span>, b: <span class="type">f64</span>) -> <span class="type">f64</span> {
+    <span class="kw">if</span> b == <span class="num">0.0</span> {
+        <span class="kw">return</span> <span class="num">0.0</span>;
+    }
+    a / b
+}
+
+<span class="cmt">// No return value (returns unit type)</span>
+<span class="kw">fn</span> <span class="fn">greet</span>(name: &<span class="type">str</span>) {
+    <span class="macro">println!</span>(<span class="str">"Hello, {}!"</span>, name);
+}</pre>
+
+                <h3>Control Flow</h3>
+                <pre data-lang="rust"><span class="cmt">// if is an expression</span>
+<span class="kw">let</span> result = <span class="kw">if</span> x > <span class="num">0</span> { <span class="str">"positive"</span> } <span class="kw">else</span> { <span class="str">"non-positive"</span> };
+
+<span class="cmt">// loop (infinite, can return value)</span>
+<span class="kw">let</span> result = <span class="kw">loop</span> {
+    <span class="kw">if</span> condition { <span class="kw">break</span> <span class="num">42</span>; }
+};
+
+<span class="cmt">// while</span>
+<span class="kw">while</span> x < <span class="num">10</span> {
+    x += <span class="num">1</span>;
+}
+
+<span class="cmt">// for (iterate over iterator)</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="num">0</span>..<span class="num">10</span> {
+    <span class="macro">println!</span>(<span class="str">"{}"</span>, i);
+}
+
+<span class="kw">for</span> item <span class="kw">in</span> &items {
+    <span class="macro">println!</span>(<span class="str">"{}"</span>, item);
+}</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Category</th>
+                            <th>Types</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>Signed Integers</td>
+                            <td><code>i8, i16, i32, i64, i128, isize</code></td>
+                            <td><code>isize</code> is pointer-sized</td>
+                        </tr>
+                        <tr>
+                            <td>Unsigned Integers</td>
+                            <td><code>u8, u16, u32, u64, u128, usize</code></td>
+                            <td><code>usize</code> for indexing</td>
+                        </tr>
+                        <tr>
+                            <td>Floats</td>
+                            <td><code>f32, f64</code></td>
+                            <td>Default is <code>f64</code></td>
+                        </tr>
+                        <tr>
+                            <td>Boolean</td>
+                            <td><code>bool</code></td>
+                            <td><code>true</code> or <code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td>Character</td>
+                            <td><code>char</code></td>
+                            <td>4 bytes, Unicode scalar</td>
+                        </tr>
+                        <tr>
+                            <td>Unit</td>
+                            <td><code>()</code></td>
+                            <td>Empty tuple, like void</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Compound Types</h3>
+                <pre data-lang="rust"><span class="cmt">// Tuples (fixed size, mixed types)</span>
+<span class="kw">let</span> tup: (<span class="type">i32</span>, <span class="type">f64</span>, <span class="type">char</span>) = (<span class="num">500</span>, <span class="num">6.4</span>, <span class="str">'z'</span>);
+<span class="kw">let</span> (x, y, z) = tup;        <span class="cmt">// destructuring</span>
+<span class="kw">let</span> first = tup.<span class="num">0</span>;          <span class="cmt">// index access</span>
+
+<span class="cmt">// Arrays (fixed size, same type)</span>
+<span class="kw">let</span> arr: [<span class="type">i32</span>; <span class="num">5</span>] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+<span class="kw">let</span> zeros = [<span class="num">0</span>; <span class="num">5</span>];        <span class="cmt">// [0, 0, 0, 0, 0]</span>
+<span class="kw">let</span> first = arr[<span class="num">0</span>];        <span class="cmt">// bounds-checked!</span></pre>
+
+                <h3>Strings</h3>
+                <pre data-lang="rust"><span class="cmt">// String slice (borrowed, immutable)</span>
+<span class="kw">let</span> s: &<span class="type">str</span> = <span class="str">"hello"</span>;
+
+<span class="cmt">// String (owned, growable)</span>
+<span class="kw">let</span> <span class="kw">mut</span> s = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>);
+s.<span class="fn">push_str</span>(<span class="str">", world"</span>);
+s.<span class="fn">push</span>(<span class="str">'!'</span>);
+
+<span class="cmt">// Conversion</span>
+<span class="kw">let</span> s: <span class="type">String</span> = <span class="str">"hello"</span>.<span class="fn">to_string</span>();
+<span class="kw">let</span> s: &<span class="type">str</span> = &my_string;  <span class="cmt">// deref coercion</span>
+
+<span class="cmt">// Concatenation</span>
+<span class="kw">let</span> s = <span class="macro">format!</span>(<span class="str">"{} {}"</span>, <span class="str">"hello"</span>, <span class="str">"world"</span>);</pre>
+            </section>
+
+            <!-- Ownership -->
+            <section id="ownership">
+                <h2>Ownership & Borrowing</h2>
+                <p>Rust's core feature. Every value has a single owner, and when the owner goes out of scope, the value is dropped.</p>
+
+                <h3>Ownership Rules</h3>
+                <pre data-lang="rust"><span class="cmt">// 1. Each value has one owner</span>
+<span class="kw">let</span> s1 = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>);
+
+<span class="cmt">// 2. Move: ownership transfers</span>
+<span class="kw">let</span> s2 = s1;          <span class="cmt">// s1 is now invalid!</span>
+<span class="cmt">// println!("{}", s1); // ERROR: value moved</span>
+
+<span class="cmt">// 3. Clone: explicit deep copy</span>
+<span class="kw">let</span> s1 = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>);
+<span class="kw">let</span> s2 = s1.<span class="fn">clone</span>();  <span class="cmt">// s1 still valid</span>
+
+<span class="cmt">// 4. Copy types (stack-only) don't move</span>
+<span class="kw">let</span> x = <span class="num">5</span>;
+<span class="kw">let</span> y = x;            <span class="cmt">// x still valid (Copy trait)</span></pre>
+
+                <h3>References & Borrowing</h3>
+                <pre data-lang="rust"><span class="kw">let</span> s = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>);
+
+<span class="cmt">// Immutable reference (can have many)</span>
+<span class="kw">let</span> r1 = &s;
+<span class="kw">let</span> r2 = &s;
+
+<span class="cmt">// Mutable reference (only one at a time)</span>
+<span class="kw">let</span> <span class="kw">mut</span> s = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>);
+<span class="kw">let</span> r = &<span class="kw">mut</span> s;
+r.<span class="fn">push_str</span>(<span class="str">", world"</span>);
+
+<span class="cmt">// Function with reference</span>
+<span class="kw">fn</span> <span class="fn">len</span>(s: &<span class="type">String</span>) -> <span class="type">usize</span> {
+    s.<span class="fn">len</span>()
+}
+
+<span class="cmt">// Mutable reference parameter</span>
+<span class="kw">fn</span> <span class="fn">append</span>(s: &<span class="kw">mut</span> <span class="type">String</span>) {
+    s.<span class="fn">push_str</span>(<span class="str">"!"</span>);
+}</pre>
+
+                <h3>Slices</h3>
+                <pre data-lang="rust"><span class="kw">let</span> s = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello world"</span>);
+
+<span class="cmt">// String slices</span>
+<span class="kw">let</span> hello: &<span class="type">str</span> = &s[<span class="num">0</span>..<span class="num">5</span>];
+<span class="kw">let</span> world: &<span class="type">str</span> = &s[<span class="num">6</span>..];
+
+<span class="cmt">// Array slices</span>
+<span class="kw">let</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+<span class="kw">let</span> slice: &[<span class="type">i32</span>] = &arr[<span class="num">1</span>..<span class="num">3</span>];  <span class="cmt">// [2, 3]</span></pre>
+
+                <h3>Lifetimes</h3>
+                <pre data-lang="rust"><span class="cmt">// Lifetime annotation: 'a</span>
+<span class="kw">fn</span> <span class="fn">longest</span>&lt;<span class="lifetime">'a</span>&gt;(x: &<span class="lifetime">'a</span> <span class="type">str</span>, y: &<span class="lifetime">'a</span> <span class="type">str</span>) -> &<span class="lifetime">'a</span> <span class="type">str</span> {
+    <span class="kw">if</span> x.<span class="fn">len</span>() > y.<span class="fn">len</span>() { x } <span class="kw">else</span> { y }
+}
+
+<span class="cmt">// Struct with lifetime</span>
+<span class="kw">struct</span> <span class="type">Excerpt</span>&lt;<span class="lifetime">'a</span>&gt; {
+    part: &<span class="lifetime">'a</span> <span class="type">str</span>,
+}
+
+<span class="cmt">// Static lifetime (lives forever)</span>
+<span class="kw">let</span> s: &<span class="lifetime">'static</span> <span class="type">str</span> = <span class="str">"I live forever"</span>;</pre>
+
+                <div class="tip">
+                    References must always be valid. The borrow checker ensures you never have dangling references.
+                </div>
+            </section>
+
+            <!-- Structs & Enums -->
+            <section id="structs">
+                <h2>Structs & Enums</h2>
+
+                <h3>Structs</h3>
+                <pre data-lang="rust"><span class="cmt">// Define struct</span>
+<span class="kw">struct</span> <span class="type">User</span> {
+    username: <span class="type">String</span>,
+    email: <span class="type">String</span>,
+    active: <span class="type">bool</span>,
+}
+
+<span class="cmt">// Create instance</span>
+<span class="kw">let</span> user = <span class="type">User</span> {
+    username: <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"alice"</span>),
+    email: <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"alice@example.com"</span>),
+    active: <span class="kw">true</span>,
+};
+
+<span class="cmt">// Field init shorthand</span>
+<span class="kw">fn</span> <span class="fn">build_user</span>(email: <span class="type">String</span>) -> <span class="type">User</span> {
+    <span class="type">User</span> {
+        email,  <span class="cmt">// shorthand</span>
+        username: <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"anonymous"</span>),
+        active: <span class="kw">true</span>,
+    }
+}
+
+<span class="cmt">// Struct update syntax</span>
+<span class="kw">let</span> user2 = <span class="type">User</span> {
+    email: <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"bob@example.com"</span>),
+    ..user  <span class="cmt">// rest from user</span>
+};</pre>
+
+                <h3>Tuple Structs & Unit Structs</h3>
+                <pre data-lang="rust"><span class="cmt">// Tuple struct</span>
+<span class="kw">struct</span> <span class="type">Color</span>(<span class="type">u8</span>, <span class="type">u8</span>, <span class="type">u8</span>);
+<span class="kw">let</span> black = <span class="type">Color</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>);
+
+<span class="cmt">// Unit struct (no fields)</span>
+<span class="kw">struct</span> <span class="type">Marker</span>;</pre>
+
+                <h3>Methods (impl blocks)</h3>
+                <pre data-lang="rust"><span class="kw">struct</span> <span class="type">Rectangle</span> {
+    width: <span class="type">u32</span>,
+    height: <span class="type">u32</span>,
+}
+
+<span class="kw">impl</span> <span class="type">Rectangle</span> {
+    <span class="cmt">// Associated function (no self) - constructor</span>
+    <span class="kw">fn</span> <span class="fn">new</span>(width: <span class="type">u32</span>, height: <span class="type">u32</span>) -> <span class="type">Self</span> {
+        <span class="type">Self</span> { width, height }
+    }
+
+    <span class="cmt">// Method (takes &self)</span>
+    <span class="kw">fn</span> <span class="fn">area</span>(&<span class="kw">self</span>) -> <span class="type">u32</span> {
+        <span class="kw">self</span>.width * <span class="kw">self</span>.height
+    }
+
+    <span class="cmt">// Mutable method</span>
+    <span class="kw">fn</span> <span class="fn">scale</span>(&<span class="kw">mut</span> <span class="kw">self</span>, factor: <span class="type">u32</span>) {
+        <span class="kw">self</span>.width *= factor;
+        <span class="kw">self</span>.height *= factor;
+    }
+}
+
+<span class="kw">let</span> rect = <span class="type">Rectangle</span>::<span class="fn">new</span>(<span class="num">30</span>, <span class="num">50</span>);
+<span class="macro">println!</span>(<span class="str">"Area: {}"</span>, rect.<span class="fn">area</span>());</pre>
+
+                <h3>Enums</h3>
+                <pre data-lang="rust"><span class="cmt">// Simple enum</span>
+<span class="kw">enum</span> <span class="type">Direction</span> {
+    North,
+    South,
+    East,
+    West,
+}
+
+<span class="cmt">// Enum with data</span>
+<span class="kw">enum</span> <span class="type">Message</span> {
+    Quit,
+    Move { x: <span class="type">i32</span>, y: <span class="type">i32</span> },
+    Write(<span class="type">String</span>),
+    ChangeColor(<span class="type">u8</span>, <span class="type">u8</span>, <span class="type">u8</span>),
+}
+
+<span class="kw">let</span> msg = <span class="type">Message</span>::Write(<span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>));</pre>
+
+                <h3>Pattern Matching</h3>
+                <pre data-lang="rust"><span class="cmt">// match is exhaustive</span>
+<span class="kw">match</span> msg {
+    <span class="type">Message</span>::Quit => <span class="macro">println!</span>(<span class="str">"Quit"</span>),
+    <span class="type">Message</span>::Move { x, y } => <span class="macro">println!</span>(<span class="str">"Move to {}, {}"</span>, x, y),
+    <span class="type">Message</span>::Write(text) => <span class="macro">println!</span>(<span class="str">"Text: {}"</span>, text),
+    <span class="type">Message</span>::ChangeColor(r, g, b) => <span class="macro">println!</span>(<span class="str">"RGB: {}, {}, {}"</span>, r, g, b),
+}
+
+<span class="cmt">// if let (single pattern)</span>
+<span class="kw">if</span> <span class="kw">let</span> <span class="type">Message</span>::Write(text) = msg {
+    <span class="macro">println!</span>(<span class="str">"Got text: {}"</span>, text);
+}
+
+<span class="cmt">// while let</span>
+<span class="kw">while</span> <span class="kw">let</span> <span class="type">Some</span>(item) = stack.<span class="fn">pop</span>() {
+    <span class="macro">println!</span>(<span class="str">"{}"</span>, item);
+}</pre>
+
+                <h3>Option & Pattern Guards</h3>
+                <pre data-lang="rust"><span class="cmt">// Option&lt;T&gt; - nullable type</span>
+<span class="kw">let</span> some_number: <span class="type">Option</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Some</span>(<span class="num">5</span>);
+<span class="kw">let</span> no_number: <span class="type">Option</span>&lt;<span class="type">i32</span>&gt; = <span class="type">None</span>;
+
+<span class="cmt">// Pattern guards</span>
+<span class="kw">match</span> x {
+    <span class="type">Some</span>(n) <span class="kw">if</span> n > <span class="num">0</span> => <span class="macro">println!</span>(<span class="str">"positive"</span>),
+    <span class="type">Some</span>(n) <span class="kw">if</span> n < <span class="num">0</span> => <span class="macro">println!</span>(<span class="str">"negative"</span>),
+    <span class="type">Some</span>(_) => <span class="macro">println!</span>(<span class="str">"zero"</span>),
+    <span class="type">None</span> => <span class="macro">println!</span>(<span class="str">"nothing"</span>),
+}</pre>
+            </section>
+
+            <!-- Traits -->
+            <section id="traits">
+                <h2>Traits</h2>
+                <p>Traits define shared behavior. Similar to interfaces in other languages.</p>
+
+                <h3>Defining & Implementing Traits</h3>
+                <pre data-lang="rust"><span class="cmt">// Define trait</span>
+<span class="kw">trait</span> <span class="type">Summary</span> {
+    <span class="kw">fn</span> <span class="fn">summarize</span>(&<span class="kw">self</span>) -> <span class="type">String</span>;
+
+    <span class="cmt">// Default implementation</span>
+    <span class="kw">fn</span> <span class="fn">preview</span>(&<span class="kw">self</span>) -> <span class="type">String</span> {
+        <span class="macro">format!</span>(<span class="str">"Read more: {}"</span>, <span class="kw">self</span>.<span class="fn">summarize</span>())
+    }
+}
+
+<span class="cmt">// Implement trait</span>
+<span class="kw">impl</span> <span class="type">Summary</span> <span class="kw">for</span> <span class="type">Article</span> {
+    <span class="kw">fn</span> <span class="fn">summarize</span>(&<span class="kw">self</span>) -> <span class="type">String</span> {
+        <span class="macro">format!</span>(<span class="str">"{} by {}"</span>, <span class="kw">self</span>.title, <span class="kw">self</span>.author)
+    }
+}</pre>
+
+                <h3>Trait Bounds</h3>
+                <pre data-lang="rust"><span class="cmt">// Function with trait bound</span>
+<span class="kw">fn</span> <span class="fn">notify</span>(item: &<span class="kw">impl</span> <span class="type">Summary</span>) {
+    <span class="macro">println!</span>(<span class="str">"Breaking: {}"</span>, item.<span class="fn">summarize</span>());
+}
+
+<span class="cmt">// Generic with trait bound</span>
+<span class="kw">fn</span> <span class="fn">notify</span>&lt;T: <span class="type">Summary</span>&gt;(item: &T) {
+    <span class="macro">println!</span>(<span class="str">"Breaking: {}"</span>, item.<span class="fn">summarize</span>());
+}
+
+<span class="cmt">// Multiple bounds</span>
+<span class="kw">fn</span> <span class="fn">process</span>&lt;T: <span class="type">Summary</span> + <span class="type">Clone</span>&gt;(item: &T) { }
+
+<span class="cmt">// where clause (cleaner)</span>
+<span class="kw">fn</span> <span class="fn">process</span>&lt;T&gt;(item: &T)
+<span class="kw">where</span>
+    T: <span class="type">Summary</span> + <span class="type">Clone</span>,
+{
+    <span class="cmt">// ...</span>
+}</pre>
+
+                <h3>Common Traits</h3>
+                <pre data-lang="rust"><span class="cmt">// Derive common traits</span>
+<span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash)]</span>
+<span class="kw">struct</span> <span class="type">Point</span> {
+    x: <span class="type">i32</span>,
+    y: <span class="type">i32</span>,
+}
+
+<span class="cmt">// Debug: {:?} formatting</span>
+<span class="macro">println!</span>(<span class="str">"{:?}"</span>, point);
+
+<span class="cmt">// Display: {} formatting (manual impl)</span>
+<span class="kw">impl</span> <span class="type">std</span>::<span class="type">fmt</span>::<span class="type">Display</span> <span class="kw">for</span> <span class="type">Point</span> {
+    <span class="kw">fn</span> <span class="fn">fmt</span>(&<span class="kw">self</span>, f: &<span class="kw">mut</span> <span class="type">std</span>::<span class="type">fmt</span>::<span class="type">Formatter</span>) -> <span class="type">std</span>::<span class="type">fmt</span>::<span class="type">Result</span> {
+        <span class="macro">write!</span>(f, <span class="str">"({}, {})"</span>, <span class="kw">self</span>.x, <span class="kw">self</span>.y)
+    }
+}</pre>
+
+                <dl class="concept-list">
+                    <div class="concept">
+                        <dt>Clone</dt>
+                        <dd>Explicit deep copy via <code>.clone()</code></dd>
+                    </div>
+                    <div class="concept">
+                        <dt>Copy</dt>
+                        <dd>Implicit bitwise copy (stack-only types)</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>Debug</dt>
+                        <dd>Format with <code>{:?}</code></dd>
+                    </div>
+                    <div class="concept">
+                        <dt>Default</dt>
+                        <dd>Create default value via <code>Default::default()</code></dd>
+                    </div>
+                    <div class="concept">
+                        <dt>PartialEq/Eq</dt>
+                        <dd>Equality comparison (<code>==</code>)</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>PartialOrd/Ord</dt>
+                        <dd>Ordering comparison (<code>&lt;</code>, <code>&gt;</code>)</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <!-- Error Handling -->
+            <section id="errors">
+                <h2>Error Handling</h2>
+                <p>Rust has no exceptions. Errors are values, handled via Result and Option types.</p>
+
+                <h3>Result Type</h3>
+                <pre data-lang="rust"><span class="cmt">// Result&lt;T, E&gt; - success or error</span>
+<span class="kw">enum</span> <span class="type">Result</span>&lt;T, E&gt; {
+    <span class="type">Ok</span>(T),
+    <span class="type">Err</span>(E),
+}
+
+<span class="kw">fn</span> <span class="fn">divide</span>(a: <span class="type">f64</span>, b: <span class="type">f64</span>) -> <span class="type">Result</span>&lt;<span class="type">f64</span>, <span class="type">String</span>&gt; {
+    <span class="kw">if</span> b == <span class="num">0.0</span> {
+        <span class="type">Err</span>(<span class="type">String</span>::<span class="fn">from</span>(<span class="str">"division by zero"</span>))
+    } <span class="kw">else</span> {
+        <span class="type">Ok</span>(a / b)
+    }
+}</pre>
+
+                <h3>Handling Results</h3>
+                <pre data-lang="rust"><span class="cmt">// match</span>
+<span class="kw">match</span> <span class="fn">divide</span>(<span class="num">10.0</span>, <span class="num">2.0</span>) {
+    <span class="type">Ok</span>(result) => <span class="macro">println!</span>(<span class="str">"Result: {}"</span>, result),
+    <span class="type">Err</span>(e) => <span class="macro">println!</span>(<span class="str">"Error: {}"</span>, e),
+}
+
+<span class="cmt">// unwrap (panics on Err)</span>
+<span class="kw">let</span> result = <span class="fn">divide</span>(<span class="num">10.0</span>, <span class="num">2.0</span>).<span class="fn">unwrap</span>();
+
+<span class="cmt">// expect (panics with message)</span>
+<span class="kw">let</span> result = <span class="fn">divide</span>(<span class="num">10.0</span>, <span class="num">2.0</span>).<span class="fn">expect</span>(<span class="str">"division failed"</span>);
+
+<span class="cmt">// unwrap_or (default value)</span>
+<span class="kw">let</span> result = <span class="fn">divide</span>(<span class="num">10.0</span>, <span class="num">0.0</span>).<span class="fn">unwrap_or</span>(<span class="num">0.0</span>);
+
+<span class="cmt">// unwrap_or_else (closure for default)</span>
+<span class="kw">let</span> result = <span class="fn">divide</span>(<span class="num">10.0</span>, <span class="num">0.0</span>).<span class="fn">unwrap_or_else</span>(|e| {
+    <span class="macro">println!</span>(<span class="str">"Error: {}"</span>, e);
+    <span class="num">0.0</span>
+});</pre>
+
+                <h3>The ? Operator</h3>
+                <pre data-lang="rust"><span class="cmt">// Propagate errors with ?</span>
+<span class="kw">fn</span> <span class="fn">read_file</span>() -> <span class="type">Result</span>&lt;<span class="type">String</span>, <span class="type">std</span>::<span class="type">io</span>::<span class="type">Error</span>&gt; {
+    <span class="kw">let</span> <span class="kw">mut</span> file = <span class="type">File</span>::<span class="fn">open</span>(<span class="str">"file.txt"</span>)?;  <span class="cmt">// returns Err if fails</span>
+    <span class="kw">let</span> <span class="kw">mut</span> contents = <span class="type">String</span>::<span class="fn">new</span>();
+    file.<span class="fn">read_to_string</span>(&<span class="kw">mut</span> contents)?;
+    <span class="type">Ok</span>(contents)
+}
+
+<span class="cmt">// Also works with Option (returns None)</span>
+<span class="kw">fn</span> <span class="fn">first_char</span>(s: &<span class="type">str</span>) -> <span class="type">Option</span>&lt;<span class="type">char</span>&gt; {
+    s.<span class="fn">lines</span>().<span class="fn">next</span>()?.<span class="fn">chars</span>().<span class="fn">next</span>()
+}</pre>
+
+                <h3>Custom Error Types</h3>
+                <pre data-lang="rust"><span class="kw">use</span> std::error::<span class="type">Error</span>;
+<span class="kw">use</span> std::fmt;
+
+<span class="attr">#[derive(Debug)]</span>
+<span class="kw">struct</span> <span class="type">MyError</span> {
+    message: <span class="type">String</span>,
+}
+
+<span class="kw">impl</span> <span class="type">fmt</span>::<span class="type">Display</span> <span class="kw">for</span> <span class="type">MyError</span> {
+    <span class="kw">fn</span> <span class="fn">fmt</span>(&<span class="kw">self</span>, f: &<span class="kw">mut</span> <span class="type">fmt</span>::<span class="type">Formatter</span>) -> <span class="type">fmt</span>::<span class="type">Result</span> {
+        <span class="macro">write!</span>(f, <span class="str">"{}"</span>, <span class="kw">self</span>.message)
+    }
+}
+
+<span class="kw">impl</span> <span class="type">Error</span> <span class="kw">for</span> <span class="type">MyError</span> {}</pre>
+
+                <div class="tip">
+                    Use <code>anyhow</code> crate for application code, <code>thiserror</code> for library code to simplify error handling.
+                </div>
+            </section>
+
+            <!-- Collections -->
+            <section id="collections">
+                <h2>Collections</h2>
+
+                <h3>Vec (Dynamic Array)</h3>
+                <pre data-lang="rust"><span class="cmt">// Create</span>
+<span class="kw">let</span> <span class="kw">mut</span> v: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Vec</span>::<span class="fn">new</span>();
+<span class="kw">let</span> v = <span class="macro">vec!</span>[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+
+<span class="cmt">// Modify</span>
+v.<span class="fn">push</span>(<span class="num">4</span>);
+<span class="kw">let</span> last = v.<span class="fn">pop</span>();  <span class="cmt">// Option&lt;i32&gt;</span>
+
+<span class="cmt">// Access</span>
+<span class="kw">let</span> third = &v[<span class="num">2</span>];           <span class="cmt">// panics if out of bounds</span>
+<span class="kw">let</span> third = v.<span class="fn">get</span>(<span class="num">2</span>);        <span class="cmt">// Option&lt;&i32&gt;</span>
+
+<span class="cmt">// Iterate</span>
+<span class="kw">for</span> item <span class="kw">in</span> &v {
+    <span class="macro">println!</span>(<span class="str">"{}"</span>, item);
+}
+
+<span class="cmt">// Mutate while iterating</span>
+<span class="kw">for</span> item <span class="kw">in</span> &<span class="kw">mut</span> v {
+    *item += <span class="num">10</span>;
+}</pre>
+
+                <h3>HashMap</h3>
+                <pre data-lang="rust"><span class="kw">use</span> std::collections::<span class="type">HashMap</span>;
+
+<span class="cmt">// Create</span>
+<span class="kw">let</span> <span class="kw">mut</span> scores = <span class="type">HashMap</span>::<span class="fn">new</span>();
+
+<span class="cmt">// Insert</span>
+scores.<span class="fn">insert</span>(<span class="type">String</span>::<span class="fn">from</span>(<span class="str">"Blue"</span>), <span class="num">10</span>);
+scores.<span class="fn">insert</span>(<span class="type">String</span>::<span class="fn">from</span>(<span class="str">"Red"</span>), <span class="num">50</span>);
+
+<span class="cmt">// Access</span>
+<span class="kw">let</span> score = scores.<span class="fn">get</span>(<span class="str">"Blue"</span>);  <span class="cmt">// Option&lt;&i32&gt;</span>
+
+<span class="cmt">// Insert only if key doesn't exist</span>
+scores.<span class="fn">entry</span>(<span class="type">String</span>::<span class="fn">from</span>(<span class="str">"Yellow"</span>)).<span class="fn">or_insert</span>(<span class="num">30</span>);
+
+<span class="cmt">// Update based on old value</span>
+<span class="kw">let</span> count = scores.<span class="fn">entry</span>(<span class="type">String</span>::<span class="fn">from</span>(<span class="str">"Blue"</span>)).<span class="fn">or_insert</span>(<span class="num">0</span>);
+*count += <span class="num">1</span>;
+
+<span class="cmt">// Iterate</span>
+<span class="kw">for</span> (key, value) <span class="kw">in</span> &scores {
+    <span class="macro">println!</span>(<span class="str">"{}: {}"</span>, key, value);
+}</pre>
+
+                <h3>HashSet</h3>
+                <pre data-lang="rust"><span class="kw">use</span> std::collections::<span class="type">HashSet</span>;
+
+<span class="kw">let</span> <span class="kw">mut</span> set = <span class="type">HashSet</span>::<span class="fn">new</span>();
+set.<span class="fn">insert</span>(<span class="num">1</span>);
+set.<span class="fn">insert</span>(<span class="num">2</span>);
+
+<span class="kw">let</span> contains = set.<span class="fn">contains</span>(&<span class="num">1</span>);  <span class="cmt">// true</span>
+<span class="kw">let</span> removed = set.<span class="fn">remove</span>(&<span class="num">1</span>);    <span class="cmt">// true</span></pre>
+            </section>
+
+            <!-- Iterators -->
+            <section id="iterators">
+                <h2>Iterators & Closures</h2>
+
+                <h3>Closures</h3>
+                <pre data-lang="rust"><span class="cmt">// Basic closure</span>
+<span class="kw">let</span> add = |a, b| a + b;
+<span class="kw">let</span> result = <span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>);
+
+<span class="cmt">// With type annotations</span>
+<span class="kw">let</span> add = |a: <span class="type">i32</span>, b: <span class="type">i32</span>| -> <span class="type">i32</span> { a + b };
+
+<span class="cmt">// Capturing environment</span>
+<span class="kw">let</span> x = <span class="num">4</span>;
+<span class="kw">let</span> equals_x = |z| z == x;  <span class="cmt">// captures x</span>
+
+<span class="cmt">// move keyword (take ownership)</span>
+<span class="kw">let</span> s = <span class="type">String</span>::<span class="fn">from</span>(<span class="str">"hello"</span>);
+<span class="kw">let</span> closure = <span class="kw">move</span> || <span class="macro">println!</span>(<span class="str">"{}"</span>, s);</pre>
+
+                <h3>Iterator Methods</h3>
+                <pre data-lang="rust"><span class="kw">let</span> v = <span class="macro">vec!</span>[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+
+<span class="cmt">// map: transform each element</span>
+<span class="kw">let</span> doubled: <span class="type">Vec</span>&lt;_&gt; = v.<span class="fn">iter</span>().<span class="fn">map</span>(|x| x * <span class="num">2</span>).<span class="fn">collect</span>();
+
+<span class="cmt">// filter: keep matching elements</span>
+<span class="kw">let</span> evens: <span class="type">Vec</span>&lt;_&gt; = v.<span class="fn">iter</span>().<span class="fn">filter</span>(|x| *x % <span class="num">2</span> == <span class="num">0</span>).<span class="fn">collect</span>();
+
+<span class="cmt">// fold: reduce to single value</span>
+<span class="kw">let</span> sum: <span class="type">i32</span> = v.<span class="fn">iter</span>().<span class="fn">fold</span>(<span class="num">0</span>, |acc, x| acc + x);
+
+<span class="cmt">// find: first matching element</span>
+<span class="kw">let</span> first_even = v.<span class="fn">iter</span>().<span class="fn">find</span>(|x| *x % <span class="num">2</span> == <span class="num">0</span>);
+
+<span class="cmt">// Chain methods</span>
+<span class="kw">let</span> result: <span class="type">i32</span> = v.<span class="fn">iter</span>()
+    .<span class="fn">filter</span>(|x| *x % <span class="num">2</span> == <span class="num">0</span>)
+    .<span class="fn">map</span>(|x| x * <span class="num">2</span>)
+    .<span class="fn">sum</span>();</pre>
+
+                <h3>Iterator Types</h3>
+                <pre data-lang="rust"><span class="cmt">// iter(): borrows elements (&T)</span>
+<span class="kw">for</span> item <span class="kw">in</span> v.<span class="fn">iter</span>() { }
+
+<span class="cmt">// iter_mut(): mutable borrow (&mut T)</span>
+<span class="kw">for</span> item <span class="kw">in</span> v.<span class="fn">iter_mut</span>() { }
+
+<span class="cmt">// into_iter(): takes ownership (T)</span>
+<span class="kw">for</span> item <span class="kw">in</span> v.<span class="fn">into_iter</span>() { }
+
+<span class="cmt">// Ranges</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="num">0</span>..<span class="num">10</span> { }     <span class="cmt">// 0 to 9</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="num">0</span>..=<span class="num">10</span> { }    <span class="cmt">// 0 to 10 (inclusive)</span></pre>
+            </section>
+
+            <!-- Cargo -->
+            <section id="cargo">
+                <h2>Cargo & Project Structure</h2>
+
+                <h3>Common Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Create new project</span>
+cargo new myproject
+cargo new --lib mylibrary
+
+<span class="cmt"># Build</span>
+cargo build
+cargo build --release
+
+<span class="cmt"># Run</span>
+cargo run
+cargo run --release
+
+<span class="cmt"># Test</span>
+cargo test
+cargo test test_name
+
+<span class="cmt"># Check (fast compile check)</span>
+cargo check
+
+<span class="cmt"># Format & lint</span>
+cargo fmt
+cargo clippy
+
+<span class="cmt"># Documentation</span>
+cargo doc --open
+
+<span class="cmt"># Add dependency</span>
+cargo add serde
+cargo add tokio --features full</pre>
+
+                <h3>Cargo.toml</h3>
+                <pre data-lang="toml"><span class="attr">[package]</span>
+name = <span class="str">"myproject"</span>
+version = <span class="str">"0.1.0"</span>
+edition = <span class="str">"2024"</span>
+
+<span class="attr">[dependencies]</span>
+serde = { version = <span class="str">"1.0"</span>, features = [<span class="str">"derive"</span>] }
+tokio = { version = <span class="str">"1"</span>, features = [<span class="str">"full"</span>] }
+
+<span class="attr">[dev-dependencies]</span>
+criterion = <span class="str">"0.5"</span></pre>
+
+                <h3>Project Structure</h3>
+                <pre data-lang="text">myproject/
+├── Cargo.toml
+├── src/
+│   ├── main.rs      <span class="cmt"># Binary entry point</span>
+│   ├── lib.rs       <span class="cmt"># Library root</span>
+│   └── module/
+│       └── mod.rs
+├── tests/           <span class="cmt"># Integration tests</span>
+├── benches/         <span class="cmt"># Benchmarks</span>
+└── examples/        <span class="cmt"># Example programs</span></pre>
+
+                <h3>Modules</h3>
+                <pre data-lang="rust"><span class="cmt">// In lib.rs or main.rs</span>
+<span class="kw">mod</span> utils;           <span class="cmt">// loads utils.rs or utils/mod.rs</span>
+<span class="kw">pub</span> <span class="kw">mod</span> api;         <span class="cmt">// public module</span>
+
+<span class="cmt">// Use items</span>
+<span class="kw">use</span> crate::utils::<span class="fn">helper</span>;
+<span class="kw">use</span> std::collections::<span class="type">HashMap</span>;
+<span class="kw">use</span> serde::{<span class="type">Serialize</span>, <span class="type">Deserialize</span>};
+
+<span class="cmt">// Re-export</span>
+<span class="kw">pub</span> <span class="kw">use</span> self::types::<span class="type">Config</span>;</pre>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Rust TLDR — Last updated December 2025 for Rust 1.91.1<br>
+                <a href="https://rust-lang.org" target="_blank">Official Site</a> ·
+                <a href="https://doc.rust-lang.org/book/" target="_blank">The Rust Book</a> ·
+                <a href="https://doc.rust-lang.org/std/" target="_blank">Std Library</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
