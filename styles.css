@@ -238,6 +238,7 @@ main {
 section {
   margin-bottom: 80px;
   animation: fadeIn 0.5s ease-out;
+  scroll-margin-top: 90px;
 }
 
 @keyframes fadeIn {
@@ -258,8 +259,8 @@ h2 {
   font-family: "Instrument Serif", serif;
   font-size: 36px;
   font-weight: 400;
-  margin-bottom: 32px;
-  padding-bottom: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
   border-bottom: 2px solid var(--accent);
   display: inline-block;
 }
