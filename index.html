@@ -191,6 +191,19 @@
         border-radius: 4px;
       }
 
+      .guide-card.lua {
+        --card-accent: #000080;
+      }
+
+      .guide-card.lua:hover {
+        border-color: #000080;
+        box-shadow: 0 12px 40px rgba(0, 0, 128, 0.15);
+      }
+
+      .guide-card.lua .guide-icon {
+        border-radius: 50%;
+      }
+
       .guide-header {
         display: flex;
         align-items: center;
@@ -503,6 +516,23 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">v5.9</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="lua.html" class="guide-card lua">
+            <div class="guide-header">
+              <div class="guide-icon">Lua</div>
+              <span class="guide-title">Lua</span>
+            </div>
+            <p class="guide-desc">
+              A lightweight, embeddable scripting language designed for
+              extending applications. Simple syntax, powerful tables as the
+              only data structure, first-class functions, and coroutines.
+              Popular in game development, embedded systems, and configuration.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v5.4.8</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>
