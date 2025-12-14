@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* PHP theme */
+        :root {
+            --accent: #777BB4;
+            --accent-glow: rgba(119, 123, 180, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 8px;
+        }
+
+        .card h4::before {
+            content: '🐘';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">PHP</div>
+            </div>
+            <h1>PHP <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the PHP programming language. Server-side scripting for the web and beyond.</p>
+            <div class="version-badge">v8.4 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is PHP?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#oop">OOP</a></li>
+                <li><a href="#modern">Modern PHP</a></li>
+                <li><a href="#arrays">Arrays</a></li>
+                <li><a href="#errors">Error Handling</a></li>
+                <li><a href="#stdlib">Standard Library</a></li>
+                <li><a href="#composer">Composer</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is PHP? -->
+            <section id="what">
+                <h2>What is PHP?</h2>
+                <p>PHP is a popular general-purpose scripting language especially suited to web development. Fast, flexible, and pragmatic, PHP powers everything from blogs to the world's largest websites.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Server-Side Scripting</h4>
+                        <p>Runs on the server, generates HTML dynamically. Powers WordPress, Laravel, Symfony, and millions of sites.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Easy to Learn</h4>
+                        <p>Simple syntax, forgiving nature, and immediate results. Perfect for beginners and productive for experts.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Modern & Evolving</h4>
+                        <p>PHP 8+ brings JIT compilation, union types, attributes, enums, and performance improvements.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Rich Ecosystem</h4>
+                        <p>Composer for packages, massive standard library, frameworks like Laravel, Symfony, and vibrant community.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="php"><span class="op">&lt;?php</span>
+<span class="kw">echo</span> <span class="str">"Hello, World!"</span>;
+<span class="cmt">// Short echo tag (requires short_open_tag enabled)</span>
+<span class="op">&lt;?=</span> <span class="str">"Hello, World!"</span> <span class="op">?&gt;</span></pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="php"><span class="op">&lt;?php</span>
+<span class="cmt">// Variables start with $</span>
+<span class="var">$name</span> = <span class="str">"Alice"</span>;
+<span class="var">$age</span> = <span class="num">30</span>;
+<span class="var">$price</span> = <span class="num">19.99</span>;
+<span class="var">$isActive</span> = <span class="kw">true</span>;
+
+<span class="cmt">// Variable variables</span>
+<span class="var">$var</span> = <span class="str">"name"</span>;
+<span class="kw">echo</span> <span class="var">$$var</span>;  <span class="cmt">// prints "Alice"</span>
+
+<span class="cmt">// Constants</span>
+<span class="kw">const</span> MAX_SIZE = <span class="num">100</span>;
+<span class="fn">define</span>(<span class="str">"API_KEY"</span>, <span class="str">"secret"</span>);
+
+<span class="cmt">// Interpolation (double quotes only)</span>
+<span class="kw">echo</span> <span class="str">"Hello, $name!"</span>;
+<span class="kw">echo</span> <span class="str">"Hello, {$name}!"</span>;  <span class="cmt">// clearer syntax</span></pre>
+
+                <h3>Data Types</h3>
+                <pre data-lang="php"><span class="cmt">// Scalar types</span>
+<span class="var">$str</span> = <span class="str">"string"</span>;           <span class="cmt">// string</span>
+<span class="var">$int</span> = <span class="num">42</span>;                 <span class="cmt">// int</span>
+<span class="var">$float</span> = <span class="num">3.14</span>;             <span class="cmt">// float</span>
+<span class="var">$bool</span> = <span class="kw">true</span>;              <span class="cmt">// bool</span>
+
+<span class="cmt">// Compound types</span>
+<span class="var">$array</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];       <span class="cmt">// array</span>
+<span class="var">$obj</span> = <span class="kw">new</span> <span class="type">stdClass</span>();    <span class="cmt">// object</span>
+<span class="var">$callback</span> = <span class="kw">fn</span>() => <span class="num">1</span>;     <span class="cmt">// callable</span>
+
+<span class="cmt">// Special types</span>
+<span class="var">$null</span> = <span class="kw">null</span>;              <span class="cmt">// null</span>
+<span class="var">$resource</span> = <span class="fn">fopen</span>(<span class="str">"file.txt"</span>, <span class="str">"r"</span>);  <span class="cmt">// resource</span>
+
+<span class="cmt">// Type checking</span>
+<span class="fn">is_string</span>(<span class="var">$str</span>);
+<span class="fn">is_int</span>(<span class="var">$int</span>);
+<span class="fn">is_array</span>(<span class="var">$array</span>);
+<span class="fn">gettype</span>(<span class="var">$var</span>);</pre>
+
+                <h3>Control Flow</h3>
+                <pre data-lang="php"><span class="cmt">// if/else</span>
+<span class="kw">if</span> (<span class="var">$age</span> >= <span class="num">18</span>) {
+    <span class="kw">echo</span> <span class="str">"Adult"</span>;
+} <span class="kw">elseif</span> (<span class="var">$age</span> >= <span class="num">13</span>) {
+    <span class="kw">echo</span> <span class="str">"Teen"</span>;
+} <span class="kw">else</span> {
+    <span class="kw">echo</span> <span class="str">"Child"</span>;
+}
+
+<span class="cmt">// Ternary</span>
+<span class="var">$status</span> = <span class="var">$age</span> >= <span class="num">18</span> ? <span class="str">"adult"</span> : <span class="str">"minor"</span>;
+
+<span class="cmt">// Null coalescing</span>
+<span class="var">$name</span> = <span class="var">$_GET</span>[<span class="str">'name'</span>] ?? <span class="str">"Guest"</span>;
+
+<span class="cmt">// Null coalescing assignment (PHP 7.4+)</span>
+<span class="var">$data</span>[<span class="str">'key'</span>] ??= <span class="str">"default"</span>;
+
+<span class="cmt">// switch</span>
+<span class="kw">switch</span> (<span class="var">$role</span>) {
+    <span class="kw">case</span> <span class="str">"admin"</span>:
+        <span class="kw">echo</span> <span class="str">"Full access"</span>;
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">"user"</span>:
+        <span class="kw">echo</span> <span class="str">"Limited access"</span>;
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="kw">echo</span> <span class="str">"No access"</span>;
+}
+
+<span class="cmt">// Loops</span>
+<span class="kw">for</span> (<span class="var">$i</span> = <span class="num">0</span>; <span class="var">$i</span> < <span class="num">10</span>; <span class="var">$i</span>++) {
+    <span class="kw">echo</span> <span class="var">$i</span>;
+}
+
+<span class="kw">while</span> (<span class="var">$condition</span>) {
+    <span class="cmt">// do something</span>
+}
+
+<span class="kw">foreach</span> (<span class="var">$array</span> <span class="kw">as</span> <span class="var">$value</span>) {
+    <span class="kw">echo</span> <span class="var">$value</span>;
+}
+
+<span class="kw">foreach</span> (<span class="var">$array</span> <span class="kw">as</span> <span class="var">$key</span> => <span class="var">$value</span>) {
+    <span class="kw">echo</span> <span class="str">"$key: $value"</span>;
+}</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Type Declarations</h2>
+                <p>PHP 7+ introduced scalar type hints and return types. PHP 8+ added union types, mixed type, and more.</p>
+
+                <h3>Function Types</h3>
+                <pre data-lang="php"><span class="cmt">// Parameter types</span>
+<span class="kw">function</span> <span class="fn">greet</span>(<span class="type">string</span> <span class="var">$name</span>): <span class="type">void</span> {
+    <span class="kw">echo</span> <span class="str">"Hello, $name!"</span>;
+}
+
+<span class="cmt">// Return type</span>
+<span class="kw">function</span> <span class="fn">add</span>(<span class="type">int</span> <span class="var">$a</span>, <span class="type">int</span> <span class="var">$b</span>): <span class="type">int</span> {
+    <span class="kw">return</span> <span class="var">$a</span> + <span class="var">$b</span>;
+}
+
+<span class="cmt">// Nullable types</span>
+<span class="kw">function</span> <span class="fn">find</span>(<span class="type">int</span> <span class="var">$id</span>): ?<span class="type">User</span> {
+    <span class="kw">return</span> <span class="var">$user</span> ?? <span class="kw">null</span>;
+}
+
+<span class="cmt">// Union types (PHP 8.0+)</span>
+<span class="kw">function</span> <span class="fn">process</span>(<span class="type">int</span>|<span class="type">float</span> <span class="var">$num</span>): <span class="type">string</span>|<span class="type">int</span> {
+    <span class="kw">return</span> <span class="var">$num</span> * <span class="num">2</span>;
+}
+
+<span class="cmt">// Mixed type (any type)</span>
+<span class="kw">function</span> <span class="fn">anything</span>(<span class="type">mixed</span> <span class="var">$value</span>): <span class="type">mixed</span> {
+    <span class="kw">return</span> <span class="var">$value</span>;
+}</pre>
+
+                <h3>Property Types (PHP 7.4+)</h3>
+                <pre data-lang="php"><span class="kw">class</span> <span class="type">User</span> {
+    <span class="kw">public</span> <span class="type">string</span> <span class="var">$name</span>;
+    <span class="kw">public</span> <span class="type">int</span> <span class="var">$age</span>;
+    <span class="kw">private</span> ?<span class="type">string</span> <span class="var">$email</span> = <span class="kw">null</span>;
+    <span class="kw">public</span> <span class="type">array</span> <span class="var">$roles</span> = [];
+
+    <span class="cmt">// Readonly properties (PHP 8.1+)</span>
+    <span class="kw">public</span> <span class="kw">readonly</span> <span class="type">string</span> <span class="var">$id</span>;
+}
+
+<span class="cmt">// Readonly class (PHP 8.2+)</span>
+<span class="kw">readonly</span> <span class="kw">class</span> <span class="type">Point</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(
+        <span class="kw">public</span> <span class="type">float</span> <span class="var">$x</span>,
+        <span class="kw">public</span> <span class="type">float</span> <span class="var">$y</span>,
+    ) {}
+}</pre>
+
+                <h3>Strict Types</h3>
+                <pre data-lang="php"><span class="op">&lt;?php</span>
+<span class="cmt">// Enable strict typing (must be first line)</span>
+<span class="kw">declare</span>(<span class="attr">strict_types</span>=<span class="num">1</span>);
+
+<span class="kw">function</span> <span class="fn">multiply</span>(<span class="type">int</span> <span class="var">$a</span>, <span class="type">int</span> <span class="var">$b</span>): <span class="type">int</span> {
+    <span class="kw">return</span> <span class="var">$a</span> * <span class="var">$b</span>;
+}
+
+<span class="fn">multiply</span>(<span class="num">2</span>, <span class="num">3</span>);       <span class="cmt">// OK</span>
+<span class="fn">multiply</span>(<span class="str">"2"</span>, <span class="str">"3"</span>);  <span class="cmt">// TypeError in strict mode</span></pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Basic Functions</h3>
+                <pre data-lang="php"><span class="cmt">// Standard function</span>
+<span class="kw">function</span> <span class="fn">sayHello</span>(<span class="type">string</span> <span class="var">$name</span> = <span class="str">"World"</span>): <span class="type">string</span> {
+    <span class="kw">return</span> <span class="str">"Hello, $name!"</span>;
+}
+
+<span class="cmt">// Variadic function</span>
+<span class="kw">function</span> <span class="fn">sum</span>(<span class="type">int</span> ...<span class="var">$numbers</span>): <span class="type">int</span> {
+    <span class="kw">return</span> <span class="fn">array_sum</span>(<span class="var">$numbers</span>);
+}
+
+<span class="fn">sum</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>);  <span class="cmt">// 10</span>
+
+<span class="cmt">// Named arguments (PHP 8.0+)</span>
+<span class="kw">function</span> <span class="fn">createUser</span>(<span class="type">string</span> <span class="var">$name</span>, <span class="type">int</span> <span class="var">$age</span>, <span class="type">string</span> <span class="var">$email</span>): <span class="type">array</span> {
+    <span class="kw">return</span> <span class="fn">compact</span>(<span class="str">'name'</span>, <span class="str">'age'</span>, <span class="str">'email'</span>);
+}
+
+<span class="fn">createUser</span>(<span class="attr">age</span>: <span class="num">25</span>, <span class="attr">name</span>: <span class="str">"Alice"</span>, <span class="attr">email</span>: <span class="str">"a@ex.com"</span>);</pre>
+
+                <h3>Anonymous Functions & Closures</h3>
+                <pre data-lang="php"><span class="cmt">// Anonymous function</span>
+<span class="var">$greet</span> = <span class="kw">function</span>(<span class="type">string</span> <span class="var">$name</span>): <span class="type">string</span> {
+    <span class="kw">return</span> <span class="str">"Hello, $name!"</span>;
+};
+
+<span class="kw">echo</span> <span class="var">$greet</span>(<span class="str">"Alice"</span>);
+
+<span class="cmt">// Closure with use</span>
+<span class="var">$multiplier</span> = <span class="num">3</span>;
+<span class="var">$times</span> = <span class="kw">function</span>(<span class="type">int</span> <span class="var">$n</span>) <span class="kw">use</span> (<span class="var">$multiplier</span>): <span class="type">int</span> {
+    <span class="kw">return</span> <span class="var">$n</span> * <span class="var">$multiplier</span>;
+};
+
+<span class="cmt">// Arrow functions (PHP 7.4+)</span>
+<span class="var">$double</span> = <span class="kw">fn</span>(<span class="var">$n</span>) => <span class="var">$n</span> * <span class="num">2</span>;
+<span class="var">$add</span> = <span class="kw">fn</span>(<span class="var">$a</span>, <span class="var">$b</span>) => <span class="var">$a</span> + <span class="var">$b</span>;
+
+<span class="cmt">// Automatically captures parent scope</span>
+<span class="var">$multiplier</span> = <span class="num">3</span>;
+<span class="var">$times</span> = <span class="kw">fn</span>(<span class="var">$n</span>) => <span class="var">$n</span> * <span class="var">$multiplier</span>;  <span class="cmt">// no 'use' needed</span></pre>
+
+                <h3>First-Class Callables (PHP 8.1+)</h3>
+                <pre data-lang="php"><span class="cmt">// Create callable reference</span>
+<span class="var">$strlen</span> = <span class="fn">strlen</span>(...);
+<span class="var">$array_map</span> = <span class="fn">array_map</span>(...);
+
+<span class="cmt">// Method references</span>
+<span class="var">$count</span> = [<span class="str">"hello"</span>, <span class="str">"world"</span>];
+<span class="var">$lengths</span> = <span class="fn">array_map</span>(<span class="fn">strlen</span>(...), <span class="var">$count</span>);</pre>
+            </section>
+
+            <!-- OOP -->
+            <section id="oop">
+                <h2>Object-Oriented Programming</h2>
+
+                <h3>Classes & Objects</h3>
+                <pre data-lang="php"><span class="kw">class</span> <span class="type">User</span> {
+    <span class="cmt">// Properties</span>
+    <span class="kw">public</span> <span class="type">string</span> <span class="var">$name</span>;
+    <span class="kw">private</span> <span class="type">int</span> <span class="var">$age</span>;
+    <span class="kw">protected</span> <span class="type">array</span> <span class="var">$roles</span> = [];
+
+    <span class="cmt">// Constructor</span>
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(<span class="type">string</span> <span class="var">$name</span>, <span class="type">int</span> <span class="var">$age</span>) {
+        <span class="var">$this</span>-><span class="var">name</span> = <span class="var">$name</span>;
+        <span class="var">$this</span>-><span class="var">age</span> = <span class="var">$age</span>;
+    }
+
+    <span class="cmt">// Methods</span>
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">getAge</span>(): <span class="type">int</span> {
+        <span class="kw">return</span> <span class="var">$this</span>-><span class="var">age</span>;
+    }
+
+    <span class="cmt">// Static method</span>
+    <span class="kw">public</span> <span class="kw">static</span> <span class="kw">function</span> <span class="fn">create</span>(<span class="type">string</span> <span class="var">$name</span>): <span class="kw">self</span> {
+        <span class="kw">return</span> <span class="kw">new</span> <span class="kw">self</span>(<span class="var">$name</span>, <span class="num">0</span>);
+    }
+}
+
+<span class="cmt">// Create instance</span>
+<span class="var">$user</span> = <span class="kw">new</span> <span class="type">User</span>(<span class="str">"Alice"</span>, <span class="num">30</span>);
+<span class="var">$user2</span> = <span class="type">User</span>::<span class="fn">create</span>(<span class="str">"Bob"</span>);</pre>
+
+                <h3>Constructor Property Promotion (PHP 8.0+)</h3>
+                <pre data-lang="php"><span class="cmt">// Before PHP 8</span>
+<span class="kw">class</span> <span class="type">Point</span> {
+    <span class="kw">public</span> <span class="type">float</span> <span class="var">$x</span>;
+    <span class="kw">public</span> <span class="type">float</span> <span class="var">$y</span>;
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(<span class="type">float</span> <span class="var">$x</span>, <span class="type">float</span> <span class="var">$y</span>) {
+        <span class="var">$this</span>-><span class="var">x</span> = <span class="var">$x</span>;
+        <span class="var">$this</span>-><span class="var">$y</span> = <span class="var">$y</span>;
+    }
+}
+
+<span class="cmt">// PHP 8+ (much cleaner!)</span>
+<span class="kw">class</span> <span class="type">Point</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(
+        <span class="kw">public</span> <span class="type">float</span> <span class="var">$x</span>,
+        <span class="kw">public</span> <span class="type">float</span> <span class="var">$y</span>,
+    ) {}
+}</pre>
+
+                <h3>Inheritance</h3>
+                <pre data-lang="php"><span class="kw">class</span> <span class="type">Animal</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(
+        <span class="kw">protected</span> <span class="type">string</span> <span class="var">$name</span>
+    ) {}
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">speak</span>(): <span class="type">string</span> {
+        <span class="kw">return</span> <span class="str">"..."</span>;
+    }
+}
+
+<span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">speak</span>(): <span class="type">string</span> {
+        <span class="kw">return</span> <span class="str">"Woof!"</span>;
+    }
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">getName</span>(): <span class="type">string</span> {
+        <span class="kw">return</span> <span class="var">$this</span>-><span class="var">name</span>;  <span class="cmt">// access protected</span>
+    }
+}</pre>
+
+                <h3>Interfaces & Traits</h3>
+                <pre data-lang="php"><span class="cmt">// Interface</span>
+<span class="kw">interface</span> <span class="type">Renderable</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">render</span>(): <span class="type">string</span>;
+}
+
+<span class="cmt">// Trait (code reuse)</span>
+<span class="kw">trait</span> <span class="type">Timestampable</span> {
+    <span class="kw">public</span> <span class="type">DateTime</span> <span class="var">$createdAt</span>;
+    <span class="kw">public</span> <span class="type">DateTime</span> <span class="var">$updatedAt</span>;
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">touch</span>(): <span class="type">void</span> {
+        <span class="var">$this</span>-><span class="var">updatedAt</span> = <span class="kw">new</span> <span class="type">DateTime</span>();
+    }
+}
+
+<span class="kw">class</span> <span class="type">Post</span> <span class="kw">implements</span> <span class="type">Renderable</span> {
+    <span class="kw">use</span> <span class="type">Timestampable</span>;
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">render</span>(): <span class="type">string</span> {
+        <span class="kw">return</span> <span class="str">"&lt;article&gt;...&lt;/article&gt;"</span>;
+    }
+}</pre>
+
+                <h3>Abstract Classes</h3>
+                <pre data-lang="php"><span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Shape</span> {
+    <span class="kw">abstract</span> <span class="kw">public</span> <span class="kw">function</span> <span class="fn">area</span>(): <span class="type">float</span>;
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">describe</span>(): <span class="type">string</span> {
+        <span class="kw">return</span> <span class="str">"Area: "</span> . <span class="var">$this</span>-><span class="fn">area</span>();
+    }
+}
+
+<span class="kw">class</span> <span class="type">Circle</span> <span class="kw">extends</span> <span class="type">Shape</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(
+        <span class="kw">private</span> <span class="type">float</span> <span class="var">$radius</span>
+    ) {}
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">area</span>(): <span class="type">float</span> {
+        <span class="kw">return</span> <span class="const">M_PI</span> * <span class="var">$this</span>-><span class="var">$radius</span> ** <span class="num">2</span>;
+    }
+}</pre>
+            </section>
+
+            <!-- Modern PHP -->
+            <section id="modern">
+                <h2>Modern PHP Features</h2>
+
+                <h3>Match Expression (PHP 8.0+)</h3>
+                <pre data-lang="php"><span class="cmt">// More strict than switch</span>
+<span class="var">$result</span> = <span class="kw">match</span>(<span class="var">$status</span>) {
+    <span class="num">200</span>, <span class="num">201</span> => <span class="str">"Success"</span>,
+    <span class="num">404</span> => <span class="str">"Not Found"</span>,
+    <span class="num">500</span> => <span class="str">"Server Error"</span>,
+    <span class="kw">default</span> => <span class="str">"Unknown"</span>,
+};
+
+<span class="cmt">// Returns value (no break needed)</span>
+<span class="var">$message</span> = <span class="kw">match</span>(<span class="var">$age</span>) {
+    <span class="num">0</span> => <span class="str">"newborn"</span>,
+    <span class="num">1</span>, <span class="num">2</span> => <span class="str">"toddler"</span>,
+    <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span> => <span class="str">"child"</span>,
+    <span class="kw">default</span> => <span class="var">$age</span> >= <span class="num">18</span> ? <span class="str">"adult"</span> : <span class="str">"minor"</span>,
+};</pre>
+
+                <h3>Enumerations (PHP 8.1+)</h3>
+                <pre data-lang="php"><span class="cmt">// Pure enum</span>
+<span class="kw">enum</span> <span class="type">Status</span> {
+    <span class="kw">case</span> <span class="const">Pending</span>;
+    <span class="kw">case</span> <span class="const">Approved</span>;
+    <span class="kw">case</span> <span class="const">Rejected</span>;
+}
+
+<span class="var">$status</span> = <span class="type">Status</span>::<span class="const">Pending</span>;
+
+<span class="cmt">// Backed enum (with values)</span>
+<span class="kw">enum</span> <span class="type">HttpStatus</span>: <span class="type">int</span> {
+    <span class="kw">case</span> <span class="const">OK</span> = <span class="num">200</span>;
+    <span class="kw">case</span> <span class="const">NotFound</span> = <span class="num">404</span>;
+    <span class="kw">case</span> <span class="const">ServerError</span> = <span class="num">500</span>;
+
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">isError</span>(): <span class="type">bool</span> {
+        <span class="kw">return</span> <span class="var">$this</span>-><span class="var">value</span> >= <span class="num">400</span>;
+    }
+}
+
+<span class="kw">echo</span> <span class="type">HttpStatus</span>::<span class="const">OK</span>-><span class="var">value</span>;  <span class="cmt">// 200</span></pre>
+
+                <h3>Attributes (PHP 8.0+)</h3>
+                <pre data-lang="php"><span class="cmt">// Define attribute</span>
+<span class="attr">#[Attribute]</span>
+<span class="kw">class</span> <span class="type">Route</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(
+        <span class="kw">public</span> <span class="type">string</span> <span class="var">$path</span>,
+        <span class="kw">public</span> <span class="type">string</span> <span class="var">$method</span> = <span class="str">'GET'</span>,
+    ) {}
+}
+
+<span class="cmt">// Use attribute</span>
+<span class="kw">class</span> <span class="type">UserController</span> {
+    <span class="attr">#[Route('/users', method: 'GET')]</span>
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">index</span>(): <span class="type">array</span> {
+        <span class="kw">return</span> [];
+    }
+
+    <span class="attr">#[Route('/users/{id}', method: 'GET')]</span>
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">show</span>(<span class="type">int</span> <span class="var">$id</span>): <span class="type">array</span> {
+        <span class="kw">return</span> [];
+    }
+}</pre>
+
+                <h3>Nullsafe Operator (PHP 8.0+)</h3>
+                <pre data-lang="php"><span class="cmt">// Old way</span>
+<span class="var">$country</span> = <span class="kw">null</span>;
+<span class="kw">if</span> (<span class="var">$user</span> !== <span class="kw">null</span>) {
+    <span class="kw">if</span> (<span class="var">$user</span>-><span class="fn">getAddress</span>() !== <span class="kw">null</span>) {
+        <span class="var">$country</span> = <span class="var">$user</span>-><span class="fn">getAddress</span>()-><span class="fn">getCountry</span>();
+    }
+}
+
+<span class="cmt">// Nullsafe operator</span>
+<span class="var">$country</span> = <span class="var">$user</span>?-><span class="fn">getAddress</span>()?-><span class="fn">getCountry</span>();</pre>
+
+                <h3>Named Arguments (PHP 8.0+)</h3>
+                <pre data-lang="php"><span class="kw">function</span> <span class="fn">createUser</span>(
+    <span class="type">string</span> <span class="var">$name</span>,
+    <span class="type">string</span> <span class="var">$email</span>,
+    <span class="type">int</span> <span class="var">$age</span> = <span class="num">0</span>,
+    <span class="type">bool</span> <span class="var">$active</span> = <span class="kw">true</span>
+): <span class="type">array</span> {
+    <span class="kw">return</span> <span class="fn">compact</span>(<span class="str">'name'</span>, <span class="str">'email'</span>, <span class="str">'age'</span>, <span class="str">'active'</span>);
+}
+
+<span class="cmt">// Named arguments - order doesn't matter</span>
+<span class="fn">createUser</span>(
+    <span class="attr">email</span>: <span class="str">'alice@example.com'</span>,
+    <span class="attr">name</span>: <span class="str">'Alice'</span>,
+    <span class="attr">active</span>: <span class="kw">false</span>,
+);</pre>
+            </section>
+
+            <!-- Arrays -->
+            <section id="arrays">
+                <h2>Arrays</h2>
+
+                <h3>Array Basics</h3>
+                <pre data-lang="php"><span class="cmt">// Indexed array</span>
+<span class="var">$fruits</span> = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>];
+<span class="var">$numbers</span> = <span class="fn">array</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>);  <span class="cmt">// old syntax</span>
+
+<span class="cmt">// Associative array (dictionary/hash)</span>
+<span class="var">$user</span> = [
+    <span class="str">"name"</span> => <span class="str">"Alice"</span>,
+    <span class="str">"age"</span> => <span class="num">30</span>,
+    <span class="str">"email"</span> => <span class="str">"alice@example.com"</span>,
+];
+
+<span class="cmt">// Access</span>
+<span class="kw">echo</span> <span class="var">$fruits</span>[<span class="num">0</span>];        <span class="cmt">// "apple"</span>
+<span class="kw">echo</span> <span class="var">$user</span>[<span class="str">"name"</span>];    <span class="cmt">// "Alice"</span>
+
+<span class="cmt">// Add elements</span>
+<span class="var">$fruits</span>[] = <span class="str">"date"</span>;
+<span class="var">$user</span>[<span class="str">"city"</span>] = <span class="str">"NYC"</span>;
+
+<span class="cmt">// Check existence</span>
+<span class="fn">isset</span>(<span class="var">$user</span>[<span class="str">"email"</span>]);
+<span class="fn">array_key_exists</span>(<span class="str">"name"</span>, <span class="var">$user</span>);</pre>
+
+                <h3>Array Functions</h3>
+                <pre data-lang="php"><span class="cmt">// Common operations</span>
+<span class="fn">count</span>(<span class="var">$array</span>);                <span class="cmt">// length</span>
+<span class="fn">array_push</span>(<span class="var">$arr</span>, <span class="var">$item</span>);      <span class="cmt">// add to end</span>
+<span class="fn">array_pop</span>(<span class="var">$arr</span>);              <span class="cmt">// remove from end</span>
+<span class="fn">array_shift</span>(<span class="var">$arr</span>);            <span class="cmt">// remove from start</span>
+<span class="fn">array_unshift</span>(<span class="var">$arr</span>, <span class="var">$item</span>);  <span class="cmt">// add to start</span>
+
+<span class="cmt">// Transform</span>
+<span class="var">$doubled</span> = <span class="fn">array_map</span>(<span class="kw">fn</span>(<span class="var">$n</span>) => <span class="var">$n</span> * <span class="num">2</span>, <span class="var">$numbers</span>);
+<span class="var">$evens</span> = <span class="fn">array_filter</span>(<span class="var">$numbers</span>, <span class="kw">fn</span>(<span class="var">$n</span>) => <span class="var">$n</span> % <span class="num">2</span> === <span class="num">0</span>);
+<span class="var">$sum</span> = <span class="fn">array_reduce</span>(<span class="var">$numbers</span>, <span class="kw">fn</span>(<span class="var">$acc</span>, <span class="var">$n</span>) => <span class="var">$acc</span> + <span class="var">$n</span>, <span class="num">0</span>);
+
+<span class="cmt">// Search & check</span>
+<span class="fn">in_array</span>(<span class="str">"apple"</span>, <span class="var">$fruits</span>);
+<span class="fn">array_search</span>(<span class="str">"apple"</span>, <span class="var">$fruits</span>);
+
+<span class="cmt">// Sort</span>
+<span class="fn">sort</span>(<span class="var">$arr</span>);           <span class="cmt">// ascending</span>
+<span class="fn">rsort</span>(<span class="var">$arr</span>);          <span class="cmt">// descending</span>
+<span class="fn">asort</span>(<span class="var">$arr</span>);          <span class="cmt">// preserve keys</span>
+<span class="fn">usort</span>(<span class="var">$arr</span>, <span class="kw">fn</span>(<span class="var">$a</span>, <span class="var">$b</span>) => <span class="var">$a</span> <=> <span class="var">$b</span>);  <span class="cmt">// custom</span>
+
+<span class="cmt">// Merge & split</span>
+<span class="var">$merged</span> = <span class="fn">array_merge</span>(<span class="var">$arr1</span>, <span class="var">$arr2</span>);
+<span class="var">$spread</span> = [...<span class="var">$arr1</span>, ...<span class="var">$arr2</span>];  <span class="cmt">// spread operator</span>
+<span class="var">$chunk</span> = <span class="fn">array_chunk</span>(<span class="var">$arr</span>, <span class="num">3</span>);
+<span class="var">$slice</span> = <span class="fn">array_slice</span>(<span class="var">$arr</span>, <span class="num">1</span>, <span class="num">3</span>);</pre>
+
+                <h3>Array Destructuring</h3>
+                <pre data-lang="php"><span class="cmt">// List destructuring</span>
+[<span class="var">$first</span>, <span class="var">$second</span>] = [<span class="str">"a"</span>, <span class="str">"b"</span>];
+
+<span class="cmt">// Skip elements</span>
+[<span class="var">$first</span>, , <span class="var">$third</span>] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+
+<span class="cmt">// Associative array destructuring</span>
+[<span class="str">'name'</span> => <span class="var">$name</span>, <span class="str">'age'</span> => <span class="var">$age</span>] = <span class="var">$user</span>;
+
+<span class="cmt">// In foreach</span>
+<span class="kw">foreach</span> (<span class="var">$users</span> <span class="kw">as</span> [<span class="str">'name'</span> => <span class="var">$name</span>, <span class="str">'email'</span> => <span class="var">$email</span>]) {
+    <span class="kw">echo</span> <span class="str">"$name: $email"</span>;
+}</pre>
+            </section>
+
+            <!-- Error Handling -->
+            <section id="errors">
+                <h2>Error Handling</h2>
+
+                <h3>Exceptions</h3>
+                <pre data-lang="php"><span class="cmt">// Try-catch</span>
+<span class="kw">try</span> {
+    <span class="var">$result</span> = <span class="fn">riskyOperation</span>();
+} <span class="kw">catch</span> (<span class="type">InvalidArgumentException</span> <span class="var">$e</span>) {
+    <span class="kw">echo</span> <span class="str">"Invalid argument: "</span> . <span class="var">$e</span>-><span class="fn">getMessage</span>();
+} <span class="kw">catch</span> (<span class="type">RuntimeException</span> <span class="var">$e</span>) {
+    <span class="kw">echo</span> <span class="str">"Runtime error: "</span> . <span class="var">$e</span>-><span class="fn">getMessage</span>();
+} <span class="kw">catch</span> (<span class="type">Exception</span> <span class="var">$e</span>) {
+    <span class="kw">echo</span> <span class="str">"Error: "</span> . <span class="var">$e</span>-><span class="fn">getMessage</span>();
+} <span class="kw">finally</span> {
+    <span class="cmt">// Always runs</span>
+    <span class="fn">cleanup</span>();
+}
+
+<span class="cmt">// Multi-catch (PHP 7.1+)</span>
+<span class="kw">catch</span> (<span class="type">InvalidArgumentException</span> | <span class="type">RuntimeException</span> <span class="var">$e</span>) {
+    <span class="fn">handleError</span>(<span class="var">$e</span>);
+}</pre>
+
+                <h3>Custom Exceptions</h3>
+                <pre data-lang="php"><span class="kw">class</span> <span class="type">UserNotFoundException</span> <span class="kw">extends</span> <span class="type">Exception</span> {
+    <span class="kw">public</span> <span class="kw">function</span> <span class="fn">__construct</span>(<span class="type">int</span> <span class="var">$userId</span>) {
+        <span class="kw">parent</span>::<span class="fn">__construct</span>(<span class="str">"User $userId not found"</span>);
+    }
+}
+
+<span class="kw">throw</span> <span class="kw">new</span> <span class="type">UserNotFoundException</span>(<span class="num">123</span>);</pre>
+
+                <h3>Error Handling</h3>
+                <pre data-lang="php"><span class="cmt">// Set error handler</span>
+<span class="fn">set_error_handler</span>(<span class="kw">function</span>(<span class="var">$errno</span>, <span class="var">$errstr</span>, <span class="var">$errfile</span>, <span class="var">$errline</span>) {
+    <span class="kw">throw</span> <span class="kw">new</span> <span class="type">ErrorException</span>(<span class="var">$errstr</span>, <span class="num">0</span>, <span class="var">$errno</span>, <span class="var">$errfile</span>, <span class="var">$errline</span>);
+});
+
+<span class="cmt">// Error suppression (avoid if possible)</span>
+<span class="var">$file</span> = @<span class="fn">file_get_contents</span>(<span class="str">'missing.txt'</span>);</pre>
+            </section>
+
+            <!-- Standard Library -->
+            <section id="stdlib">
+                <h2>Standard Library Highlights</h2>
+
+                <h3>String Functions</h3>
+                <pre data-lang="php"><span class="fn">strlen</span>(<span class="var">$str</span>);                    <span class="cmt">// length</span>
+<span class="fn">str_contains</span>(<span class="var">$str</span>, <span class="str">'word'</span>);    <span class="cmt">// PHP 8+</span>
+<span class="fn">str_starts_with</span>(<span class="var">$str</span>, <span class="str">'pre'</span>);  <span class="cmt">// PHP 8+</span>
+<span class="fn">str_ends_with</span>(<span class="var">$str</span>, <span class="str">'fix'</span>);    <span class="cmt">// PHP 8+</span>
+<span class="fn">strtolower</span>(<span class="var">$str</span>);
+<span class="fn">strtoupper</span>(<span class="var">$str</span>);
+<span class="fn">trim</span>(<span class="var">$str</span>);                     <span class="cmt">// remove whitespace</span>
+<span class="fn">explode</span>(<span class="str">','</span>, <span class="var">$str</span>);            <span class="cmt">// string to array</span>
+<span class="fn">implode</span>(<span class="str">','</span>, <span class="var">$arr</span>);            <span class="cmt">// array to string</span>
+<span class="fn">substr</span>(<span class="var">$str</span>, <span class="num">0</span>, <span class="num">5</span>);            <span class="cmt">// substring</span>
+<span class="fn">str_replace</span>(<span class="str">'old'</span>, <span class="str">'new'</span>, <span class="var">$str</span>);
+<span class="fn">preg_match</span>(<span class="str">'/pattern/'</span>, <span class="var">$str</span>);  <span class="cmt">// regex</span></pre>
+
+                <h3>File I/O</h3>
+                <pre data-lang="php"><span class="cmt">// Read file</span>
+<span class="var">$content</span> = <span class="fn">file_get_contents</span>(<span class="str">'file.txt'</span>);
+<span class="var">$lines</span> = <span class="fn">file</span>(<span class="str">'file.txt'</span>);  <span class="cmt">// array of lines</span>
+
+<span class="cmt">// Write file</span>
+<span class="fn">file_put_contents</span>(<span class="str">'file.txt'</span>, <span class="var">$content</span>);
+
+<span class="cmt">// File operations</span>
+<span class="fn">file_exists</span>(<span class="str">'file.txt'</span>);
+<span class="fn">is_file</span>(<span class="str">'file.txt'</span>);
+<span class="fn">is_dir</span>(<span class="str">'path/to/dir'</span>);
+<span class="fn">unlink</span>(<span class="str">'file.txt'</span>);  <span class="cmt">// delete</span>
+<span class="fn">mkdir</span>(<span class="str">'dir'</span>);
+<span class="fn">rmdir</span>(<span class="str">'dir'</span>);
+
+<span class="cmt">// Stream operations</span>
+<span class="var">$handle</span> = <span class="fn">fopen</span>(<span class="str">'file.txt'</span>, <span class="str">'r'</span>);
+<span class="kw">while</span> ((<span class="var">$line</span> = <span class="fn">fgets</span>(<span class="var">$handle</span>)) !== <span class="kw">false</span>) {
+    <span class="kw">echo</span> <span class="var">$line</span>;
+}
+<span class="fn">fclose</span>(<span class="var">$handle</span>);</pre>
+
+                <h3>JSON</h3>
+                <pre data-lang="php"><span class="cmt">// Encode</span>
+<span class="var">$json</span> = <span class="fn">json_encode</span>(<span class="var">$data</span>);
+<span class="var">$pretty</span> = <span class="fn">json_encode</span>(<span class="var">$data</span>, <span class="const">JSON_PRETTY_PRINT</span>);
+
+<span class="cmt">// Decode</span>
+<span class="var">$data</span> = <span class="fn">json_decode</span>(<span class="var">$json</span>, <span class="kw">true</span>);  <span class="cmt">// to array</span>
+<span class="var">$obj</span> = <span class="fn">json_decode</span>(<span class="var">$json</span>);         <span class="cmt">// to object</span>
+
+<span class="cmt">// Check errors</span>
+<span class="kw">if</span> (<span class="fn">json_last_error</span>() !== <span class="const">JSON_ERROR_NONE</span>) {
+    <span class="kw">echo</span> <span class="fn">json_last_error_msg</span>();
+}</pre>
+
+                <h3>Date & Time</h3>
+                <pre data-lang="php"><span class="cmt">// DateTime object</span>
+<span class="var">$now</span> = <span class="kw">new</span> <span class="type">DateTime</span>();
+<span class="var">$date</span> = <span class="kw">new</span> <span class="type">DateTime</span>(<span class="str">'2025-12-31'</span>);
+<span class="var">$date</span> = <span class="type">DateTime</span>::<span class="fn">createFromFormat</span>(<span class="str">'Y-m-d'</span>, <span class="str">'2025-12-31'</span>);
+
+<span class="cmt">// Format</span>
+<span class="kw">echo</span> <span class="var">$date</span>-><span class="fn">format</span>(<span class="str">'Y-m-d H:i:s'</span>);
+<span class="kw">echo</span> <span class="var">$date</span>-><span class="fn">format</span>(<span class="type">DateTime</span>::<span class="const">ISO8601</span>);
+
+<span class="cmt">// Modify</span>
+<span class="var">$date</span>-><span class="fn">modify</span>(<span class="str">'+1 day'</span>);
+<span class="var">$date</span>-><span class="fn">add</span>(<span class="kw">new</span> <span class="type">DateInterval</span>(<span class="str">'P1D'</span>));  <span class="cmt">// +1 day</span>
+<span class="var">$date</span>-><span class="fn">sub</span>(<span class="kw">new</span> <span class="type">DateInterval</span>(<span class="str">'P1M'</span>));  <span class="cmt">// -1 month</span>
+
+<span class="cmt">// Compare</span>
+<span class="var">$diff</span> = <span class="var">$date1</span>-><span class="fn">diff</span>(<span class="var">$date2</span>);
+<span class="kw">echo</span> <span class="var">$diff</span>-><span class="var">days</span>;</pre>
+            </section>
+
+            <!-- Composer -->
+            <section id="composer">
+                <h2>Composer & Package Management</h2>
+
+                <h3>Common Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Initialize project</span>
+composer init
+
+<span class="cmt"># Install dependencies</span>
+composer install
+
+<span class="cmt"># Update dependencies</span>
+composer update
+
+<span class="cmt"># Add package</span>
+composer require vendor/package
+composer require --dev phpunit/phpunit
+
+<span class="cmt"># Remove package</span>
+composer remove vendor/package
+
+<span class="cmt"># Autoload optimization</span>
+composer dump-autoload -o
+
+<span class="cmt"># Run scripts</span>
+composer run-script test</pre>
+
+                <h3>composer.json</h3>
+                <pre data-lang="json">{
+    <span class="str">"name"</span>: <span class="str">"vendor/project"</span>,
+    <span class="str">"description"</span>: <span class="str">"My project"</span>,
+    <span class="str">"type"</span>: <span class="str">"project"</span>,
+    <span class="str">"require"</span>: {
+        <span class="str">"php"</span>: <span class="str">"^8.2"</span>,
+        <span class="str">"vendor/package"</span>: <span class="str">"^1.0"</span>
+    },
+    <span class="str">"require-dev"</span>: {
+        <span class="str">"phpunit/phpunit"</span>: <span class="str">"^10.0"</span>
+    },
+    <span class="str">"autoload"</span>: {
+        <span class="str">"psr-4"</span>: {
+            <span class="str">"App\\"</span>: <span class="str">"src/"</span>
+        }
+    },
+    <span class="str">"scripts"</span>: {
+        <span class="str">"test"</span>: <span class="str">"phpunit"</span>,
+        <span class="str">"lint"</span>: <span class="str">"phpcs"</span>
+    }
+}</pre>
+
+                <h3>Autoloading</h3>
+                <pre data-lang="php"><span class="cmt">// Include Composer's autoloader</span>
+<span class="kw">require</span> <span class="str">__DIR__</span> . <span class="str">'/vendor/autoload.php'</span>;
+
+<span class="cmt">// Now use any installed packages</span>
+<span class="kw">use</span> <span class="type">Vendor\Package\Class</span>;
+<span class="kw">use</span> <span class="kw">function</span> <span class="fn">Vendor\Package\helper</span>;
+
+<span class="var">$instance</span> = <span class="kw">new</span> <span class="type">Class</span>();
+<span class="fn">helper</span>();</pre>
+
+                <h3>Popular Packages</h3>
+                <dl class="concept-list">
+                    <div class="concept">
+                        <dt>laravel/framework</dt>
+                        <dd>Full-stack web framework with elegant syntax</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>symfony/symfony</dt>
+                        <dd>Set of reusable PHP components and framework</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>guzzlehttp/guzzle</dt>
+                        <dd>HTTP client for making API requests</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>monolog/monolog</dt>
+                        <dd>Powerful logging library</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>phpunit/phpunit</dt>
+                        <dd>Testing framework</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>vlucas/phpdotenv</dt>
+                        <dd>Load environment variables from .env files</dd>
+                    </div>
+                </dl>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                PHP TLDR — Last updated December 2025 for PHP 8.4<br>
+                <a href="https://php.net" target="_blank">Official Site</a> ·
+                <a href="https://php.net/manual/en/" target="_blank">Documentation</a> ·
+                <a href="https://www.php-fig.org/" target="_blank">PHP-FIG (Standards)</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
