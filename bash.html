@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bash TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Bash theme */
+        :root {
+            --accent: #4eaa25;
+            --accent-glow: rgba(78, 170, 37, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 8px;
+        }
+
+        .card h4::before {
+            content: '$';
+            font-family: 'JetBrains Mono', monospace;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">$_</div>
+            </div>
+            <h1>Bash <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to Bash shell scripting. Automate tasks, write scripts, and master the command line.</p>
+            <div class="version-badge">Bash 5.2 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is Bash?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#variables">Variables</a></li>
+                <li><a href="#quoting">Quoting</a></li>
+                <li><a href="#conditionals">Conditionals</a></li>
+                <li><a href="#loops">Loops</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#arrays">Arrays</a></li>
+                <li><a href="#strings">Strings</a></li>
+                <li><a href="#io">I/O & Redirection</a></li>
+                <li><a href="#errors">Error Handling</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Bash? -->
+            <section id="what">
+                <h2>What is Bash?</h2>
+                <p>Bash (Bourne Again SHell) is the default shell on most Linux distributions and macOS. It's a command processor that runs in a text window where users type commands, and it can also read and execute commands from scripts.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Scripting</h4>
+                        <p>Automate repetitive tasks, system administration, and build complex workflows with shell scripts.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Portable</h4>
+                        <p>Available on virtually every Unix-like system. Write once, run anywhere (with minor adjustments).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Powerful Pipes</h4>
+                        <p>Chain commands together with pipes and redirections to build complex data processing pipelines.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Glue Language</h4>
+                        <p>Perfect for orchestrating other programs and tools. Let each tool do what it does best.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="bash"><span class="cmt">#!/bin/bash</span>
+<span class="cmt"># This is a comment</span>
+<span class="builtin">echo</span> <span class="str">"Hello, World!"</span></pre>
+
+                <h3>Running Scripts</h3>
+                <pre data-lang="bash"><span class="cmt"># Make script executable</span>
+chmod +x script.sh
+
+<span class="cmt"># Run the script</span>
+./script.sh
+
+<span class="cmt"># Or run with bash explicitly</span>
+bash script.sh
+
+<span class="cmt"># Source (run in current shell, keeps variables)</span>
+<span class="builtin">source</span> script.sh
+. script.sh           <span class="cmt"># same thing</span></pre>
+
+                <h3>Command Substitution</h3>
+                <pre data-lang="bash"><span class="cmt"># Modern syntax (preferred)</span>
+<span class="kw">today</span>=$(<span class="fn">date</span> +%Y-%m-%d)
+<span class="kw">files</span>=$(<span class="fn">ls</span> *.txt)
+
+<span class="cmt"># Can nest cleanly</span>
+<span class="kw">result</span>=$(<span class="builtin">echo</span> $(<span class="fn">cat</span> file.txt) | <span class="fn">wc</span> -w)
+
+<span class="cmt"># Legacy syntax (avoid)</span>
+<span class="kw">today</span>=`<span class="fn">date</span> +%Y-%m-%d`</pre>
+
+                <h3>Arithmetic</h3>
+                <pre data-lang="bash"><span class="cmt"># Arithmetic expansion</span>
+<span class="kw">result</span>=$(( <span class="num">5</span> + <span class="num">3</span> ))
+<span class="kw">result</span>=$(( a + b ))        <span class="cmt"># variables don't need $</span>
+<span class="kw">result</span>=$(( <span class="num">10</span> / <span class="num">3</span> ))      <span class="cmt"># integer division = 3</span>
+<span class="kw">result</span>=$(( <span class="num">2</span> ** <span class="num">8</span> ))      <span class="cmt"># exponentiation = 256</span>
+
+<span class="cmt"># Compound arithmetic (no output, use in conditions)</span>
+(( counter++ ))
+(( total += <span class="num">10</span> ))
+
+<span class="cmt"># Arithmetic condition</span>
+<span class="kw">if</span> (( a > b )); <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"a is greater"</span>
+<span class="kw">fi</span>
+
+<span class="cmt"># Number bases</span>
+<span class="builtin">echo</span> $(( <span class="num">0xFF</span> ))         <span class="cmt"># hex: 255</span>
+<span class="builtin">echo</span> $(( <span class="num">2#1010</span> ))       <span class="cmt"># binary: 10</span>
+<span class="builtin">echo</span> $(( <span class="num">8#77</span> ))         <span class="cmt"># octal: 63</span></pre>
+
+                <div class="tip">
+                    Bash only supports integer arithmetic. For floating point, use <code>bc</code> or <code>awk</code>.
+                </div>
+            </section>
+
+            <!-- Variables -->
+            <section id="variables">
+                <h2>Variables</h2>
+
+                <h3>Declaration & Assignment</h3>
+                <pre data-lang="bash"><span class="cmt"># No spaces around =</span>
+<span class="kw">name</span>=<span class="str">"Alice"</span>
+<span class="kw">count</span>=<span class="num">42</span>
+
+<span class="cmt"># Use the variable</span>
+<span class="builtin">echo</span> <span class="str">"Hello, $name"</span>
+<span class="builtin">echo</span> <span class="str">"Hello, ${name}"</span>    <span class="cmt"># braces for clarity</span>
+
+<span class="cmt"># Readonly (constant)</span>
+<span class="builtin">readonly</span> <span class="kw">PI</span>=<span class="num">3.14159</span>
+
+<span class="cmt"># Export to child processes</span>
+<span class="builtin">export</span> <span class="kw">PATH</span>=<span class="str">"$PATH:/usr/local/bin"</span>
+
+<span class="cmt"># Unset a variable</span>
+<span class="builtin">unset</span> name</pre>
+
+                <h3>Special Variables</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>$0</code></td>
+                            <td>Script name</td>
+                        </tr>
+                        <tr>
+                            <td><code>$1, $2 ... $9</code></td>
+                            <td>Positional arguments (use <code>${10}</code> for 10+)</td>
+                        </tr>
+                        <tr>
+                            <td><code>$#</code></td>
+                            <td>Number of arguments</td>
+                        </tr>
+                        <tr>
+                            <td><code>$@</code></td>
+                            <td>All arguments as separate words (use <code>"$@"</code>)</td>
+                        </tr>
+                        <tr>
+                            <td><code>$*</code></td>
+                            <td>All arguments as single string</td>
+                        </tr>
+                        <tr>
+                            <td><code>$?</code></td>
+                            <td>Exit status of last command (0 = success)</td>
+                        </tr>
+                        <tr>
+                            <td><code>$$</code></td>
+                            <td>PID of current shell</td>
+                        </tr>
+                        <tr>
+                            <td><code>$!</code></td>
+                            <td>PID of last background process</td>
+                        </tr>
+                        <tr>
+                            <td><code>$_</code></td>
+                            <td>Last argument of previous command</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Parameter Expansion (Defaults)</h3>
+                <pre data-lang="bash"><span class="cmt"># Use default if unset or empty</span>
+<span class="builtin">echo</span> <span class="str">"${name:-Guest}"</span>
+
+<span class="cmt"># Assign default if unset or empty</span>
+<span class="builtin">echo</span> <span class="str">"${name:=Guest}"</span>
+
+<span class="cmt"># Error if unset or empty</span>
+<span class="builtin">echo</span> <span class="str">"${name:?'name is required'}"</span>
+
+<span class="cmt"># Use alternate value if set and non-empty</span>
+<span class="builtin">echo</span> <span class="str">"${name:+Hello $name}"</span></pre>
+
+                <h3>Declare with Types</h3>
+                <pre data-lang="bash"><span class="cmt"># Integer</span>
+<span class="builtin">declare</span> -i num=<span class="num">42</span>
+num=num+<span class="num">1</span>                <span class="cmt"># arithmetic automatic</span>
+
+<span class="cmt"># Lowercase</span>
+<span class="builtin">declare</span> -l lower=<span class="str">"HELLO"</span>   <span class="cmt"># stored as "hello"</span>
+
+<span class="cmt"># Uppercase</span>
+<span class="builtin">declare</span> -u upper=<span class="str">"hello"</span>   <span class="cmt"># stored as "HELLO"</span>
+
+<span class="cmt"># Readonly</span>
+<span class="builtin">declare</span> -r constant=<span class="str">"value"</span>
+
+<span class="cmt"># Export</span>
+<span class="builtin">declare</span> -x exported=<span class="str">"value"</span></pre>
+            </section>
+
+            <!-- Quoting -->
+            <section id="quoting">
+                <h2>Quoting</h2>
+
+                <h3>Single vs Double Quotes</h3>
+                <pre data-lang="bash"><span class="kw">name</span>=<span class="str">"Alice"</span>
+
+<span class="cmt"># Double quotes: variables expand</span>
+<span class="builtin">echo</span> <span class="str">"Hello, $name"</span>       <span class="cmt"># Hello, Alice</span>
+<span class="builtin">echo</span> <span class="str">"Today is $(date)"</span>   <span class="cmt"># command substitution works</span>
+
+<span class="cmt"># Single quotes: everything literal</span>
+<span class="builtin">echo</span> <span class="str">'Hello, $name'</span>       <span class="cmt"># Hello, $name</span>
+<span class="builtin">echo</span> <span class="str">'No $(expansion)'</span>    <span class="cmt"># No $(expansion)</span>
+
+<span class="cmt"># Escaping in double quotes</span>
+<span class="builtin">echo</span> <span class="str">"The price is \$100"</span>
+<span class="builtin">echo</span> <span class="str">"She said \"Hello\""</span>
+
+<span class="cmt"># Single quote in single quotes (workaround)</span>
+<span class="builtin">echo</span> <span class="str">'It'\''s working'</span>     <span class="cmt"># It's working</span></pre>
+
+                <h3>ANSI-C Quoting</h3>
+                <pre data-lang="bash"><span class="cmt"># $'...' enables escape sequences</span>
+<span class="builtin">echo</span> $<span class="str">'Line1\nLine2'</span>      <span class="cmt"># actual newline</span>
+<span class="builtin">echo</span> $<span class="str">'Tab\there'</span>         <span class="cmt"># actual tab</span>
+<span class="builtin">echo</span> $<span class="str">'Ring the \a bell'</span>  <span class="cmt"># bell character</span></pre>
+
+                <div class="warning">
+                    Always quote your variables: <code>"$var"</code>. Unquoted variables undergo word splitting and glob expansion, leading to subtle bugs.
+                </div>
+            </section>
+
+            <!-- Conditionals -->
+            <section id="conditionals">
+                <h2>Conditionals</h2>
+
+                <h3>if/elif/else</h3>
+                <pre data-lang="bash"><span class="kw">if</span> [[ <span class="str">"$name"</span> == <span class="str">"Alice"</span> ]]; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Hello, Alice!"</span>
+<span class="kw">elif</span> [[ <span class="str">"$name"</span> == <span class="str">"Bob"</span> ]]; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Hello, Bob!"</span>
+<span class="kw">else</span>
+    <span class="builtin">echo</span> <span class="str">"Hello, stranger!"</span>
+<span class="kw">fi</span></pre>
+
+                <h3>Test Commands: [ ] vs [[ ]]</h3>
+                <pre data-lang="bash"><span class="cmt"># [ ] - POSIX compatible, more portable</span>
+<span class="kw">if</span> [ <span class="str">"$a"</span> = <span class="str">"$b"</span> ]; <span class="kw">then</span> ...; <span class="kw">fi</span>
+
+<span class="cmt"># [[ ]] - Bash extended test (preferred)</span>
+<span class="cmt"># - No word splitting, safer without quotes</span>
+<span class="cmt"># - Supports && || directly</span>
+<span class="cmt"># - Pattern matching with ==</span>
+<span class="cmt"># - Regex matching with =~</span>
+<span class="kw">if</span> [[ $a == $b ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>
+<span class="kw">if</span> [[ $file == *.txt ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>
+<span class="kw">if</span> [[ $str =~ ^[0-9]+$ ]]; <span class="kw">then</span> ...; <span class="kw">fi</span></pre>
+
+                <h3>String Comparisons</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>== or =</code></td>
+                            <td>Equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>!=</code></td>
+                            <td>Not equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>-z "$str"</code></td>
+                            <td>String is empty</td>
+                        </tr>
+                        <tr>
+                            <td><code>-n "$str"</code></td>
+                            <td>String is not empty</td>
+                        </tr>
+                        <tr>
+                            <td><code>&lt;</code></td>
+                            <td>Less than (alphabetically)</td>
+                        </tr>
+                        <tr>
+                            <td><code>&gt;</code></td>
+                            <td>Greater than (alphabetically)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Integer Comparisons</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>-eq</code></td>
+                            <td>Equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>-ne</code></td>
+                            <td>Not equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>-lt</code></td>
+                            <td>Less than</td>
+                        </tr>
+                        <tr>
+                            <td><code>-le</code></td>
+                            <td>Less than or equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>-gt</code></td>
+                            <td>Greater than</td>
+                        </tr>
+                        <tr>
+                            <td><code>-ge</code></td>
+                            <td>Greater than or equal</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>File Tests</h3>
+                <pre data-lang="bash"><span class="kw">if</span> [[ -f <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># regular file exists</span>
+<span class="kw">if</span> [[ -d <span class="str">"$dir"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>   <span class="cmt"># directory exists</span>
+<span class="kw">if</span> [[ -e <span class="str">"$path"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># exists (any type)</span>
+<span class="kw">if</span> [[ -r <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># readable</span>
+<span class="kw">if</span> [[ -w <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># writable</span>
+<span class="kw">if</span> [[ -x <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># executable</span>
+<span class="kw">if</span> [[ -s <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># size > 0</span>
+<span class="kw">if</span> [[ -L <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>  <span class="cmt"># symbolic link</span></pre>
+
+                <h3>Logical Operators</h3>
+                <pre data-lang="bash"><span class="cmt"># In [[ ]]</span>
+<span class="kw">if</span> [[ $a -gt <span class="num">0</span> && $a -lt <span class="num">100</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>
+<span class="kw">if</span> [[ $a == <span class="str">"yes"</span> || $a == <span class="str">"y"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>
+<span class="kw">if</span> [[ ! -f <span class="str">"$file"</span> ]]; <span class="kw">then</span> ...; <span class="kw">fi</span>
+
+<span class="cmt"># Command chaining</span>
+<span class="fn">command1</span> && <span class="fn">command2</span>   <span class="cmt"># run command2 only if command1 succeeds</span>
+<span class="fn">command1</span> || <span class="fn">command2</span>   <span class="cmt"># run command2 only if command1 fails</span></pre>
+
+                <h3>case Statement</h3>
+                <pre data-lang="bash"><span class="kw">case</span> <span class="str">"$answer"</span> <span class="kw">in</span>
+    yes|y|Y)
+        <span class="builtin">echo</span> <span class="str">"Confirmed"</span>
+        ;;
+    no|n|N)
+        <span class="builtin">echo</span> <span class="str">"Declined"</span>
+        ;;
+    *)
+        <span class="builtin">echo</span> <span class="str">"Unknown response"</span>
+        ;;
+<span class="kw">esac</span>
+
+<span class="cmt"># Pattern matching</span>
+<span class="kw">case</span> <span class="str">"$filename"</span> <span class="kw">in</span>
+    *.txt)   <span class="builtin">echo</span> <span class="str">"Text file"</span> ;;
+    *.jpg|*.png) <span class="builtin">echo</span> <span class="str">"Image"</span> ;;
+    *)       <span class="builtin">echo</span> <span class="str">"Unknown"</span> ;;
+<span class="kw">esac</span></pre>
+            </section>
+
+            <!-- Loops -->
+            <section id="loops">
+                <h2>Loops</h2>
+
+                <h3>for Loop</h3>
+                <pre data-lang="bash"><span class="cmt"># Iterate over list</span>
+<span class="kw">for</span> name <span class="kw">in</span> Alice Bob Charlie; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"Hello, $name"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Iterate over files</span>
+<span class="kw">for</span> file <span class="kw">in</span> *.txt; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"Processing $file"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Iterate over command output</span>
+<span class="kw">for</span> user <span class="kw">in</span> $(<span class="fn">cat</span> users.txt); <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"User: $user"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># C-style for loop</span>
+<span class="kw">for</span> (( i=<span class="num">0</span>; i&lt;<span class="num">10</span>; i++ )); <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$i"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Range with brace expansion</span>
+<span class="kw">for</span> i <span class="kw">in</span> {<span class="num">1</span>..<span class="num">5</span>}; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$i"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Range with step</span>
+<span class="kw">for</span> i <span class="kw">in</span> {<span class="num">0</span>..<span class="num">10</span>..<span class="num">2</span>}; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$i"</span>   <span class="cmt"># 0, 2, 4, 6, 8, 10</span>
+<span class="kw">done</span></pre>
+
+                <h3>while Loop</h3>
+                <pre data-lang="bash"><span class="kw">counter</span>=<span class="num">0</span>
+<span class="kw">while</span> [[ $counter -lt <span class="num">5</span> ]]; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"Count: $counter"</span>
+    (( counter++ ))
+<span class="kw">done</span>
+
+<span class="cmt"># Read file line by line</span>
+<span class="kw">while</span> <span class="builtin">read</span> -r line; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"Line: $line"</span>
+<span class="kw">done</span> &lt; file.txt
+
+<span class="cmt"># Process command output line by line</span>
+<span class="fn">ls</span> -la | <span class="kw">while</span> <span class="builtin">read</span> -r line; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$line"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Infinite loop</span>
+<span class="kw">while</span> <span class="builtin">true</span>; <span class="kw">do</span>
+    <span class="cmt"># ...</span>
+    sleep <span class="num">1</span>
+<span class="kw">done</span></pre>
+
+                <h3>until Loop</h3>
+                <pre data-lang="bash"><span class="cmt"># Run until condition is true (opposite of while)</span>
+<span class="kw">counter</span>=<span class="num">0</span>
+<span class="kw">until</span> [[ $counter -ge <span class="num">5</span> ]]; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"Count: $counter"</span>
+    (( counter++ ))
+<span class="kw">done</span></pre>
+
+                <h3>Loop Control</h3>
+                <pre data-lang="bash"><span class="cmt"># break - exit loop</span>
+<span class="kw">for</span> i <span class="kw">in</span> {<span class="num">1</span>..<span class="num">10</span>}; <span class="kw">do</span>
+    <span class="kw">if</span> [[ $i -eq <span class="num">5</span> ]]; <span class="kw">then</span>
+        <span class="kw">break</span>
+    <span class="kw">fi</span>
+    <span class="builtin">echo</span> <span class="str">"$i"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># continue - skip to next iteration</span>
+<span class="kw">for</span> i <span class="kw">in</span> {<span class="num">1</span>..<span class="num">10</span>}; <span class="kw">do</span>
+    <span class="kw">if</span> [[ $((i % <span class="num">2</span>)) -eq <span class="num">0</span> ]]; <span class="kw">then</span>
+        <span class="kw">continue</span>   <span class="cmt"># skip even numbers</span>
+    <span class="kw">fi</span>
+    <span class="builtin">echo</span> <span class="str">"$i"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># break/continue with nesting</span>
+<span class="kw">break</span> <span class="num">2</span>     <span class="cmt"># break out of 2 nested loops</span>
+<span class="kw">continue</span> <span class="num">2</span>  <span class="cmt"># continue in outer loop</span></pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Defining Functions</h3>
+                <pre data-lang="bash"><span class="cmt"># Standard syntax</span>
+<span class="fn">greet</span>() {
+    <span class="builtin">echo</span> <span class="str">"Hello, $1!"</span>
+}
+
+<span class="cmt"># Alternative syntax</span>
+<span class="kw">function</span> <span class="fn">greet</span> {
+    <span class="builtin">echo</span> <span class="str">"Hello, $1!"</span>
+}
+
+<span class="cmt"># Call the function</span>
+<span class="fn">greet</span> <span class="str">"Alice"</span></pre>
+
+                <h3>Arguments & Return Values</h3>
+                <pre data-lang="bash"><span class="fn">add</span>() {
+    <span class="builtin">local</span> a=$<span class="num">1</span>
+    <span class="builtin">local</span> b=$<span class="num">2</span>
+    <span class="builtin">local</span> sum=$(( a + b ))
+    <span class="builtin">echo</span> <span class="str">"$sum"</span>   <span class="cmt"># output is the "return value"</span>
+}
+
+<span class="cmt"># Capture output</span>
+<span class="kw">result</span>=$(<span class="fn">add</span> <span class="num">5</span> <span class="num">3</span>)
+<span class="builtin">echo</span> <span class="str">"Sum: $result"</span>
+
+<span class="cmt"># Return status (0-255)</span>
+<span class="fn">is_even</span>() {
+    <span class="kw">if</span> [[ $(($<span class="num">1</span> % <span class="num">2</span>)) -eq <span class="num">0</span> ]]; <span class="kw">then</span>
+        <span class="kw">return</span> <span class="num">0</span>   <span class="cmt"># success/true</span>
+    <span class="kw">else</span>
+        <span class="kw">return</span> <span class="num">1</span>   <span class="cmt"># failure/false</span>
+    <span class="kw">fi</span>
+}
+
+<span class="kw">if</span> <span class="fn">is_even</span> <span class="num">42</span>; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"It's even"</span>
+<span class="kw">fi</span></pre>
+
+                <h3>Local Variables</h3>
+                <pre data-lang="bash"><span class="fn">my_function</span>() {
+    <span class="builtin">local</span> local_var=<span class="str">"only here"</span>    <span class="cmt"># scoped to function</span>
+    <span class="kw">global_var</span>=<span class="str">"everywhere"</span>         <span class="cmt"># global (avoid this)</span>
+}
+
+<span class="fn">my_function</span>
+<span class="builtin">echo</span> <span class="str">"$local_var"</span>    <span class="cmt"># empty - not accessible</span>
+<span class="builtin">echo</span> <span class="str">"$global_var"</span>   <span class="cmt"># "everywhere"</span></pre>
+
+                <h3>Function with All Args</h3>
+                <pre data-lang="bash"><span class="fn">print_all</span>() {
+    <span class="builtin">echo</span> <span class="str">"Number of args: $#"</span>
+    <span class="kw">for</span> arg <span class="kw">in</span> <span class="str">"$@"</span>; <span class="kw">do</span>
+        <span class="builtin">echo</span> <span class="str">"  Arg: $arg"</span>
+    <span class="kw">done</span>
+}
+
+<span class="fn">print_all</span> <span class="str">"one"</span> <span class="str">"two"</span> <span class="str">"three"</span></pre>
+
+                <div class="tip">
+                    Always use <code>local</code> for variables inside functions to avoid polluting the global scope.
+                </div>
+            </section>
+
+            <!-- Arrays -->
+            <section id="arrays">
+                <h2>Arrays</h2>
+
+                <h3>Indexed Arrays</h3>
+                <pre data-lang="bash"><span class="cmt"># Create array</span>
+<span class="kw">fruits</span>=(<span class="str">"apple"</span> <span class="str">"banana"</span> <span class="str">"cherry"</span>)
+<span class="kw">numbers</span>=(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span> <span class="num">5</span>)
+
+<span class="cmt"># Access elements</span>
+<span class="builtin">echo</span> <span class="str">"${fruits[0]}"</span>     <span class="cmt"># apple</span>
+<span class="builtin">echo</span> <span class="str">"${fruits[1]}"</span>     <span class="cmt"># banana</span>
+<span class="builtin">echo</span> <span class="str">"${fruits[-1]}"</span>    <span class="cmt"># cherry (last element)</span>
+
+<span class="cmt"># All elements</span>
+<span class="builtin">echo</span> <span class="str">"${fruits[@]}"</span>     <span class="cmt"># apple banana cherry</span>
+
+<span class="cmt"># Array length</span>
+<span class="builtin">echo</span> <span class="str">"${#fruits[@]}"</span>    <span class="cmt"># 3</span>
+
+<span class="cmt"># All indices</span>
+<span class="builtin">echo</span> <span class="str">"${!fruits[@]}"</span>    <span class="cmt"># 0 1 2</span>
+
+<span class="cmt"># Modify</span>
+fruits[<span class="num">1</span>]=<span class="str">"blueberry"</span>
+
+<span class="cmt"># Append</span>
+fruits+=(<span class="str">"date"</span>)
+
+<span class="cmt"># Slice</span>
+<span class="builtin">echo</span> <span class="str">"${fruits[@]:1:2}"</span>  <span class="cmt"># 2 elements starting at index 1</span></pre>
+
+                <h3>Iterating Arrays</h3>
+                <pre data-lang="bash"><span class="cmt"># Iterate over values</span>
+<span class="kw">for</span> fruit <span class="kw">in</span> <span class="str">"${fruits[@]}"</span>; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$fruit"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Iterate with index</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="str">"${!fruits[@]}"</span>; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$i: ${fruits[$i]}"</span>
+<span class="kw">done</span></pre>
+
+                <h3>Associative Arrays (Bash 4+)</h3>
+                <pre data-lang="bash"><span class="cmt"># Must declare first</span>
+<span class="builtin">declare</span> -A <span class="kw">colors</span>
+
+<span class="cmt"># Assign</span>
+colors[<span class="str">"apple"</span>]=<span class="str">"red"</span>
+colors[<span class="str">"banana"</span>]=<span class="str">"yellow"</span>
+colors[<span class="str">"grape"</span>]=<span class="str">"purple"</span>
+
+<span class="cmt"># Or inline</span>
+<span class="builtin">declare</span> -A <span class="kw">sizes</span>=([<span class="str">"small"</span>]=<span class="num">1</span> [<span class="str">"medium"</span>]=<span class="num">2</span> [<span class="str">"large"</span>]=<span class="num">3</span>)
+
+<span class="cmt"># Access</span>
+<span class="builtin">echo</span> <span class="str">"${colors[apple]}"</span>    <span class="cmt"># red</span>
+
+<span class="cmt"># All keys</span>
+<span class="builtin">echo</span> <span class="str">"${!colors[@]}"</span>       <span class="cmt"># apple banana grape</span>
+
+<span class="cmt"># All values</span>
+<span class="builtin">echo</span> <span class="str">"${colors[@]}"</span>        <span class="cmt"># red yellow purple</span>
+
+<span class="cmt"># Iterate</span>
+<span class="kw">for</span> key <span class="kw">in</span> <span class="str">"${!colors[@]}"</span>; <span class="kw">do</span>
+    <span class="builtin">echo</span> <span class="str">"$key: ${colors[$key]}"</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Check if key exists</span>
+<span class="kw">if</span> [[ -v colors[<span class="str">"apple"</span>] ]]; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Key exists"</span>
+<span class="kw">fi</span></pre>
+
+                <div class="warning">
+                    Always quote array expansions: <code>"${array[@]}"</code>. Without quotes, elements with spaces will be split.
+                </div>
+            </section>
+
+            <!-- Strings -->
+            <section id="strings">
+                <h2>String Manipulation</h2>
+
+                <h3>String Length</h3>
+                <pre data-lang="bash"><span class="kw">str</span>=<span class="str">"Hello, World!"</span>
+<span class="builtin">echo</span> <span class="str">"${#str}"</span>           <span class="cmt"># 13</span></pre>
+
+                <h3>Substring Extraction</h3>
+                <pre data-lang="bash"><span class="kw">str</span>=<span class="str">"Hello, World!"</span>
+
+<span class="cmt"># ${string:offset:length}</span>
+<span class="builtin">echo</span> <span class="str">"${str:0:5}"</span>         <span class="cmt"># Hello</span>
+<span class="builtin">echo</span> <span class="str">"${str:7}"</span>           <span class="cmt"># World!</span>
+<span class="builtin">echo</span> <span class="str">"${str: -6}"</span>         <span class="cmt"># World! (space before -)</span>
+<span class="builtin">echo</span> <span class="str">"${str: -6:5}"</span>       <span class="cmt"># World</span></pre>
+
+                <h3>Search & Replace</h3>
+                <pre data-lang="bash"><span class="kw">str</span>=<span class="str">"hello world world"</span>
+
+<span class="cmt"># Replace first match</span>
+<span class="builtin">echo</span> <span class="str">"${str/world/there}"</span>   <span class="cmt"># hello there world</span>
+
+<span class="cmt"># Replace all matches</span>
+<span class="builtin">echo</span> <span class="str">"${str//world/there}"</span>  <span class="cmt"># hello there there</span>
+
+<span class="cmt"># Replace at start</span>
+<span class="builtin">echo</span> <span class="str">"${str/#hello/hi}"</span>     <span class="cmt"># hi world world</span>
+
+<span class="cmt"># Replace at end</span>
+<span class="builtin">echo</span> <span class="str">"${str/%world/earth}"</span>  <span class="cmt"># hello world earth</span>
+
+<span class="cmt"># Delete pattern (replace with nothing)</span>
+<span class="builtin">echo</span> <span class="str">"${str// world/}"</span>      <span class="cmt"># hello</span></pre>
+
+                <h3>Pattern Deletion</h3>
+                <pre data-lang="bash"><span class="kw">path</span>=<span class="str">"/home/user/docs/file.txt"</span>
+
+<span class="cmt"># Remove shortest match from start</span>
+<span class="builtin">echo</span> <span class="str">"${path#*/}"</span>         <span class="cmt"># home/user/docs/file.txt</span>
+
+<span class="cmt"># Remove longest match from start</span>
+<span class="builtin">echo</span> <span class="str">"${path##*/}"</span>        <span class="cmt"># file.txt (basename)</span>
+
+<span class="cmt"># Remove shortest match from end</span>
+<span class="builtin">echo</span> <span class="str">"${path%/*}"</span>         <span class="cmt"># /home/user/docs (dirname)</span>
+
+<span class="cmt"># Remove longest match from end</span>
+<span class="builtin">echo</span> <span class="str">"${path%%/*}"</span>        <span class="cmt"># (empty - removes everything)</span>
+
+<span class="cmt"># Get extension</span>
+<span class="kw">file</span>=<span class="str">"archive.tar.gz"</span>
+<span class="builtin">echo</span> <span class="str">"${file#*.}"</span>         <span class="cmt"># tar.gz (first .)</span>
+<span class="builtin">echo</span> <span class="str">"${file##*.}"</span>        <span class="cmt"># gz (last .)</span>
+
+<span class="cmt"># Remove extension</span>
+<span class="builtin">echo</span> <span class="str">"${file%.*}"</span>         <span class="cmt"># archive.tar</span>
+<span class="builtin">echo</span> <span class="str">"${file%%.*}"</span>        <span class="cmt"># archive</span></pre>
+
+                <h3>Case Conversion (Bash 4+)</h3>
+                <pre data-lang="bash"><span class="kw">str</span>=<span class="str">"Hello World"</span>
+
+<span class="cmt"># Lowercase</span>
+<span class="builtin">echo</span> <span class="str">"${str,}"</span>    <span class="cmt"># hello World (first char)</span>
+<span class="builtin">echo</span> <span class="str">"${str,,}"</span>   <span class="cmt"># hello world (all)</span>
+
+<span class="cmt"># Uppercase</span>
+<span class="builtin">echo</span> <span class="str">"${str^}"</span>    <span class="cmt"># Hello World (first char)</span>
+<span class="builtin">echo</span> <span class="str">"${str^^}"</span>   <span class="cmt"># HELLO WORLD (all)</span>
+
+<span class="cmt"># Toggle case</span>
+<span class="builtin">echo</span> <span class="str">"${str~}"</span>    <span class="cmt"># hELLO World (first char)</span>
+<span class="builtin">echo</span> <span class="str">"${str~~}"</span>   <span class="cmt"># hELLO wORLD (all)</span></pre>
+            </section>
+
+            <!-- I/O & Redirection -->
+            <section id="io">
+                <h2>I/O & Redirection</h2>
+
+                <h3>Output: echo & printf</h3>
+                <pre data-lang="bash"><span class="cmt"># echo</span>
+<span class="builtin">echo</span> <span class="str">"Hello"</span>              <span class="cmt"># with newline</span>
+<span class="builtin">echo</span> -n <span class="str">"Hello"</span>           <span class="cmt"># without newline</span>
+<span class="builtin">echo</span> -e <span class="str">"Line1\nLine2"</span>   <span class="cmt"># interpret escapes</span>
+
+<span class="cmt"># printf (more control)</span>
+<span class="builtin">printf</span> <span class="str">"%s is %d years old\n"</span> <span class="str">"Alice"</span> <span class="num">30</span>
+<span class="builtin">printf</span> <span class="str">"%-10s %5d\n"</span> <span class="str">"Item"</span> <span class="num">42</span>   <span class="cmt"># padded</span>
+<span class="builtin">printf</span> <span class="str">"%05d\n"</span> <span class="num">42</span>         <span class="cmt"># zero-padded: 00042</span>
+<span class="builtin">printf</span> <span class="str">"%.2f\n"</span> <span class="num">3.14159</span>   <span class="cmt"># 3.14</span></pre>
+
+                <h3>Input: read</h3>
+                <pre data-lang="bash"><span class="cmt"># Basic read</span>
+<span class="builtin">read</span> <span class="kw">name</span>
+<span class="builtin">echo</span> <span class="str">"Hello, $name"</span>
+
+<span class="cmt"># With prompt</span>
+<span class="builtin">read</span> -p <span class="str">"Enter your name: "</span> <span class="kw">name</span>
+
+<span class="cmt"># Silent (for passwords)</span>
+<span class="builtin">read</span> -sp <span class="str">"Password: "</span> <span class="kw">password</span>
+<span class="builtin">echo</span>   <span class="cmt"># newline after hidden input</span>
+
+<span class="cmt"># Read into array</span>
+<span class="builtin">read</span> -a <span class="kw">words</span> &lt;&lt;&lt; <span class="str">"one two three"</span>
+
+<span class="cmt"># Read with timeout</span>
+<span class="builtin">read</span> -t <span class="num">5</span> -p <span class="str">"Quick! (5s): "</span> <span class="kw">answer</span>
+
+<span class="cmt"># Read n characters</span>
+<span class="builtin">read</span> -n <span class="num">1</span> -p <span class="str">"Press any key: "</span> <span class="kw">key</span>
+
+<span class="cmt"># Raw input (no backslash interpretation)</span>
+<span class="builtin">read</span> -r <span class="kw">line</span>   <span class="cmt"># always use -r!</span></pre>
+
+                <h3>Redirection</h3>
+                <pre data-lang="bash"><span class="cmt"># Output redirection</span>
+<span class="fn">command</span> &gt; file.txt      <span class="cmt"># overwrite</span>
+<span class="fn">command</span> &gt;&gt; file.txt     <span class="cmt"># append</span>
+
+<span class="cmt"># Input redirection</span>
+<span class="fn">command</span> &lt; file.txt
+
+<span class="cmt"># Stderr redirection</span>
+<span class="fn">command</span> <span class="num">2</span>&gt; errors.txt        <span class="cmt"># stderr to file</span>
+<span class="fn">command</span> <span class="num">2</span>&gt;&gt; errors.txt       <span class="cmt"># append stderr</span>
+<span class="fn">command</span> <span class="num">2</span>&gt;/dev/null         <span class="cmt"># discard stderr</span>
+
+<span class="cmt"># Combine stdout and stderr</span>
+<span class="fn">command</span> &amp;&gt; output.txt        <span class="cmt"># both to file</span>
+<span class="fn">command</span> &gt; file.txt <span class="num">2</span>&gt;&amp;<span class="num">1</span>     <span class="cmt"># stderr to stdout</span>
+<span class="fn">command</span> <span class="num">2</span>&gt;&amp;<span class="num">1</span> | <span class="fn">less</span>          <span class="cmt"># both through pipe</span>
+
+<span class="cmt"># Discard all output</span>
+<span class="fn">command</span> &gt;/dev/null <span class="num">2</span>&gt;&amp;<span class="num">1</span></pre>
+
+                <h3>Here Documents & Here Strings</h3>
+                <pre data-lang="bash"><span class="cmt"># Here document (multi-line input)</span>
+<span class="fn">cat</span> &lt;&lt;<span class="str">EOF</span>
+This is line 1
+Variable: $name
+This is line 3
+<span class="str">EOF</span>
+
+<span class="cmt"># Literal (no expansion)</span>
+<span class="fn">cat</span> &lt;&lt;<span class="str">'EOF'</span>
+$variables are literal
+$(commands) too
+<span class="str">EOF</span>
+
+<span class="cmt"># Strip leading tabs</span>
+<span class="fn">cat</span> &lt;&lt;-<span class="str">EOF</span>
+	Indented with tabs
+	They will be stripped
+<span class="str">EOF</span>
+
+<span class="cmt"># Here string (single-line input)</span>
+<span class="fn">grep</span> <span class="str">"pattern"</span> &lt;&lt;&lt; <span class="str">"$variable"</span>
+<span class="fn">bc</span> &lt;&lt;&lt; <span class="str">"5 + 3"</span>   <span class="cmt"># 8</span></pre>
+
+                <h3>Pipes</h3>
+                <pre data-lang="bash"><span class="cmt"># Chain commands</span>
+<span class="fn">cat</span> file.txt | <span class="fn">grep</span> <span class="str">"pattern"</span> | <span class="fn">sort</span> | <span class="fn">uniq</span>
+
+<span class="cmt"># Process substitution</span>
+<span class="fn">diff</span> &lt;(<span class="fn">sort</span> file1) &lt;(<span class="fn">sort</span> file2)
+
+<span class="cmt"># Tee - write to file AND stdout</span>
+<span class="fn">command</span> | <span class="fn">tee</span> output.txt | <span class="fn">less</span>
+<span class="fn">command</span> | <span class="fn">tee</span> -a output.txt   <span class="cmt"># append</span></pre>
+            </section>
+
+            <!-- Error Handling -->
+            <section id="errors">
+                <h2>Error Handling</h2>
+
+                <h3>Exit Codes</h3>
+                <pre data-lang="bash"><span class="cmt"># 0 = success, 1-255 = failure</span>
+<span class="fn">command</span>
+<span class="builtin">echo</span> <span class="str">"Exit code: $?"</span>
+
+<span class="cmt"># Exit with specific code</span>
+<span class="builtin">exit</span> <span class="num">0</span>    <span class="cmt"># success</span>
+<span class="builtin">exit</span> <span class="num">1</span>    <span class="cmt"># generic failure</span>
+
+<span class="cmt"># Check command success</span>
+<span class="kw">if</span> <span class="fn">command</span>; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Success"</span>
+<span class="kw">else</span>
+    <span class="builtin">echo</span> <span class="str">"Failed"</span>
+<span class="kw">fi</span></pre>
+
+                <h3>Strict Mode</h3>
+                <pre data-lang="bash"><span class="cmt">#!/bin/bash</span>
+<span class="builtin">set</span> -euo pipefail
+
+<span class="cmt"># -e: exit on any command failure</span>
+<span class="cmt"># -u: error on undefined variables</span>
+<span class="cmt"># -o pipefail: pipe fails if any command fails</span>
+
+<span class="cmt"># Optional: safer word splitting</span>
+<span class="kw">IFS</span>=$<span class="str">'\n\t'</span></pre>
+
+                <h3>Error Handling Patterns</h3>
+                <pre data-lang="bash"><span class="cmt"># Handle individual command failure</span>
+<span class="fn">command</span> || { <span class="builtin">echo</span> <span class="str">"Failed"</span> &gt;&amp;<span class="num">2</span>; <span class="builtin">exit</span> <span class="num">1</span>; }
+
+<span class="cmt"># Command chain with fallback</span>
+<span class="fn">command1</span> && <span class="fn">command2</span> || <span class="builtin">echo</span> <span class="str">"Something failed"</span>
+
+<span class="cmt"># Explicit check</span>
+<span class="kw">if</span> ! <span class="fn">command</span>; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Command failed"</span> &gt;&amp;<span class="num">2</span>
+    <span class="builtin">exit</span> <span class="num">1</span>
+<span class="kw">fi</span>
+
+<span class="cmt"># Check command exists</span>
+<span class="kw">if</span> ! <span class="builtin">command</span> -v jq &gt;/dev/null <span class="num">2</span>&gt;&amp;<span class="num">1</span>; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"jq is required but not installed"</span> &gt;&amp;<span class="num">2</span>
+    <span class="builtin">exit</span> <span class="num">1</span>
+<span class="kw">fi</span></pre>
+
+                <h3>trap - Signal Handling & Cleanup</h3>
+                <pre data-lang="bash"><span class="cmt"># Cleanup on exit</span>
+<span class="fn">cleanup</span>() {
+    <span class="builtin">echo</span> <span class="str">"Cleaning up..."</span>
+    <span class="fn">rm</span> -f <span class="str">"$tmpfile"</span>
+}
+<span class="builtin">trap</span> cleanup EXIT
+
+<span class="kw">tmpfile</span>=$(<span class="fn">mktemp</span>)
+<span class="cmt"># ... script continues, cleanup runs on exit</span>
+
+<span class="cmt"># Handle Ctrl+C (SIGINT)</span>
+<span class="builtin">trap</span> <span class="str">'echo "Interrupted"; exit 1'</span> INT
+
+<span class="cmt"># Error with line number</span>
+<span class="builtin">trap</span> <span class="str">'echo "Error on line $LINENO"'</span> ERR
+
+<span class="cmt"># Ignore signal</span>
+<span class="builtin">trap</span> <span class="str">''</span> SIGINT   <span class="cmt"># ignore Ctrl+C</span>
+
+<span class="cmt"># Reset to default</span>
+<span class="builtin">trap</span> - SIGINT</pre>
+
+                <h3>Input Validation</h3>
+                <pre data-lang="bash"><span class="cmt"># Check argument count</span>
+<span class="kw">if</span> [[ $<span class="num">#</span> -lt <span class="num">1</span> ]]; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Usage: $0 &lt;filename&gt;"</span> &gt;&amp;<span class="num">2</span>
+    <span class="builtin">exit</span> <span class="num">1</span>
+<span class="kw">fi</span>
+
+<span class="cmt"># Check file exists</span>
+<span class="kw">if</span> [[ ! -f <span class="str">"$1"</span> ]]; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Error: File '$1' not found"</span> &gt;&amp;<span class="num">2</span>
+    <span class="builtin">exit</span> <span class="num">1</span>
+<span class="kw">fi</span>
+
+<span class="cmt"># Validate numeric input</span>
+<span class="kw">if</span> ! [[ <span class="str">"$1"</span> =~ ^[<span class="num">0</span>-<span class="num">9</span>]+$ ]]; <span class="kw">then</span>
+    <span class="builtin">echo</span> <span class="str">"Error: '$1' is not a number"</span> &gt;&amp;<span class="num">2</span>
+    <span class="builtin">exit</span> <span class="num">1</span>
+<span class="kw">fi</span></pre>
+
+                <h3>getopts - Parse Options</h3>
+                <pre data-lang="bash"><span class="fn">usage</span>() {
+    <span class="builtin">echo</span> <span class="str">"Usage: $0 [-v] [-f file] [-n count] arg"</span>
+}
+
+<span class="kw">verbose</span>=<span class="num">0</span>
+<span class="kw">file</span>=<span class="str">""</span>
+<span class="kw">count</span>=<span class="num">1</span>
+
+<span class="kw">while</span> <span class="builtin">getopts</span> <span class="str">"hvf:n:"</span> <span class="kw">opt</span>; <span class="kw">do</span>
+    <span class="kw">case</span> <span class="str">"$opt"</span> <span class="kw">in</span>
+        h) <span class="fn">usage</span>; <span class="builtin">exit</span> <span class="num">0</span> ;;
+        v) <span class="kw">verbose</span>=<span class="num">1</span> ;;
+        f) <span class="kw">file</span>=<span class="str">"$OPTARG"</span> ;;
+        n) <span class="kw">count</span>=<span class="str">"$OPTARG"</span> ;;
+        ?) <span class="fn">usage</span>; <span class="builtin">exit</span> <span class="num">1</span> ;;
+    <span class="kw">esac</span>
+<span class="kw">done</span>
+
+<span class="cmt"># Shift past options</span>
+<span class="builtin">shift</span> $(( OPTIND - <span class="num">1</span> ))
+
+<span class="cmt"># Remaining args in $@</span>
+<span class="builtin">echo</span> <span class="str">"Positional args: $@"</span></pre>
+
+                <div class="tip">
+                    Write to stderr for errors: <code>echo "Error" >&2</code>. This keeps error messages separate from normal output.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Bash TLDR — Last updated December 2025 for Bash 5.2<br>
+                <a href="https://www.gnu.org/software/bash/" target="_blank">Official Site</a> ·
+                <a href="https://www.gnu.org/software/bash/manual/bash.html" target="_blank">Bash Manual</a> ·
+                <a href="https://mywiki.wooledge.org/BashGuide" target="_blank">Bash Guide</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
