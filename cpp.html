@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* C++ theme */
+        :root {
+            --accent: #00599C;
+            --accent-glow: rgba(0, 89, 156, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 8px;
+        }
+
+        .card h4::before {
+            content: '⚡';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">C++</div>
+            </div>
+            <h1>C++ <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to modern C++. Power, performance, and flexibility for systems programming.</p>
+            <div class="version-badge">C++23 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is C++?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#pointers">Pointers & References</a></li>
+                <li><a href="#memory">Memory Management</a></li>
+                <li><a href="#classes">Classes & Objects</a></li>
+                <li><a href="#inheritance">Inheritance</a></li>
+                <li><a href="#templates">Templates</a></li>
+                <li><a href="#stl">STL Containers</a></li>
+                <li><a href="#algorithms">Algorithms</a></li>
+                <li><a href="#modern">Modern C++</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is C++? -->
+            <section id="what">
+                <h2>What is C++?</h2>
+                <p>C++ is a general-purpose programming language created as an extension of C. It supports procedural, object-oriented, and generic programming, offering high performance with low-level memory control.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Performance</h4>
+                        <p>Zero-overhead abstractions and direct hardware access. Compile to native code for maximum speed.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Multi-Paradigm</h4>
+                        <p>Procedural, object-oriented, functional, and generic programming. Use what fits your problem.</p>
+                    </div>
+                    <div class="card">
+                        <h4>RAII</h4>
+                        <p>Resource Acquisition Is Initialization. Automatic resource management tied to object lifetime.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Rich Ecosystem</h4>
+                        <p>Massive standard library, countless third-party libraries, and decades of tools and frameworks.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;iostream&gt;</span>
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    std::cout &lt;&lt; <span class="str">"Hello, World!"</span> &lt;&lt; std::endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="cpp"><span class="cmt">// Basic types</span>
+<span class="type">int</span> x = <span class="num">42</span>;
+<span class="type">double</span> pi = <span class="num">3.14159</span>;
+<span class="type">bool</span> flag = <span class="kw">true</span>;
+<span class="type">char</span> letter = <span class="str">'A'</span>;
+
+<span class="cmt">// Auto type deduction (C++11)</span>
+<span class="kw">auto</span> y = <span class="num">42</span>;        <span class="cmt">// int</span>
+<span class="kw">auto</span> z = <span class="num">3.14</span>;      <span class="cmt">// double</span>
+
+<span class="cmt">// Constants</span>
+<span class="kw">const</span> <span class="type">int</span> MAX = <span class="num">100</span>;
+<span class="kw">constexpr</span> <span class="type">int</span> SIZE = <span class="num">256</span>;  <span class="cmt">// compile-time constant</span>
+
+<span class="cmt">// Initialization (C++11)</span>
+<span class="type">int</span> a{<span class="num">5</span>};           <span class="cmt">// uniform initialization</span>
+<span class="type">int</span> b = {<span class="num">5</span>};
+<span class="type">int</span> c(<span class="num">5</span>);           <span class="cmt">// constructor syntax</span></pre>
+
+                <h3>Functions</h3>
+                <pre data-lang="cpp"><span class="cmt">// Basic function</span>
+<span class="type">int</span> <span class="fn">add</span>(<span class="type">int</span> a, <span class="type">int</span> b) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Function overloading</span>
+<span class="type">double</span> <span class="fn">add</span>(<span class="type">double</span> a, <span class="type">double</span> b) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Default parameters</span>
+<span class="type">void</span> <span class="fn">greet</span>(<span class="type">std::string</span> name = <span class="str">"World"</span>) {
+    std::cout &lt;&lt; <span class="str">"Hello, "</span> &lt;&lt; name &lt;&lt; <span class="str">"!\n"</span>;
+}
+
+<span class="cmt">// Inline functions</span>
+<span class="kw">inline</span> <span class="type">int</span> <span class="fn">square</span>(<span class="type">int</span> x) {
+    <span class="kw">return</span> x * x;
+}
+
+<span class="cmt">// Lambda expressions (C++11)</span>
+<span class="kw">auto</span> multiply = [](<span class="type">int</span> a, <span class="type">int</span> b) { <span class="kw">return</span> a * b; };
+<span class="type">int</span> result = <span class="fn">multiply</span>(<span class="num">3</span>, <span class="num">4</span>);</pre>
+
+                <h3>Control Flow</h3>
+                <pre data-lang="cpp"><span class="cmt">// if-else</span>
+<span class="kw">if</span> (x > <span class="num">0</span>) {
+    <span class="cmt">// positive</span>
+} <span class="kw">else</span> <span class="kw">if</span> (x < <span class="num">0</span>) {
+    <span class="cmt">// negative</span>
+} <span class="kw">else</span> {
+    <span class="cmt">// zero</span>
+}
+
+<span class="cmt">// switch</span>
+<span class="kw">switch</span> (value) {
+    <span class="kw">case</span> <span class="num">1</span>:
+        <span class="cmt">// do something</span>
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">2</span>:
+        <span class="cmt">// do something else</span>
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="cmt">// default case</span>
+}
+
+<span class="cmt">// for loop</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">10</span>; i++) {
+    std::cout &lt;&lt; i &lt;&lt; <span class="str">"\n"</span>;
+}
+
+<span class="cmt">// range-based for (C++11)</span>
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; nums = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+<span class="kw">for</span> (<span class="kw">auto</span> num : nums) {
+    std::cout &lt;&lt; num &lt;&lt; <span class="str">"\n"</span>;
+}
+
+<span class="cmt">// while</span>
+<span class="kw">while</span> (condition) {
+    <span class="cmt">// loop body</span>
+}
+
+<span class="cmt">// do-while</span>
+<span class="kw">do</span> {
+    <span class="cmt">// loop body</span>
+} <span class="kw">while</span> (condition);</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Range/Notes</th>
+                        </tr>
+                        <tr>
+                            <td><code>bool</code></td>
+                            <td>1 byte</td>
+                            <td><code>true</code> or <code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>char</code></td>
+                            <td>1 byte</td>
+                            <td>-128 to 127 or 0 to 255</td>
+                        </tr>
+                        <tr>
+                            <td><code>short</code></td>
+                            <td>2 bytes</td>
+                            <td>-32,768 to 32,767</td>
+                        </tr>
+                        <tr>
+                            <td><code>int</code></td>
+                            <td>4 bytes</td>
+                            <td>~-2 billion to 2 billion</td>
+                        </tr>
+                        <tr>
+                            <td><code>long</code></td>
+                            <td>4-8 bytes</td>
+                            <td>Platform dependent</td>
+                        </tr>
+                        <tr>
+                            <td><code>long long</code></td>
+                            <td>8 bytes</td>
+                            <td>Very large integers</td>
+                        </tr>
+                        <tr>
+                            <td><code>float</code></td>
+                            <td>4 bytes</td>
+                            <td>Single precision</td>
+                        </tr>
+                        <tr>
+                            <td><code>double</code></td>
+                            <td>8 bytes</td>
+                            <td>Double precision</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Compound Types</h3>
+                <pre data-lang="cpp"><span class="cmt">// Arrays</span>
+<span class="type">int</span> arr[<span class="num">5</span>] = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+<span class="type">int</span> matrix[<span class="num">3</span>][<span class="num">3</span>];  <span class="cmt">// 2D array</span>
+
+<span class="cmt">// std::array (C++11) - safer than raw arrays</span>
+std::<span class="type">array</span>&lt;<span class="type">int</span>, <span class="num">5</span>&gt; arr2 = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+
+<span class="cmt">// Structures</span>
+<span class="kw">struct</span> <span class="type">Point</span> {
+    <span class="type">int</span> x;
+    <span class="type">int</span> y;
+};
+<span class="type">Point</span> p = {<span class="num">10</span>, <span class="num">20</span>};
+
+<span class="cmt">// Enums</span>
+<span class="kw">enum</span> <span class="type">Color</span> { RED, GREEN, BLUE };
+
+<span class="cmt">// Enum class (C++11) - type-safe</span>
+<span class="kw">enum</span> <span class="kw">class</span> <span class="type">Status</span> {
+    OK,
+    ERROR,
+    PENDING
+};
+<span class="type">Status</span> s = <span class="type">Status</span>::OK;</pre>
+
+                <h3>Strings</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;string&gt;</span>
+
+<span class="cmt">// C-style strings</span>
+<span class="type">char</span> str[] = <span class="str">"Hello"</span>;
+<span class="kw">const</span> <span class="type">char</span>* ptr = <span class="str">"World"</span>;
+
+<span class="cmt">// std::string</span>
+std::<span class="type">string</span> s1 = <span class="str">"Hello"</span>;
+std::<span class="type">string</span> s2(<span class="str">"World"</span>);
+
+<span class="cmt">// String operations</span>
+std::<span class="type">string</span> full = s1 + <span class="str">", "</span> + s2;  <span class="cmt">// concatenation</span>
+<span class="type">size_t</span> len = s1.<span class="fn">length</span>();
+<span class="type">char</span> first = s1[<span class="num">0</span>];
+s1.<span class="fn">append</span>(<span class="str">"!"</span>);
+s1.<span class="fn">substr</span>(<span class="num">0</span>, <span class="num">5</span>);           <span class="cmt">// substring</span>
+s1.<span class="fn">find</span>(<span class="str">"ell"</span>);             <span class="cmt">// returns position or npos</span>
+
+<span class="cmt">// String view (C++17) - non-owning</span>
+std::<span class="type">string_view</span> sv = <span class="str">"Hello"</span>;</pre>
+            </section>
+
+            <!-- Pointers & References -->
+            <section id="pointers">
+                <h2>Pointers & References</h2>
+
+                <h3>Pointers</h3>
+                <pre data-lang="cpp"><span class="cmt">// Pointer basics</span>
+<span class="type">int</span> x = <span class="num">42</span>;
+<span class="type">int</span>* ptr = &x;        <span class="cmt">// pointer to x</span>
+<span class="type">int</span> value = *ptr;     <span class="cmt">// dereference (get value)</span>
+
+<span class="cmt">// Null pointers</span>
+<span class="type">int</span>* p1 = <span class="kw">nullptr</span>;    <span class="cmt">// C++11 (preferred)</span>
+<span class="type">int</span>* p2 = NULL;       <span class="cmt">// old style</span>
+<span class="type">int</span>* p3 = <span class="num">0</span>;          <span class="cmt">// old style</span>
+
+<span class="cmt">// Pointer arithmetic</span>
+<span class="type">int</span> arr[] = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};
+<span class="type">int</span>* p = arr;
+p++;                   <span class="cmt">// points to arr[1]</span>
+<span class="type">int</span> val = *(p + <span class="num">1</span>);  <span class="cmt">// arr[2]</span>
+
+<span class="cmt">// Const pointers</span>
+<span class="kw">const</span> <span class="type">int</span>* p4 = &x;      <span class="cmt">// pointer to const int</span>
+<span class="type">int</span>* <span class="kw">const</span> p5 = &x;      <span class="cmt">// const pointer to int</span>
+<span class="kw">const</span> <span class="type">int</span>* <span class="kw">const</span> p6 = &x; <span class="cmt">// const pointer to const int</span></pre>
+
+                <h3>References</h3>
+                <pre data-lang="cpp"><span class="cmt">// References (must be initialized)</span>
+<span class="type">int</span> x = <span class="num">42</span>;
+<span class="type">int</span>& ref = x;         <span class="cmt">// reference to x</span>
+ref = <span class="num">100</span>;              <span class="cmt">// modifies x</span>
+
+<span class="cmt">// Function parameters (pass by reference)</span>
+<span class="type">void</span> <span class="fn">increment</span>(<span class="type">int</span>& n) {
+    n++;
+}
+
+<span class="cmt">// Const reference (read-only, no copy)</span>
+<span class="type">void</span> <span class="fn">print</span>(<span class="kw">const</span> std::<span class="type">string</span>& s) {
+    std::cout &lt;&lt; s &lt;&lt; <span class="str">"\n"</span>;
+}
+
+<span class="cmt">// Rvalue references (C++11) - for move semantics</span>
+<span class="type">void</span> <span class="fn">process</span>(std::<span class="type">string</span>&& s) {
+    <span class="cmt">// s is an rvalue reference</span>
+}</pre>
+
+                <h3>Dynamic Memory</h3>
+                <pre data-lang="cpp"><span class="cmt">// new and delete</span>
+<span class="type">int</span>* p = <span class="kw">new</span> <span class="type">int</span>(<span class="num">42</span>);
+<span class="kw">delete</span> p;
+
+<span class="cmt">// Arrays</span>
+<span class="type">int</span>* arr = <span class="kw">new</span> <span class="type">int</span>[<span class="num">10</span>];
+<span class="kw">delete</span>[] arr;
+
+<span class="cmt">// NOTE: Prefer smart pointers in modern C++!</span></pre>
+
+                <div class="tip">
+                    In modern C++, prefer references over pointers when you don't need to reassign or handle null values.
+                </div>
+            </section>
+
+            <!-- Memory Management -->
+            <section id="memory">
+                <h2>Memory Management & RAII</h2>
+                <p>RAII (Resource Acquisition Is Initialization) ties resource lifetime to object lifetime. When the object is destroyed, resources are automatically released.</p>
+
+                <h3>Smart Pointers (C++11)</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;memory&gt;</span>
+
+<span class="cmt">// unique_ptr - exclusive ownership</span>
+std::<span class="type">unique_ptr</span>&lt;<span class="type">int</span>&gt; p1 = std::<span class="fn">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="num">42</span>);
+<span class="cmt">// std::unique_ptr&lt;int&gt; p2 = p1;  // ERROR: cannot copy</span>
+std::<span class="type">unique_ptr</span>&lt;<span class="type">int</span>&gt; p2 = std::<span class="fn">move</span>(p1);  <span class="cmt">// OK: move ownership</span>
+
+<span class="cmt">// shared_ptr - shared ownership (reference counted)</span>
+std::<span class="type">shared_ptr</span>&lt;<span class="type">int</span>&gt; s1 = std::<span class="fn">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="num">42</span>);
+std::<span class="type">shared_ptr</span>&lt;<span class="type">int</span>&gt; s2 = s1;  <span class="cmt">// OK: shared ownership</span>
+std::cout &lt;&lt; s1.<span class="fn">use_count</span>() &lt;&lt; <span class="str">"\n"</span>;  <span class="cmt">// 2</span>
+
+<span class="cmt">// weak_ptr - non-owning reference (breaks circular refs)</span>
+std::<span class="type">weak_ptr</span>&lt;<span class="type">int</span>&gt; w1 = s1;
+<span class="kw">if</span> (<span class="kw">auto</span> sp = w1.<span class="fn">lock</span>()) {
+    <span class="cmt">// object still exists</span>
+}</pre>
+
+                <h3>RAII Example</h3>
+                <pre data-lang="cpp"><span class="cmt">// File handle automatically closed when object destroyed</span>
+<span class="kw">class</span> <span class="type">FileHandler</span> {
+    <span class="type">FILE</span>* file;
+<span class="kw">public</span>:
+    <span class="fn">FileHandler</span>(<span class="kw">const</span> <span class="type">char</span>* name) {
+        file = <span class="fn">fopen</span>(name, <span class="str">"r"</span>);
+    }
+
+    ~<span class="fn">FileHandler</span>() {
+        <span class="kw">if</span> (file) <span class="fn">fclose</span>(file);
+    }
+
+    <span class="cmt">// Delete copy operations</span>
+    <span class="fn">FileHandler</span>(<span class="kw">const</span> <span class="type">FileHandler</span>&) = <span class="kw">delete</span>;
+    <span class="type">FileHandler</span>& <span class="kw">operator</span>=(<span class="kw">const</span> <span class="type">FileHandler</span>&) = <span class="kw">delete</span>;
+};</pre>
+
+                <h3>Move Semantics (C++11)</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Buffer</span> {
+    <span class="type">int</span>* data;
+    <span class="type">size_t</span> size;
+<span class="kw">public</span>:
+    <span class="cmt">// Move constructor</span>
+    <span class="fn">Buffer</span>(<span class="type">Buffer</span>&& other) <span class="kw">noexcept</span>
+        : data(other.data), size(other.size) {
+        other.data = <span class="kw">nullptr</span>;
+        other.size = <span class="num">0</span>;
+    }
+
+    <span class="cmt">// Move assignment</span>
+    <span class="type">Buffer</span>& <span class="kw">operator</span>=(<span class="type">Buffer</span>&& other) <span class="kw">noexcept</span> {
+        <span class="kw">if</span> (<span class="kw">this</span> != &other) {
+            <span class="kw">delete</span>[] data;
+            data = other.data;
+            size = other.size;
+            other.data = <span class="kw">nullptr</span>;
+            other.size = <span class="num">0</span>;
+        }
+        <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+};</pre>
+
+                <div class="tip">
+                    Always prefer smart pointers over raw pointers. Use <code>make_unique</code> and <code>make_shared</code> for exception safety.
+                </div>
+            </section>
+
+            <!-- Classes & Objects -->
+            <section id="classes">
+                <h2>Classes & Objects</h2>
+
+                <h3>Basic Class</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Rectangle</span> {
+<span class="kw">private</span>:
+    <span class="type">int</span> width;
+    <span class="type">int</span> height;
+
+<span class="kw">public</span>:
+    <span class="cmt">// Constructor</span>
+    <span class="fn">Rectangle</span>(<span class="type">int</span> w, <span class="type">int</span> h) : width(w), height(h) {}
+
+    <span class="cmt">// Default constructor</span>
+    <span class="fn">Rectangle</span>() : width(<span class="num">0</span>), height(<span class="num">0</span>) {}
+
+    <span class="cmt">// Member function</span>
+    <span class="type">int</span> <span class="fn">area</span>() <span class="kw">const</span> {
+        <span class="kw">return</span> width * height;
+    }
+
+    <span class="cmt">// Getter</span>
+    <span class="type">int</span> <span class="fn">getWidth</span>() <span class="kw">const</span> { <span class="kw">return</span> width; }
+
+    <span class="cmt">// Setter</span>
+    <span class="type">void</span> <span class="fn">setWidth</span>(<span class="type">int</span> w) { width = w; }
+};
+
+<span class="cmt">// Usage</span>
+<span class="type">Rectangle</span> r1(<span class="num">10</span>, <span class="num">5</span>);
+std::cout &lt;&lt; r1.<span class="fn">area</span>() &lt;&lt; <span class="str">"\n"</span>;  <span class="cmt">// 50</span></pre>
+
+                <h3>Constructor Initialization List</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Person</span> {
+    std::<span class="type">string</span> name;
+    <span class="type">int</span> age;
+    <span class="kw">const</span> <span class="type">int</span> id;  <span class="cmt">// must use initialization list</span>
+
+<span class="kw">public</span>:
+    <span class="cmt">// Preferred: initialization list</span>
+    <span class="fn">Person</span>(std::<span class="type">string</span> n, <span class="type">int</span> a, <span class="type">int</span> i)
+        : name(n), age(a), id(i) {}
+};</pre>
+
+                <h3>Special Member Functions</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">MyClass</span> {
+<span class="kw">public</span>:
+    <span class="cmt">// Constructor</span>
+    <span class="fn">MyClass</span>() { }
+
+    <span class="cmt">// Destructor</span>
+    ~<span class="fn">MyClass</span>() { }
+
+    <span class="cmt">// Copy constructor</span>
+    <span class="fn">MyClass</span>(<span class="kw">const</span> <span class="type">MyClass</span>& other) { }
+
+    <span class="cmt">// Copy assignment</span>
+    <span class="type">MyClass</span>& <span class="kw">operator</span>=(<span class="kw">const</span> <span class="type">MyClass</span>& other) {
+        <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+
+    <span class="cmt">// Move constructor (C++11)</span>
+    <span class="fn">MyClass</span>(<span class="type">MyClass</span>&& other) <span class="kw">noexcept</span> { }
+
+    <span class="cmt">// Move assignment (C++11)</span>
+    <span class="type">MyClass</span>& <span class="kw">operator</span>=(<span class="type">MyClass</span>&& other) <span class="kw">noexcept</span> {
+        <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+};
+
+<span class="cmt">// Rule of Five: if you define one, define all or delete them</span>
+<span class="cmt">// Or use = default / = delete</span>
+<span class="kw">class</span> <span class="type">Simple</span> {
+<span class="kw">public</span>:
+    <span class="fn">Simple</span>() = <span class="kw">default</span>;
+    <span class="fn">Simple</span>(<span class="kw">const</span> <span class="type">Simple</span>&) = <span class="kw">delete</span>;  <span class="cmt">// no copying</span>
+};</pre>
+
+                <h3>Operator Overloading</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Vector2D</span> {
+    <span class="type">double</span> x, y;
+<span class="kw">public</span>:
+    <span class="fn">Vector2D</span>(<span class="type">double</span> x, <span class="type">double</span> y) : x(x), y(y) {}
+
+    <span class="cmt">// Operator +</span>
+    <span class="type">Vector2D</span> <span class="kw">operator</span>+(<span class="kw">const</span> <span class="type">Vector2D</span>& other) <span class="kw">const</span> {
+        <span class="kw">return</span> <span class="type">Vector2D</span>(x + other.x, y + other.y);
+    }
+
+    <span class="cmt">// Operator ==</span>
+    <span class="type">bool</span> <span class="kw">operator</span>==(<span class="kw">const</span> <span class="type">Vector2D</span>& other) <span class="kw">const</span> {
+        <span class="kw">return</span> x == other.x && y == other.y;
+    }
+
+    <span class="cmt">// Operator &lt;&lt; (friend function)</span>
+    <span class="kw">friend</span> std::<span class="type">ostream</span>& <span class="kw">operator</span>&lt;&lt;(std::<span class="type">ostream</span>& os, <span class="kw">const</span> <span class="type">Vector2D</span>& v) {
+        os &lt;&lt; <span class="str">"("</span> &lt;&lt; v.x &lt;&lt; <span class="str">", "</span> &lt;&lt; v.y &lt;&lt; <span class="str">")"</span>;
+        <span class="kw">return</span> os;
+    }
+};</pre>
+
+                <h3>Static Members</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Counter</span> {
+    <span class="kw">static</span> <span class="type">int</span> count;  <span class="cmt">// shared by all instances</span>
+<span class="kw">public</span>:
+    <span class="fn">Counter</span>() { count++; }
+
+    <span class="kw">static</span> <span class="type">int</span> <span class="fn">getCount</span>() { <span class="kw">return</span> count; }
+};
+
+<span class="cmt">// Define static member</span>
+<span class="type">int</span> <span class="type">Counter</span>::count = <span class="num">0</span>;
+
+<span class="cmt">// Access without instance</span>
+<span class="type">int</span> n = <span class="type">Counter</span>::<span class="fn">getCount</span>();</pre>
+            </section>
+
+            <!-- Inheritance -->
+            <section id="inheritance">
+                <h2>Inheritance & Polymorphism</h2>
+
+                <h3>Basic Inheritance</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Animal</span> {
+<span class="kw">protected</span>:
+    std::<span class="type">string</span> name;
+<span class="kw">public</span>:
+    <span class="fn">Animal</span>(std::<span class="type">string</span> n) : name(n) {}
+
+    <span class="type">void</span> <span class="fn">eat</span>() {
+        std::cout &lt;&lt; name &lt;&lt; <span class="str">" is eating\n"</span>;
+    }
+};
+
+<span class="cmt">// Derived class</span>
+<span class="kw">class</span> <span class="type">Dog</span> : <span class="kw">public</span> <span class="type">Animal</span> {
+<span class="kw">public</span>:
+    <span class="fn">Dog</span>(std::<span class="type">string</span> n) : <span class="fn">Animal</span>(n) {}
+
+    <span class="type">void</span> <span class="fn">bark</span>() {
+        std::cout &lt;&lt; name &lt;&lt; <span class="str">" barks!\n"</span>;
+    }
+};
+
+<span class="type">Dog</span> d(<span class="str">"Rex"</span>);
+d.<span class="fn">eat</span>();   <span class="cmt">// inherited</span>
+d.<span class="fn">bark</span>();  <span class="cmt">// own method</span></pre>
+
+                <h3>Virtual Functions & Polymorphism</h3>
+                <pre data-lang="cpp"><span class="kw">class</span> <span class="type">Shape</span> {
+<span class="kw">public</span>:
+    <span class="cmt">// Virtual function</span>
+    <span class="kw">virtual</span> <span class="type">double</span> <span class="fn">area</span>() <span class="kw">const</span> {
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="cmt">// Virtual destructor (important!)</span>
+    <span class="kw">virtual</span> ~<span class="fn">Shape</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="type">Circle</span> : <span class="kw">public</span> <span class="type">Shape</span> {
+    <span class="type">double</span> radius;
+<span class="kw">public</span>:
+    <span class="fn">Circle</span>(<span class="type">double</span> r) : radius(r) {}
+
+    <span class="cmt">// Override (C++11 keyword)</span>
+    <span class="type">double</span> <span class="fn">area</span>() <span class="kw">const</span> <span class="kw">override</span> {
+        <span class="kw">return</span> <span class="num">3.14159</span> * radius * radius;
+    }
+};
+
+<span class="cmt">// Polymorphism</span>
+<span class="type">Shape</span>* s = <span class="kw">new</span> <span class="type">Circle</span>(<span class="num">5</span>);
+std::cout &lt;&lt; s-&gt;<span class="fn">area</span>() &lt;&lt; <span class="str">"\n"</span>;  <span class="cmt">// calls Circle::area</span>
+<span class="kw">delete</span> s;</pre>
+
+                <h3>Abstract Classes</h3>
+                <pre data-lang="cpp"><span class="cmt">// Pure virtual function = abstract class</span>
+<span class="kw">class</span> <span class="type">Drawable</span> {
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> <span class="type">void</span> <span class="fn">draw</span>() <span class="kw">const</span> = <span class="num">0</span>;  <span class="cmt">// pure virtual</span>
+    <span class="kw">virtual</span> ~<span class="fn">Drawable</span>() = <span class="kw">default</span>;
+};
+
+<span class="kw">class</span> <span class="type">Rectangle</span> : <span class="kw">public</span> <span class="type">Drawable</span> {
+<span class="kw">public</span>:
+    <span class="type">void</span> <span class="fn">draw</span>() <span class="kw">const</span> <span class="kw">override</span> {
+        std::cout &lt;&lt; <span class="str">"Drawing rectangle\n"</span>;
+    }
+};</pre>
+
+                <h3>Access Specifiers</h3>
+                <dl class="concept-list">
+                    <div class="concept">
+                        <dt>public</dt>
+                        <dd>Accessible from anywhere</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>protected</dt>
+                        <dd>Accessible in class and derived classes</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>private</dt>
+                        <dd>Accessible only within the class</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <!-- Templates -->
+            <section id="templates">
+                <h2>Templates</h2>
+                <p>Templates enable generic programming. Write code once, use with any type.</p>
+
+                <h3>Function Templates</h3>
+                <pre data-lang="cpp"><span class="cmt">// Generic function</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+T <span class="fn">max</span>(T a, T b) {
+    <span class="kw">return</span> (a > b) ? a : b;
+}
+
+<span class="cmt">// Usage</span>
+<span class="type">int</span> i = <span class="fn">max</span>(<span class="num">3</span>, <span class="num">7</span>);           <span class="cmt">// T = int</span>
+<span class="type">double</span> d = <span class="fn">max</span>(<span class="num">3.5</span>, <span class="num">2.1</span>);   <span class="cmt">// T = double</span>
+
+<span class="cmt">// Multiple template parameters</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T, <span class="kw">typename</span> U&gt;
+<span class="kw">auto</span> <span class="fn">add</span>(T a, U b) {
+    <span class="kw">return</span> a + b;
+}</pre>
+
+                <h3>Class Templates</h3>
+                <pre data-lang="cpp"><span class="cmt">// Generic class</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">class</span> <span class="type">Stack</span> {
+    std::<span class="type">vector</span>&lt;T&gt; elements;
+<span class="kw">public</span>:
+    <span class="type">void</span> <span class="fn">push</span>(<span class="kw">const</span> T& elem) {
+        elements.<span class="fn">push_back</span>(elem);
+    }
+
+    T <span class="fn">pop</span>() {
+        T elem = elements.<span class="fn">back</span>();
+        elements.<span class="fn">pop_back</span>();
+        <span class="kw">return</span> elem;
+    }
+
+    <span class="type">bool</span> <span class="fn">empty</span>() <span class="kw">const</span> {
+        <span class="kw">return</span> elements.<span class="fn">empty</span>();
+    }
+};
+
+<span class="cmt">// Usage</span>
+<span class="type">Stack</span>&lt;<span class="type">int</span>&gt; intStack;
+<span class="type">Stack</span>&lt;std::<span class="type">string</span>&gt; strStack;</pre>
+
+                <h3>Template Specialization</h3>
+                <pre data-lang="cpp"><span class="cmt">// Generic template</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">class</span> <span class="type">Storage</span> {
+    T data;
+<span class="kw">public</span>:
+    <span class="type">void</span> <span class="fn">print</span>() { std::cout &lt;&lt; data &lt;&lt; <span class="str">"\n"</span>; }
+};
+
+<span class="cmt">// Specialization for bool</span>
+<span class="kw">template</span>&lt;&gt;
+<span class="kw">class</span> <span class="type">Storage</span>&lt;<span class="type">bool</span>&gt; {
+    <span class="type">bool</span> data;
+<span class="kw">public</span>:
+    <span class="type">void</span> <span class="fn">print</span>() {
+        std::cout &lt;&lt; (data ? <span class="str">"true"</span> : <span class="str">"false"</span>) &lt;&lt; <span class="str">"\n"</span>;
+    }
+};</pre>
+
+                <h3>Variadic Templates (C++11)</h3>
+                <pre data-lang="cpp"><span class="cmt">// Variable number of arguments</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span>... Args&gt;
+<span class="type">void</span> <span class="fn">print</span>(Args... args) {
+    (std::cout &lt;&lt; ... &lt;&lt; args) &lt;&lt; <span class="str">"\n"</span>;  <span class="cmt">// fold expression (C++17)</span>
+}
+
+<span class="fn">print</span>(<span class="num">1</span>, <span class="str">" hello "</span>, <span class="num">3.14</span>, <span class="str">" world"</span>);</pre>
+            </section>
+
+            <!-- STL -->
+            <section id="stl">
+                <h2>STL Containers</h2>
+
+                <h3>Sequence Containers</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;deque&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;list&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;array&gt;</span>
+
+<span class="cmt">// vector - dynamic array</span>
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};
+v.<span class="fn">push_back</span>(<span class="num">4</span>);
+v.<span class="fn">pop_back</span>();
+<span class="type">int</span> first = v[<span class="num">0</span>];
+<span class="type">int</span> last = v.<span class="fn">back</span>();
+<span class="type">size_t</span> sz = v.<span class="fn">size</span>();
+
+<span class="cmt">// deque - double-ended queue</span>
+std::<span class="type">deque</span>&lt;<span class="type">int</span>&gt; dq;
+dq.<span class="fn">push_front</span>(<span class="num">1</span>);
+dq.<span class="fn">push_back</span>(<span class="num">2</span>);
+dq.<span class="fn">pop_front</span>();
+
+<span class="cmt">// list - doubly linked list</span>
+std::<span class="type">list</span>&lt;<span class="type">int</span>&gt; lst = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};
+lst.<span class="fn">push_front</span>(<span class="num">0</span>);
+lst.<span class="fn">push_back</span>(<span class="num">4</span>);
+
+<span class="cmt">// array - fixed-size array (C++11)</span>
+std::<span class="type">array</span>&lt;<span class="type">int</span>, <span class="num">5</span>&gt; arr = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};</pre>
+
+                <h3>Associative Containers</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;map&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;set&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;unordered_map&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;unordered_set&gt;</span>
+
+<span class="cmt">// map - ordered key-value pairs</span>
+std::<span class="type">map</span>&lt;std::<span class="type">string</span>, <span class="type">int</span>&gt; ages;
+ages[<span class="str">"Alice"</span>] = <span class="num">30</span>;
+ages.<span class="fn">insert</span>({<span class="str">"Bob"</span>, <span class="num">25</span>});
+<span class="kw">if</span> (ages.<span class="fn">count</span>(<span class="str">"Alice"</span>)) { <span class="cmt">/* exists */</span> }
+
+<span class="cmt">// set - ordered unique elements</span>
+std::<span class="type">set</span>&lt;<span class="type">int</span>&gt; s = {<span class="num">3</span>, <span class="num">1</span>, <span class="num">4</span>, <span class="num">1</span>, <span class="num">5</span>};  <span class="cmt">// {1, 3, 4, 5}</span>
+s.<span class="fn">insert</span>(<span class="num">2</span>);
+<span class="type">bool</span> has = s.<span class="fn">count</span>(<span class="num">3</span>);  <span class="cmt">// true</span>
+
+<span class="cmt">// unordered_map - hash map (C++11)</span>
+std::<span class="type">unordered_map</span>&lt;std::<span class="type">string</span>, <span class="type">int</span>&gt; scores;
+scores[<span class="str">"player1"</span>] = <span class="num">100</span>;
+
+<span class="cmt">// unordered_set - hash set (C++11)</span>
+std::<span class="type">unordered_set</span>&lt;<span class="type">int</span>&gt; uset = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};</pre>
+
+                <h3>Container Adaptors</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;stack&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;queue&gt;</span>
+
+<span class="cmt">// stack - LIFO</span>
+std::<span class="type">stack</span>&lt;<span class="type">int</span>&gt; stk;
+stk.<span class="fn">push</span>(<span class="num">1</span>);
+stk.<span class="fn">push</span>(<span class="num">2</span>);
+<span class="type">int</span> top = stk.<span class="fn">top</span>();
+stk.<span class="fn">pop</span>();
+
+<span class="cmt">// queue - FIFO</span>
+std::<span class="type">queue</span>&lt;<span class="type">int</span>&gt; q;
+q.<span class="fn">push</span>(<span class="num">1</span>);
+<span class="type">int</span> front = q.<span class="fn">front</span>();
+q.<span class="fn">pop</span>();
+
+<span class="cmt">// priority_queue - heap</span>
+std::<span class="type">priority_queue</span>&lt;<span class="type">int</span>&gt; pq;
+pq.<span class="fn">push</span>(<span class="num">3</span>);
+pq.<span class="fn">push</span>(<span class="num">1</span>);
+pq.<span class="fn">push</span>(<span class="num">4</span>);
+<span class="type">int</span> max = pq.<span class="fn">top</span>();  <span class="cmt">// 4</span></pre>
+
+                <h3>Iterators</h3>
+                <pre data-lang="cpp"><span class="cmt">// Iterator basics</span>
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+
+<span class="cmt">// Range-based for loop (C++11)</span>
+<span class="kw">for</span> (<span class="kw">auto</span> x : v) {
+    std::cout &lt;&lt; x &lt;&lt; <span class="str">" "</span>;
+}
+
+<span class="cmt">// Iterator loop</span>
+<span class="kw">for</span> (<span class="kw">auto</span> it = v.<span class="fn">begin</span>(); it != v.<span class="fn">end</span>(); ++it) {
+    std::cout &lt;&lt; *it &lt;&lt; <span class="str">" "</span>;
+}
+
+<span class="cmt">// Reverse iterator</span>
+<span class="kw">for</span> (<span class="kw">auto</span> it = v.<span class="fn">rbegin</span>(); it != v.<span class="fn">rend</span>(); ++it) {
+    std::cout &lt;&lt; *it &lt;&lt; <span class="str">" "</span>;
+}</pre>
+            </section>
+
+            <!-- Algorithms -->
+            <section id="algorithms">
+                <h2>Algorithms & Iterators</h2>
+
+                <h3>Common Algorithms</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;algorithm&gt;</span>
+<span class="attr">#include</span> <span class="str">&lt;numeric&gt;</span>
+
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">3</span>, <span class="num">1</span>, <span class="num">4</span>, <span class="num">1</span>, <span class="num">5</span>, <span class="num">9</span>};
+
+<span class="cmt">// Sort</span>
+std::<span class="fn">sort</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());
+
+<span class="cmt">// Sort with custom comparator</span>
+std::<span class="fn">sort</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(), std::greater&lt;<span class="type">int</span>&gt;());
+
+<span class="cmt">// Find</span>
+<span class="kw">auto</span> it = std::<span class="fn">find</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(), <span class="num">4</span>);
+<span class="kw">if</span> (it != v.<span class="fn">end</span>()) {
+    std::cout &lt;&lt; <span class="str">"Found at "</span> &lt;&lt; (it - v.<span class="fn">begin</span>());
+}
+
+<span class="cmt">// Count</span>
+<span class="type">int</span> count = std::<span class="fn">count</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(), <span class="num">1</span>);
+
+<span class="cmt">// Min/Max</span>
+<span class="kw">auto</span> min = std::<span class="fn">min_element</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());
+<span class="kw">auto</span> max = std::<span class="fn">max_element</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());
+
+<span class="cmt">// Accumulate (sum)</span>
+<span class="type">int</span> sum = std::<span class="fn">accumulate</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(), <span class="num">0</span>);
+
+<span class="cmt">// Reverse</span>
+std::<span class="fn">reverse</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());
+
+<span class="cmt">// Remove duplicates (needs sort first)</span>
+std::<span class="fn">sort</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());
+v.<span class="fn">erase</span>(std::<span class="fn">unique</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>()), v.<span class="fn">end</span>());</pre>
+
+                <h3>Transform & Lambda</h3>
+                <pre data-lang="cpp"><span class="cmt">// Transform with lambda</span>
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; result(v.<span class="fn">size</span>());
+
+std::<span class="fn">transform</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(), result.<span class="fn">begin</span>(),
+    [](<span class="type">int</span> x) { <span class="kw">return</span> x * x; });
+
+<span class="cmt">// For_each</span>
+std::<span class="fn">for_each</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(),
+    [](<span class="type">int</span> x) { std::cout &lt;&lt; x &lt;&lt; <span class="str">" "</span>; });
+
+<span class="cmt">// Count_if</span>
+<span class="type">int</span> evens = std::<span class="fn">count_if</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(),
+    [](<span class="type">int</span> x) { <span class="kw">return</span> x % <span class="num">2</span> == <span class="num">0</span>; });</pre>
+
+                <h3>Ranges (C++20)</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;ranges&gt;</span>
+
+<span class="kw">namespace</span> ranges = std::ranges;
+
+std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
+
+<span class="cmt">// Ranges algorithms</span>
+ranges::<span class="fn">sort</span>(v);
+<span class="kw">auto</span> it = ranges::<span class="fn">find</span>(v, <span class="num">3</span>);
+
+<span class="cmt">// Views (lazy evaluation)</span>
+<span class="kw">auto</span> evens = v | std::views::<span class="fn">filter</span>([](<span class="type">int</span> x) { <span class="kw">return</span> x % <span class="num">2</span> == <span class="num">0</span>; });
+<span class="kw">auto</span> squared = evens | std::views::<span class="fn">transform</span>([](<span class="type">int</span> x) { <span class="kw">return</span> x * x; });</pre>
+            </section>
+
+            <!-- Modern C++ -->
+            <section id="modern">
+                <h2>Modern C++ Features</h2>
+
+                <h3>auto & decltype (C++11)</h3>
+                <pre data-lang="cpp"><span class="cmt">// auto - type deduction</span>
+<span class="kw">auto</span> x = <span class="num">42</span>;              <span class="cmt">// int</span>
+<span class="kw">auto</span> pi = <span class="num">3.14</span>;           <span class="cmt">// double</span>
+<span class="kw">auto</span> s = <span class="str">"hello"</span>;         <span class="cmt">// const char*</span>
+<span class="kw">auto</span> v = std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt;{};
+
+<span class="cmt">// decltype - get type of expression</span>
+<span class="type">int</span> a = <span class="num">5</span>;
+<span class="kw">decltype</span>(a) b = <span class="num">10</span>;      <span class="cmt">// b is int</span></pre>
+
+                <h3>Range-based for (C++11)</h3>
+                <pre data-lang="cpp">std::<span class="type">vector</span>&lt;<span class="type">int</span>&gt; v = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};
+
+<span class="cmt">// By value</span>
+<span class="kw">for</span> (<span class="kw">auto</span> x : v) {
+    std::cout &lt;&lt; x;
+}
+
+<span class="cmt">// By reference (modify)</span>
+<span class="kw">for</span> (<span class="kw">auto</span>& x : v) {
+    x *= <span class="num">2</span>;
+}
+
+<span class="cmt">// By const reference (no copy)</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="kw">auto</span>& x : v) {
+    std::cout &lt;&lt; x;
+}</pre>
+
+                <h3>nullptr (C++11)</h3>
+                <pre data-lang="cpp"><span class="cmt">// Old way: NULL or 0</span>
+<span class="type">int</span>* p1 = NULL;
+
+<span class="cmt">// Modern way: nullptr</span>
+<span class="type">int</span>* p2 = <span class="kw">nullptr</span>;
+
+<span class="kw">if</span> (p2 == <span class="kw">nullptr</span>) {
+    <span class="cmt">// null pointer</span>
+}</pre>
+
+                <h3>Structured Bindings (C++17)</h3>
+                <pre data-lang="cpp"><span class="cmt">// Unpack tuple/pair/struct</span>
+std::<span class="type">pair</span>&lt;<span class="type">int</span>, std::<span class="type">string</span>&gt; p = {<span class="num">1</span>, <span class="str">"hello"</span>};
+<span class="kw">auto</span> [id, name] = p;
+
+<span class="cmt">// With map</span>
+std::<span class="type">map</span>&lt;std::<span class="type">string</span>, <span class="type">int</span>&gt; ages;
+<span class="kw">for</span> (<span class="kw">const</span> <span class="kw">auto</span>& [key, value] : ages) {
+    std::cout &lt;&lt; key &lt;&lt; <span class="str">": "</span> &lt;&lt; value;
+}</pre>
+
+                <h3>Optional (C++17)</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;optional&gt;</span>
+
+<span class="cmt">// Optional return value</span>
+std::<span class="type">optional</span>&lt;<span class="type">int</span>&gt; <span class="fn">find_value</span>() {
+    <span class="kw">if</span> (success) {
+        <span class="kw">return</span> <span class="num">42</span>;
+    }
+    <span class="kw">return</span> std::nullopt;
+}
+
+<span class="cmt">// Usage</span>
+<span class="kw">if</span> (<span class="kw">auto</span> val = <span class="fn">find_value</span>()) {
+    std::cout &lt;&lt; *val;
+}</pre>
+
+                <h3>std::variant (C++17)</h3>
+                <pre data-lang="cpp"><span class="attr">#include</span> <span class="str">&lt;variant&gt;</span>
+
+<span class="cmt">// Type-safe union</span>
+std::<span class="type">variant</span>&lt;<span class="type">int</span>, <span class="type">double</span>, std::<span class="type">string</span>&gt; v;
+
+v = <span class="num">42</span>;
+v = <span class="num">3.14</span>;
+v = <span class="str">"hello"</span>;
+
+<span class="cmt">// Get value</span>
+<span class="kw">if</span> (<span class="kw">auto</span> p = std::<span class="fn">get_if</span>&lt;std::<span class="type">string</span>&gt;(&v)) {
+    std::cout &lt;&lt; *p;
+}</pre>
+
+                <h3>Concepts (C++20)</h3>
+                <pre data-lang="cpp"><span class="cmt">// Define concept</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+concept Numeric = std::is_arithmetic_v&lt;T&gt;;
+
+<span class="cmt">// Use concept</span>
+<span class="kw">template</span>&lt;Numeric T&gt;
+T <span class="fn">add</span>(T a, T b) {
+    <span class="kw">return</span> a + b;
+}</pre>
+
+                <h3>if/switch with initializer (C++17)</h3>
+                <pre data-lang="cpp"><span class="cmt">// if with initializer</span>
+<span class="kw">if</span> (<span class="kw">auto</span> it = m.<span class="fn">find</span>(key); it != m.<span class="fn">end</span>()) {
+    <span class="cmt">// use it</span>
+}
+
+<span class="cmt">// switch with initializer</span>
+<span class="kw">switch</span> (<span class="kw">auto</span> val = <span class="fn">getValue</span>(); val) {
+    <span class="kw">case</span> <span class="num">1</span>: <span class="kw">break</span>;
+    <span class="kw">default</span>: <span class="kw">break</span>;
+}</pre>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                C++ TLDR — Last updated December 2025 for C++23<br>
+                <a href="https://isocpp.org" target="_blank">ISO C++</a> ·
+                <a href="https://en.cppreference.com" target="_blank">cppreference.com</a> ·
+                <a href="https://github.com/isocpp/CppCoreGuidelines" target="_blank">Core Guidelines</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
