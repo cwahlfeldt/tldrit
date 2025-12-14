@@ -191,6 +191,19 @@
         border-radius: 4px;
       }
 
+      .guide-card.fish {
+        --card-accent: #00afaf;
+      }
+
+      .guide-card.fish:hover {
+        border-color: #00afaf;
+        box-shadow: 0 12px 40px rgba(0, 175, 175, 0.15);
+      }
+
+      .guide-card.fish .guide-icon {
+        border-radius: 50%;
+      }
+
       .guide-header {
         display: flex;
         align-items: center;
@@ -503,6 +516,23 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">v5.9</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="fish.html" class="guide-card fish">
+            <div class="guide-header">
+              <div class="guide-icon">🐟</div>
+              <span class="guide-title">Fish Shell</span>
+            </div>
+            <p class="guide-desc">
+              The friendly interactive shell with autosuggestions and syntax
+              highlighting out of the box. Smart completions, no configuration
+              needed, and a clean scripting syntax. Designed to be discoverable
+              and user-friendly while remaining powerful for advanced use.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v4.2.1</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>
