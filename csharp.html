@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C# TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* C# theme - purple */
+      :root {
+        --accent: #9b4dca;
+        --accent-glow: rgba(155, 77, 202, 0.15);
+      }
+
+      .logo-icon {
+        border-radius: 12px;
+      }
+
+      .card h4::before {
+        content: "#";
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="index.html" class="back-link">← Back to all guides</a>
+        <div class="logo">
+          <div class="logo-icon">C#</div>
+        </div>
+        <h1>C# <span>TLDR</span></h1>
+        <p class="tagline">
+          A rapid reference guide to the C# programming language. Everything you
+          need to know, distilled.
+        </p>
+        <div class="version-badge">C# 13 / .NET 9 — November 2024</div>
+      </div>
+    </header>
+
+    <nav>
+      <div class="nav-container">
+        <ul>
+          <li><a href="#what">What is C#?</a></li>
+          <li><a href="#basics">Basics</a></li>
+          <li><a href="#types">Types</a></li>
+          <li><a href="#control">Control Flow</a></li>
+          <li><a href="#oop">OOP</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#linq">LINQ</a></li>
+          <li><a href="#async">Async/Await</a></li>
+          <li><a href="#errors">Errors</a></li>
+          <li><a href="#patterns">Patterns</a></li>
+          <li><a href="#modern">Modern C#</a></li>
+          <li><a href="#dotnet">CLI & Project</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container">
+        <!-- What is C#? -->
+        <section id="what">
+          <h2>What is C#?</h2>
+          <p>
+            C# is a modern, object-oriented programming language developed by
+            Microsoft. It runs on the .NET platform and is used for building web
+            apps, desktop apps, games (Unity), cloud services, and more.
+          </p>
+
+          <div class="cards">
+            <div class="card">
+              <h4>Type-Safe</h4>
+              <p>
+                Strong static typing catches errors at compile time. Nullable
+                reference types prevent null reference exceptions.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Cross-Platform</h4>
+              <p>
+                .NET runs on Windows, macOS, and Linux. Build once, deploy
+                anywhere.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Modern Features</h4>
+              <p>
+                Pattern matching, records, async/await, LINQ, and more. C#
+                evolves rapidly with yearly releases.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Rich Ecosystem</h4>
+              <p>
+                NuGet packages, Visual Studio/VS Code tooling, and extensive
+                standard library.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Basics -->
+        <section id="basics">
+          <h2>Basics</h2>
+
+          <h3>Hello World</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Minimal (C# 9+ top-level statements)</span>
+Console.<span class="fn">WriteLine</span>(<span class="str">"Hello, World!"</span>);
+
+<span class="cmt">// Traditional</span>
+<span class="kw">namespace</span> MyApp;
+
+<span class="kw">class</span> <span class="type">Program</span>
+{
+    <span class="kw">static</span> <span class="type">void</span> <span class="fn">Main</span>(<span class="type">string</span>[] args)
+    {
+        Console.<span class="fn">WriteLine</span>(<span class="str">"Hello, World!"</span>);
+    }
+}</pre>
+
+          <h3>Variables</h3>
+          <pre data-lang="csharp"><span class="cmt">// Explicit typing</span>
+<span class="type">int</span> age = <span class="num">25</span>;
+<span class="type">string</span> name = <span class="str">"Alice"</span>;
+<span class="type">bool</span> isActive = <span class="kw">true</span>;
+
+<span class="cmt">// Type inference with var</span>
+<span class="kw">var</span> count = <span class="num">42</span>;           <span class="cmt">// int</span>
+<span class="kw">var</span> message = <span class="str">"Hello"</span>;    <span class="cmt">// string</span>
+
+<span class="cmt">// Constants</span>
+<span class="kw">const</span> <span class="type">double</span> Pi = <span class="num">3.14159</span>;
+
+<span class="cmt">// Nullable types</span>
+<span class="type">int</span>? maybeNull = <span class="kw">null</span>;
+<span class="type">string</span>? nullableString = <span class="kw">null</span>;</pre>
+
+          <h3>Methods</h3>
+          <pre data-lang="csharp"><span class="cmt">// Basic method</span>
+<span class="type">int</span> <span class="fn">Add</span>(<span class="type">int</span> a, <span class="type">int</span> b)
+{
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Expression-bodied method</span>
+<span class="type">int</span> <span class="fn">Multiply</span>(<span class="type">int</span> a, <span class="type">int</span> b) => a * b;
+
+<span class="cmt">// Default parameters</span>
+<span class="type">void</span> <span class="fn">Greet</span>(<span class="type">string</span> name = <span class="str">"World"</span>) => Console.<span class="fn">WriteLine</span>(<span class="str">$"Hello, </span>{name}<span class="str">!"</span>);
+
+<span class="cmt">// Named arguments</span>
+<span class="fn">Greet</span>(name: <span class="str">"Alice"</span>);
+
+<span class="cmt">// Out parameters</span>
+<span class="type">bool</span> <span class="fn">TryParse</span>(<span class="type">string</span> s, <span class="kw">out</span> <span class="type">int</span> result) { ... }
+<span class="kw">if</span> (<span class="type">int</span>.<span class="fn">TryParse</span>(<span class="str">"42"</span>, <span class="kw">out</span> <span class="kw">var</span> value)) { ... }
+
+<span class="cmt">// Ref parameters (pass by reference)</span>
+<span class="type">void</span> <span class="fn">Swap</span>(<span class="kw">ref</span> <span class="type">int</span> a, <span class="kw">ref</span> <span class="type">int</span> b) => (a, b) = (b, a);</pre>
+
+          <h3>String Interpolation</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> name = <span class="str">"Alice"</span>;
+<span class="kw">var</span> age = <span class="num">30</span>;
+
+<span class="cmt">// Interpolated string</span>
+<span class="kw">var</span> greeting = <span class="str">$"Hello, </span>{name}<span class="str">! You are </span>{age}<span class="str"> years old."</span>;
+
+<span class="cmt">// Formatting</span>
+<span class="kw">var</span> price = <span class="num">19.99m</span>;
+Console.<span class="fn">WriteLine</span>(<span class="str">$"Price: </span>{price:C}<span class="str">"</span>);      <span class="cmt">// Price: $19.99</span>
+Console.<span class="fn">WriteLine</span>(<span class="str">$"Date: </span>{DateTime.Now:yyyy-MM-dd}<span class="str">"</span>);
+
+<span class="cmt">// Raw string literals (C# 11+)</span>
+<span class="kw">var</span> json = <span class="str">"""
+    {
+        "name": "Alice",
+        "age": 30
+    }
+    """</span>;</pre>
+        </section>
+
+        <!-- Types -->
+        <section id="types">
+          <h2>Types</h2>
+
+          <h3>Value Types</h3>
+          <div class="table-wrapper">
+            <table>
+              <tr>
+                <th>Category</th>
+                <th>Types</th>
+                <th>Notes</th>
+              </tr>
+              <tr>
+                <td>Integers</td>
+                <td><code>byte, short, int, long</code></td>
+                <td>8, 16, 32, 64-bit signed</td>
+              </tr>
+              <tr>
+                <td>Unsigned</td>
+                <td><code>sbyte, ushort, uint, ulong</code></td>
+                <td>Unsigned variants</td>
+              </tr>
+              <tr>
+                <td>Floating</td>
+                <td><code>float, double, decimal</code></td>
+                <td>32, 64-bit; decimal for money</td>
+              </tr>
+              <tr>
+                <td>Boolean</td>
+                <td><code>bool</code></td>
+                <td><code>true</code> or <code>false</code></td>
+              </tr>
+              <tr>
+                <td>Character</td>
+                <td><code>char</code></td>
+                <td>Unicode character</td>
+              </tr>
+              <tr>
+                <td>Struct</td>
+                <td><code>struct</code></td>
+                <td>Custom value types</td>
+              </tr>
+              <tr>
+                <td>Enum</td>
+                <td><code>enum</code></td>
+                <td>Named constants</td>
+              </tr>
+            </table>
+          </div>
+
+          <h3>Reference Types</h3>
+          <pre data-lang="csharp"><span class="cmt">// String (immutable)</span>
+<span class="type">string</span> s = <span class="str">"Hello"</span>;
+
+<span class="cmt">// Object (base of all types)</span>
+<span class="type">object</span> obj = <span class="num">42</span>;        <span class="cmt">// boxing</span>
+<span class="type">int</span> n = (<span class="type">int</span>)obj;       <span class="cmt">// unboxing</span>
+
+<span class="cmt">// Dynamic (runtime typing)</span>
+<span class="kw">dynamic</span> dyn = <span class="str">"Hello"</span>;
+dyn = <span class="num">42</span>;               <span class="cmt">// OK at runtime</span>
+
+<span class="cmt">// Arrays</span>
+<span class="type">int</span>[] numbers = { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+<span class="type">int</span>[] zeros = <span class="kw">new</span> <span class="type">int</span>[<span class="num">10</span>];
+<span class="type">int</span>[,] matrix = <span class="kw">new</span> <span class="type">int</span>[<span class="num">3</span>, <span class="num">3</span>];  <span class="cmt">// 2D array</span></pre>
+
+          <h3>Structs</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">struct</span> <span class="type">Point</span>
+{
+    <span class="kw">public</span> <span class="type">double</span> X { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="type">double</span> Y { <span class="kw">get</span>; <span class="kw">set</span>; }
+
+    <span class="kw">public</span> <span class="fn">Point</span>(<span class="type">double</span> x, <span class="type">double</span> y) => (X, Y) = (x, y);
+
+    <span class="kw">public</span> <span class="type">double</span> <span class="fn">Distance</span>(<span class="type">Point</span> other) =>
+        Math.<span class="fn">Sqrt</span>(Math.<span class="fn">Pow</span>(X - other.X, <span class="num">2</span>) + Math.<span class="fn">Pow</span>(Y - other.Y, <span class="num">2</span>));
+}
+
+<span class="kw">var</span> p = <span class="kw">new</span> <span class="type">Point</span>(<span class="num">3</span>, <span class="num">4</span>);</pre>
+
+          <h3>Enums</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">enum</span> <span class="type">Status</span>
+{
+    Pending,      <span class="cmt">// 0</span>
+    Active,       <span class="cmt">// 1</span>
+    Completed,    <span class="cmt">// 2</span>
+    Cancelled     <span class="cmt">// 3</span>
+}
+
+<span class="cmt">// With explicit values</span>
+<span class="kw">public</span> <span class="kw">enum</span> <span class="type">HttpStatus</span>
+{
+    OK = <span class="num">200</span>,
+    NotFound = <span class="num">404</span>,
+    ServerError = <span class="num">500</span>
+}
+
+<span class="cmt">// Flags enum</span>
+[<span class="type">Flags</span>]
+<span class="kw">public</span> <span class="kw">enum</span> <span class="type">Permissions</span>
+{
+    None = <span class="num">0</span>,
+    Read = <span class="num">1</span>,
+    Write = <span class="num">2</span>,
+    Execute = <span class="num">4</span>,
+    All = Read | Write | Execute
+}
+
+<span class="kw">var</span> perms = <span class="type">Permissions</span>.Read | <span class="type">Permissions</span>.Write;</pre>
+
+          <h3>Tuples</h3>
+          <pre data-lang="csharp"><span class="cmt">// Unnamed tuple</span>
+(<span class="type">int</span>, <span class="type">string</span>) pair = (<span class="num">1</span>, <span class="str">"one"</span>);
+Console.<span class="fn">WriteLine</span>(pair.Item1);  <span class="cmt">// 1</span>
+
+<span class="cmt">// Named tuple</span>
+(<span class="type">int</span> Id, <span class="type">string</span> Name) person = (<span class="num">1</span>, <span class="str">"Alice"</span>);
+Console.<span class="fn">WriteLine</span>(person.Name);  <span class="cmt">// Alice</span>
+
+<span class="cmt">// Return multiple values</span>
+(<span class="type">int</span> Min, <span class="type">int</span> Max) <span class="fn">GetRange</span>(<span class="type">int</span>[] arr) => (arr.<span class="fn">Min</span>(), arr.<span class="fn">Max</span>());
+
+<span class="cmt">// Deconstruction</span>
+<span class="kw">var</span> (min, max) = <span class="fn">GetRange</span>(numbers);</pre>
+        </section>
+
+        <!-- Control Flow -->
+        <section id="control">
+          <h2>Control Flow</h2>
+
+          <h3>If / Else</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">if</span> (age >= <span class="num">18</span>)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Adult"</span>);
+}
+<span class="kw">else if</span> (age >= <span class="num">13</span>)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Teenager"</span>);
+}
+<span class="kw">else</span>
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Child"</span>);
+}
+
+<span class="cmt">// Ternary operator</span>
+<span class="kw">var</span> status = age >= <span class="num">18</span> ? <span class="str">"Adult"</span> : <span class="str">"Minor"</span>;
+
+<span class="cmt">// Null coalescing</span>
+<span class="kw">var</span> value = nullableValue ?? <span class="str">"default"</span>;
+nullableValue ??= <span class="str">"assign if null"</span>;</pre>
+
+          <h3>Switch</h3>
+          <pre data-lang="csharp"><span class="cmt">// Statement</span>
+<span class="kw">switch</span> (day)
+{
+    <span class="kw">case</span> <span class="str">"Monday"</span>:
+    <span class="kw">case</span> <span class="str">"Tuesday"</span>:
+        Console.<span class="fn">WriteLine</span>(<span class="str">"Weekday"</span>);
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">"Saturday"</span>:
+    <span class="kw">case</span> <span class="str">"Sunday"</span>:
+        Console.<span class="fn">WriteLine</span>(<span class="str">"Weekend"</span>);
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        Console.<span class="fn">WriteLine</span>(<span class="str">"Unknown"</span>);
+        <span class="kw">break</span>;
+}
+
+<span class="cmt">// Expression (C# 8+)</span>
+<span class="kw">var</span> message = day <span class="kw">switch</span>
+{
+    <span class="str">"Monday"</span> <span class="kw">or</span> <span class="str">"Tuesday"</span> => <span class="str">"Weekday"</span>,
+    <span class="str">"Saturday"</span> <span class="kw">or</span> <span class="str">"Sunday"</span> => <span class="str">"Weekend"</span>,
+    _ => <span class="str">"Unknown"</span>
+};</pre>
+
+          <h3>Loops</h3>
+          <pre data-lang="csharp"><span class="cmt">// For loop</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">10</span>; i++)
+{
+    Console.<span class="fn">WriteLine</span>(i);
+}
+
+<span class="cmt">// Foreach</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> item <span class="kw">in</span> collection)
+{
+    Console.<span class="fn">WriteLine</span>(item);
+}
+
+<span class="cmt">// While</span>
+<span class="kw">while</span> (condition)
+{
+    <span class="cmt">// ...</span>
+}
+
+<span class="cmt">// Do-while</span>
+<span class="kw">do</span>
+{
+    <span class="cmt">// executes at least once</span>
+} <span class="kw">while</span> (condition);
+
+<span class="cmt">// Break and continue</span>
+<span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">100</span>; i++)
+{
+    <span class="kw">if</span> (i == <span class="num">50</span>) <span class="kw">break</span>;     <span class="cmt">// exit loop</span>
+    <span class="kw">if</span> (i % <span class="num">2</span> == <span class="num">0</span>) <span class="kw">continue</span>; <span class="cmt">// skip even</span>
+    Console.<span class="fn">WriteLine</span>(i);
+}</pre>
+        </section>
+
+        <!-- OOP -->
+        <section id="oop">
+          <h2>Object-Oriented Programming</h2>
+
+          <h3>Classes</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span>
+{
+    <span class="cmt">// Fields</span>
+    <span class="kw">private</span> <span class="type">string</span> _name;
+
+    <span class="cmt">// Properties</span>
+    <span class="kw">public</span> <span class="type">string</span> Name
+    {
+        <span class="kw">get</span> => _name;
+        <span class="kw">set</span> => _name = value ?? <span class="kw">throw new</span> <span class="type">ArgumentNullException</span>();
+    }
+
+    <span class="cmt">// Auto-property</span>
+    <span class="kw">public</span> <span class="type">int</span> Age { <span class="kw">get</span>; <span class="kw">set</span>; }
+
+    <span class="cmt">// Read-only property</span>
+    <span class="kw">public</span> <span class="type">bool</span> IsAdult => Age >= <span class="num">18</span>;
+
+    <span class="cmt">// Init-only property (C# 9+)</span>
+    <span class="kw">public</span> <span class="type">string</span> Id { <span class="kw">get</span>; <span class="kw">init</span>; }
+
+    <span class="cmt">// Constructor</span>
+    <span class="kw">public</span> <span class="fn">Person</span>(<span class="type">string</span> name, <span class="type">int</span> age)
+    {
+        Name = name;
+        Age = age;
+    }
+
+    <span class="cmt">// Method</span>
+    <span class="kw">public</span> <span class="type">void</span> <span class="fn">Greet</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">$"Hi, I'm </span>{Name}<span class="str">"</span>);
+}
+
+<span class="cmt">// Instantiation</span>
+<span class="kw">var</span> person = <span class="kw">new</span> <span class="type">Person</span>(<span class="str">"Alice"</span>, <span class="num">30</span>);
+<span class="kw">var</span> person2 = <span class="kw">new</span> <span class="type">Person</span>(<span class="str">"Bob"</span>, <span class="num">25</span>) { Id = <span class="str">"123"</span> };</pre>
+
+          <h3>Primary Constructors (C# 12+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Parameters available throughout the class</span>
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span>(<span class="type">string</span> name, <span class="type">int</span> age)
+{
+    <span class="kw">public</span> <span class="type">string</span> Name => name;
+    <span class="kw">public</span> <span class="type">int</span> Age => age;
+    <span class="kw">public</span> <span class="type">bool</span> IsAdult => age >= <span class="num">18</span>;
+}</pre>
+
+          <h3>Inheritance</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">class</span> <span class="type">Animal</span>
+{
+    <span class="kw">public</span> <span class="type">string</span> Name { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="kw">virtual</span> <span class="type">void</span> <span class="fn">Speak</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">"..."</span>);
+}
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Dog</span> : <span class="type">Animal</span>
+{
+    <span class="kw">public</span> <span class="kw">override</span> <span class="type">void</span> <span class="fn">Speak</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">"Woof!"</span>);
+
+    <span class="cmt">// Call base method</span>
+    <span class="kw">public</span> <span class="type">void</span> <span class="fn">SpeakQuietly</span>()
+    {
+        <span class="kw">base</span>.<span class="fn">Speak</span>();
+    }
+}
+
+<span class="cmt">// Sealed prevents inheritance</span>
+<span class="kw">public</span> <span class="kw">sealed</span> <span class="kw">class</span> <span class="type">FinalClass</span> { }</pre>
+
+          <h3>Interfaces</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">interface</span> <span class="type">IShape</span>
+{
+    <span class="type">double</span> Area { <span class="kw">get</span>; }
+    <span class="type">double</span> <span class="fn">Perimeter</span>();
+
+    <span class="cmt">// Default implementation (C# 8+)</span>
+    <span class="type">void</span> <span class="fn">Print</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">$"Area: </span>{Area}<span class="str">"</span>);
+}
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Circle</span> : <span class="type">IShape</span>
+{
+    <span class="kw">public</span> <span class="type">double</span> Radius { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="type">double</span> Area => Math.PI * Radius * Radius;
+    <span class="kw">public</span> <span class="type">double</span> <span class="fn">Perimeter</span>() => <span class="num">2</span> * Math.PI * Radius;
+}</pre>
+
+          <h3>Abstract Classes</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">abstract</span> <span class="kw">class</span> <span class="type">Shape</span>
+{
+    <span class="kw">public</span> <span class="kw">abstract</span> <span class="type">double</span> Area { <span class="kw">get</span>; }
+
+    <span class="cmt">// Can have concrete methods too</span>
+    <span class="kw">public</span> <span class="type">void</span> <span class="fn">PrintArea</span>() => Console.<span class="fn">WriteLine</span>(<span class="str">$"Area: </span>{Area}<span class="str">"</span>);
+}
+
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Rectangle</span> : <span class="type">Shape</span>
+{
+    <span class="kw">public</span> <span class="type">double</span> Width { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="type">double</span> Height { <span class="kw">get</span>; <span class="kw">set</span>; }
+    <span class="kw">public</span> <span class="kw">override</span> <span class="type">double</span> Area => Width * Height;
+}</pre>
+
+          <h3>Records (C# 9+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Immutable reference type with value semantics</span>
+<span class="kw">public</span> <span class="kw">record</span> <span class="type">Person</span>(<span class="type">string</span> Name, <span class="type">int</span> Age);
+
+<span class="kw">var</span> alice = <span class="kw">new</span> <span class="type">Person</span>(<span class="str">"Alice"</span>, <span class="num">30</span>);
+<span class="kw">var</span> bob = alice <span class="kw">with</span> { Name = <span class="str">"Bob"</span> };  <span class="cmt">// Non-destructive mutation</span>
+
+<span class="cmt">// Value equality</span>
+<span class="kw">var</span> alice2 = <span class="kw">new</span> <span class="type">Person</span>(<span class="str">"Alice"</span>, <span class="num">30</span>);
+Console.<span class="fn">WriteLine</span>(alice == alice2);  <span class="cmt">// True</span>
+
+<span class="cmt">// Record struct (C# 10+)</span>
+<span class="kw">public</span> <span class="kw">record</span> <span class="kw">struct</span> <span class="type">Point</span>(<span class="type">double</span> X, <span class="type">double</span> Y);</pre>
+        </section>
+
+        <!-- Collections -->
+        <section id="collections">
+          <h2>Collections</h2>
+
+          <h3>Arrays</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Declaration and initialization</span>
+<span class="type">int</span>[] numbers = { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span> };
+<span class="type">int</span>[] zeros = <span class="kw">new</span> <span class="type">int</span>[<span class="num">10</span>];
+<span class="type">string</span>[] names = <span class="kw">new</span>[] { <span class="str">"Alice"</span>, <span class="str">"Bob"</span> };
+
+<span class="cmt">// Access</span>
+<span class="kw">var</span> first = numbers[<span class="num">0</span>];
+<span class="kw">var</span> last = numbers[^<span class="num">1</span>];        <span class="cmt">// Index from end</span>
+<span class="kw">var</span> slice = numbers[<span class="num">1</span>..<span class="num">4</span>];    <span class="cmt">// Range: {2, 3, 4}</span>
+
+<span class="cmt">// 2D array</span>
+<span class="type">int</span>[,] matrix = <span class="kw">new</span> <span class="type">int</span>[<span class="num">3</span>, <span class="num">3</span>];
+matrix[<span class="num">0</span>, <span class="num">0</span>] = <span class="num">1</span>;</pre>
+
+          <h3>List&lt;T&gt;</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> list = <span class="kw">new</span> <span class="type">List</span>&lt;<span class="type">string</span>&gt; { <span class="str">"Alice"</span>, <span class="str">"Bob"</span> };
+
+<span class="cmt">// Collection expression (C# 12+)</span>
+<span class="type">List</span>&lt;<span class="type">int</span>&gt; nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+
+<span class="cmt">// Operations</span>
+list.<span class="fn">Add</span>(<span class="str">"Charlie"</span>);
+list.<span class="fn">AddRange</span>([<span class="str">"Dave"</span>, <span class="str">"Eve"</span>]);
+list.<span class="fn">Remove</span>(<span class="str">"Bob"</span>);
+list.<span class="fn">RemoveAt</span>(<span class="num">0</span>);
+list.<span class="fn">Insert</span>(<span class="num">0</span>, <span class="str">"First"</span>);
+
+<span class="cmt">// Query</span>
+<span class="kw">var</span> contains = list.<span class="fn">Contains</span>(<span class="str">"Alice"</span>);
+<span class="kw">var</span> index = list.<span class="fn">IndexOf</span>(<span class="str">"Charlie"</span>);
+<span class="kw">var</span> count = list.Count;</pre>
+
+          <h3>Dictionary&lt;K, V&gt;</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> dict = <span class="kw">new</span> <span class="type">Dictionary</span>&lt;<span class="type">string</span>, <span class="type">int</span>&gt;
+{
+    [<span class="str">"Alice"</span>] = <span class="num">30</span>,
+    [<span class="str">"Bob"</span>] = <span class="num">25</span>
+};
+
+<span class="cmt">// Add/update</span>
+dict[<span class="str">"Charlie"</span>] = <span class="num">35</span>;
+dict.<span class="fn">TryAdd</span>(<span class="str">"Dave"</span>, <span class="num">28</span>);  <span class="cmt">// Only if not exists</span>
+
+<span class="cmt">// Access</span>
+<span class="kw">if</span> (dict.<span class="fn">TryGetValue</span>(<span class="str">"Alice"</span>, <span class="kw">out</span> <span class="kw">var</span> age))
+{
+    Console.<span class="fn">WriteLine</span>(age);
+}
+
+<span class="cmt">// Iterate</span>
+<span class="kw">foreach</span> (<span class="kw">var</span> (key, value) <span class="kw">in</span> dict)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">$"</span>{key}<span class="str">: </span>{value}<span class="str">"</span>);
+}</pre>
+
+          <h3>Other Collections</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// HashSet - unique elements</span>
+<span class="kw">var</span> set = <span class="kw">new</span> <span class="type">HashSet</span>&lt;<span class="type">int</span>&gt; { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+set.<span class="fn">Add</span>(<span class="num">3</span>);  <span class="cmt">// Ignored, already exists</span>
+
+<span class="cmt">// Queue - FIFO</span>
+<span class="kw">var</span> queue = <span class="kw">new</span> <span class="type">Queue</span>&lt;<span class="type">string</span>&gt;();
+queue.<span class="fn">Enqueue</span>(<span class="str">"first"</span>);
+<span class="kw">var</span> item = queue.<span class="fn">Dequeue</span>();
+
+<span class="cmt">// Stack - LIFO</span>
+<span class="kw">var</span> stack = <span class="kw">new</span> <span class="type">Stack</span>&lt;<span class="type">int</span>&gt;();
+stack.<span class="fn">Push</span>(<span class="num">1</span>);
+<span class="kw">var</span> top = stack.<span class="fn">Pop</span>();
+
+<span class="cmt">// SortedDictionary, SortedSet - ordered</span>
+<span class="kw">var</span> sorted = <span class="kw">new</span> <span class="type">SortedDictionary</span>&lt;<span class="type">string</span>, <span class="type">int</span>&gt;();</pre>
+
+          <h3>Span&lt;T&gt; and Memory&lt;T&gt;</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Stack-allocated, no heap allocation</span>
+<span class="type">Span</span>&lt;<span class="type">int</span>&gt; span = <span class="kw">stackalloc</span> <span class="type">int</span>[] { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+
+<span class="cmt">// Slice of array without copying</span>
+<span class="type">int</span>[] arr = { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span> };
+<span class="type">Span</span>&lt;<span class="type">int</span>&gt; slice = arr.<span class="fn">AsSpan</span>(<span class="num">1</span>, <span class="num">3</span>);  <span class="cmt">// {2, 3, 4}</span>
+
+<span class="cmt">// ReadOnlySpan for strings</span>
+<span class="type">ReadOnlySpan</span>&lt;<span class="type">char</span>&gt; text = <span class="str">"Hello, World!"</span>.<span class="fn">AsSpan</span>();
+<span class="kw">var</span> hello = text[..<span class="num">5</span>];  <span class="cmt">// "Hello"</span></pre>
+        </section>
+
+        <!-- LINQ -->
+        <section id="linq">
+          <h2>LINQ</h2>
+          <p>
+            Language Integrated Query — declarative data querying that works
+            with any IEnumerable.
+          </p>
+
+          <h3>Query Syntax</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> numbers = <span class="kw">new</span>[] { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>, <span class="num">10</span> };
+
+<span class="kw">var</span> evens = <span class="kw">from</span> n <span class="kw">in</span> numbers
+            <span class="kw">where</span> n % <span class="num">2</span> == <span class="num">0</span>
+            <span class="kw">orderby</span> n <span class="kw">descending</span>
+            <span class="kw">select</span> n * <span class="num">2</span>;
+
+<span class="cmt">// With grouping</span>
+<span class="kw">var</span> grouped = <span class="kw">from</span> p <span class="kw">in</span> people
+              <span class="kw">group</span> p <span class="kw">by</span> p.City <span class="kw">into</span> g
+              <span class="kw">select</span> <span class="kw">new</span> { City = g.Key, Count = g.<span class="fn">Count</span>() };</pre>
+
+          <h3>Method Syntax</h3>
+          <pre data-lang="csharp"><span class="cmt">// Filtering</span>
+<span class="kw">var</span> adults = people.<span class="fn">Where</span>(p => p.Age >= <span class="num">18</span>);
+
+<span class="cmt">// Projection</span>
+<span class="kw">var</span> names = people.<span class="fn">Select</span>(p => p.Name);
+
+<span class="cmt">// Sorting</span>
+<span class="kw">var</span> sorted = people.<span class="fn">OrderBy</span>(p => p.Name)
+                   .<span class="fn">ThenByDescending</span>(p => p.Age);
+
+<span class="cmt">// Aggregation</span>
+<span class="kw">var</span> count = numbers.<span class="fn">Count</span>();
+<span class="kw">var</span> sum = numbers.<span class="fn">Sum</span>();
+<span class="kw">var</span> avg = numbers.<span class="fn">Average</span>();
+<span class="kw">var</span> max = numbers.<span class="fn">Max</span>();
+
+<span class="cmt">// First/Last</span>
+<span class="kw">var</span> first = numbers.<span class="fn">First</span>();
+<span class="kw">var</span> firstOrNull = numbers.<span class="fn">FirstOrDefault</span>();
+<span class="kw">var</span> single = numbers.<span class="fn">Single</span>(n => n == <span class="num">5</span>);
+
+<span class="cmt">// Any/All</span>
+<span class="kw">var</span> hasAdults = people.<span class="fn">Any</span>(p => p.Age >= <span class="num">18</span>);
+<span class="kw">var</span> allAdults = people.<span class="fn">All</span>(p => p.Age >= <span class="num">18</span>);</pre>
+
+          <h3>More LINQ Operations</h3>
+          <pre data-lang="csharp"><span class="cmt">// Skip/Take</span>
+<span class="kw">var</span> page = items.<span class="fn">Skip</span>(<span class="num">20</span>).<span class="fn">Take</span>(<span class="num">10</span>);
+
+<span class="cmt">// Distinct</span>
+<span class="kw">var</span> unique = items.<span class="fn">Distinct</span>();
+
+<span class="cmt">// GroupBy</span>
+<span class="kw">var</span> byCity = people.<span class="fn">GroupBy</span>(p => p.City);
+
+<span class="cmt">// Join</span>
+<span class="kw">var</span> joined = orders.<span class="fn">Join</span>(customers,
+    o => o.CustomerId,
+    c => c.Id,
+    (o, c) => <span class="kw">new</span> { Order = o, Customer = c });
+
+<span class="cmt">// Flatten nested collections</span>
+<span class="kw">var</span> allOrders = customers.<span class="fn">SelectMany</span>(c => c.Orders);
+
+<span class="cmt">// ToList/ToArray/ToDictionary</span>
+<span class="kw">var</span> list = query.<span class="fn">ToList</span>();
+<span class="kw">var</span> dict = people.<span class="fn">ToDictionary</span>(p => p.Id);
+
+<span class="cmt">// Chunk (C# 13)</span>
+<span class="kw">var</span> batches = items.<span class="fn">Chunk</span>(<span class="num">100</span>);  <span class="cmt">// IEnumerable of 100-item arrays</span></pre>
+
+          <div class="tip">
+            LINQ uses deferred execution — queries aren't executed until you
+            iterate or call a terminal operation like <code>ToList()</code>.
+          </div>
+        </section>
+
+        <!-- Async/Await -->
+        <section id="async">
+          <h2>Async/Await</h2>
+          <p>
+            Write asynchronous code that looks synchronous. Non-blocking I/O
+            without callback hell.
+          </p>
+
+          <h3>Basic Async</h3>
+          <pre data-lang="csharp"><span class="cmt">// Async method</span>
+<span class="kw">public</span> <span class="kw">async</span> <span class="type">Task</span>&lt;<span class="type">string</span>&gt; <span class="fn">GetDataAsync</span>()
+{
+    <span class="kw">using</span> <span class="kw">var</span> client = <span class="kw">new</span> <span class="type">HttpClient</span>();
+    <span class="kw">var</span> response = <span class="kw">await</span> client.<span class="fn">GetStringAsync</span>(<span class="str">"https://api.example.com"</span>);
+    <span class="kw">return</span> response;
+}
+
+<span class="cmt">// Async void (only for event handlers!)</span>
+<span class="kw">private</span> <span class="kw">async</span> <span class="type">void</span> <span class="fn">Button_Click</span>(<span class="type">object</span> sender, <span class="type">EventArgs</span> e)
+{
+    <span class="kw">await</span> <span class="fn">DoSomethingAsync</span>();
+}
+
+<span class="cmt">// ValueTask for hot paths (avoids allocation when sync)</span>
+<span class="kw">public</span> <span class="kw">async</span> <span class="type">ValueTask</span>&lt;<span class="type">int</span>&gt; <span class="fn">GetCachedValueAsync</span>()
+{
+    <span class="kw">if</span> (_cache.TryGetValue(key, <span class="kw">out</span> <span class="kw">var</span> value))
+        <span class="kw">return</span> value;  <span class="cmt">// No allocation</span>
+    <span class="kw">return</span> <span class="kw">await</span> <span class="fn">FetchFromDbAsync</span>(key);
+}</pre>
+
+          <h3>Parallel Operations</h3>
+          <pre data-lang="csharp"><span class="cmt">// Wait for all</span>
+<span class="kw">var</span> task1 = <span class="fn">GetUserAsync</span>(id1);
+<span class="kw">var</span> task2 = <span class="fn">GetUserAsync</span>(id2);
+<span class="kw">var</span> task3 = <span class="fn">GetUserAsync</span>(id3);
+
+<span class="kw">var</span> users = <span class="kw">await</span> <span class="type">Task</span>.<span class="fn">WhenAll</span>(task1, task2, task3);
+
+<span class="cmt">// Wait for first to complete</span>
+<span class="kw">var</span> first = <span class="kw">await</span> <span class="type">Task</span>.<span class="fn">WhenAny</span>(task1, task2, task3);
+
+<span class="cmt">// Process as they complete</span>
+<span class="kw">var</span> tasks = urls.<span class="fn">Select</span>(url => <span class="fn">FetchAsync</span>(url)).<span class="fn">ToList</span>();
+<span class="kw">while</span> (tasks.Count > <span class="num">0</span>)
+{
+    <span class="kw">var</span> completed = <span class="kw">await</span> <span class="type">Task</span>.<span class="fn">WhenAny</span>(tasks);
+    tasks.<span class="fn">Remove</span>(completed);
+    <span class="kw">var</span> result = <span class="kw">await</span> completed;
+    <span class="fn">Process</span>(result);
+}</pre>
+
+          <h3>Async Streams (C# 8+)</h3>
+          <pre data-lang="csharp"><span class="cmt">// Producer</span>
+<span class="kw">public</span> <span class="kw">async</span> <span class="type">IAsyncEnumerable</span>&lt;<span class="type">int</span>&gt; <span class="fn">GenerateAsync</span>()
+{
+    <span class="kw">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i < <span class="num">100</span>; i++)
+    {
+        <span class="kw">await</span> <span class="type">Task</span>.<span class="fn">Delay</span>(<span class="num">100</span>);
+        <span class="kw">yield</span> <span class="kw">return</span> i;
+    }
+}
+
+<span class="cmt">// Consumer</span>
+<span class="kw">await</span> <span class="kw">foreach</span> (<span class="kw">var</span> item <span class="kw">in</span> <span class="fn">GenerateAsync</span>())
+{
+    Console.<span class="fn">WriteLine</span>(item);
+}</pre>
+
+          <h3>Cancellation</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">async</span> <span class="type">Task</span> <span class="fn">ProcessAsync</span>(<span class="type">CancellationToken</span> ct)
+{
+    <span class="kw">while</span> (!ct.IsCancellationRequested)
+    {
+        <span class="kw">await</span> <span class="fn">DoWorkAsync</span>(ct);
+    }
+}
+
+<span class="cmt">// Usage</span>
+<span class="kw">var</span> cts = <span class="kw">new</span> <span class="type">CancellationTokenSource</span>();
+cts.<span class="fn">CancelAfter</span>(<span class="type">TimeSpan</span>.<span class="fn">FromSeconds</span>(<span class="num">30</span>));
+
+<span class="kw">try</span>
+{
+    <span class="kw">await</span> <span class="fn">ProcessAsync</span>(cts.Token);
+}
+<span class="kw">catch</span> (<span class="type">OperationCanceledException</span>)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Cancelled"</span>);
+}</pre>
+        </section>
+
+        <!-- Error Handling -->
+        <section id="errors">
+          <h2>Error Handling</h2>
+
+          <h3>Try/Catch/Finally</h3>
+          <pre data-lang="csharp"><span class="kw">try</span>
+{
+    <span class="kw">var</span> result = <span class="fn">RiskyOperation</span>();
+}
+<span class="kw">catch</span> (<span class="type">FileNotFoundException</span> ex)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">$"File not found: </span>{ex.FileName}<span class="str">"</span>);
+}
+<span class="kw">catch</span> (<span class="type">IOException</span> ex) <span class="kw">when</span> (ex.HResult == <span class="num">-2147024816</span>)
+{
+    <span class="cmt">// Exception filter</span>
+    Console.<span class="fn">WriteLine</span>(<span class="str">"Disk full"</span>);
+}
+<span class="kw">catch</span> (<span class="type">Exception</span> ex)
+{
+    Console.<span class="fn">WriteLine</span>(<span class="str">$"Error: </span>{ex.Message}<span class="str">"</span>);
+    <span class="kw">throw</span>;  <span class="cmt">// Re-throw preserving stack trace</span>
+}
+<span class="kw">finally</span>
+{
+    <span class="cmt">// Always runs (cleanup)</span>
+    <span class="fn">Cleanup</span>();
+}</pre>
+
+          <h3>Throwing Exceptions</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Throw new exception</span>
+<span class="kw">throw new</span> <span class="type">ArgumentException</span>(<span class="str">"Invalid argument"</span>, <span class="kw">nameof</span>(param));
+
+<span class="cmt">// Common exception types</span>
+<span class="kw">throw new</span> <span class="type">ArgumentNullException</span>(<span class="kw">nameof</span>(param));
+<span class="kw">throw new</span> <span class="type">InvalidOperationException</span>(<span class="str">"Cannot do that now"</span>);
+<span class="kw">throw new</span> <span class="type">NotImplementedException</span>();
+<span class="kw">throw new</span> <span class="type">NotSupportedException</span>();
+
+<span class="cmt">// Guard clauses</span>
+<span class="type">ArgumentNullException</span>.<span class="fn">ThrowIfNull</span>(param);
+<span class="type">ArgumentException</span>.<span class="fn">ThrowIfNullOrEmpty</span>(str);</pre>
+
+          <h3>Custom Exceptions</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">class</span> <span class="type">OrderNotFoundException</span> : <span class="type">Exception</span>
+{
+    <span class="kw">public</span> <span class="type">int</span> OrderId { <span class="kw">get</span>; }
+
+    <span class="kw">public</span> <span class="fn">OrderNotFoundException</span>(<span class="type">int</span> orderId)
+        : <span class="kw">base</span>(<span class="str">$"Order </span>{orderId}<span class="str"> not found"</span>)
+    {
+        OrderId = orderId;
+    }
+}</pre>
+
+          <h3>Using Statement (IDisposable)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Classic using block</span>
+<span class="kw">using</span> (<span class="kw">var</span> file = <span class="type">File</span>.<span class="fn">OpenRead</span>(<span class="str">"data.txt"</span>))
+{
+    <span class="cmt">// file is disposed at end of block</span>
+}
+
+<span class="cmt">// Using declaration (C# 8+)</span>
+<span class="kw">using</span> <span class="kw">var</span> file = <span class="type">File</span>.<span class="fn">OpenRead</span>(<span class="str">"data.txt"</span>);
+<span class="cmt">// file is disposed at end of scope</span>
+
+<span class="cmt">// Multiple resources</span>
+<span class="kw">using</span> <span class="kw">var</span> reader = <span class="kw">new</span> <span class="type">StreamReader</span>(path);
+<span class="kw">using</span> <span class="kw">var</span> writer = <span class="kw">new</span> <span class="type">StreamWriter</span>(outPath);
+
+<span class="cmt">// Async disposal</span>
+<span class="kw">await</span> <span class="kw">using</span> <span class="kw">var</span> conn = <span class="kw">new</span> <span class="type">SqlConnection</span>(connStr);</pre>
+        </section>
+
+        <!-- Pattern Matching -->
+        <section id="patterns">
+          <h2>Pattern Matching</h2>
+          <p>
+            Powerful conditional logic with concise syntax. Progressively
+            enhanced from C# 7 through C# 11+.
+          </p>
+
+          <h3>Type Patterns</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Type check and cast</span>
+<span class="kw">if</span> (obj <span class="kw">is</span> <span class="type">string</span> s)
+{
+    Console.<span class="fn">WriteLine</span>(s.Length);
+}
+
+<span class="cmt">// Negation</span>
+<span class="kw">if</span> (obj <span class="kw">is</span> <span class="kw">not</span> <span class="kw">null</span>)
+{
+    <span class="cmt">// ...</span>
+}
+
+<span class="cmt">// Switch expression</span>
+<span class="kw">var</span> description = obj <span class="kw">switch</span>
+{
+    <span class="type">int</span> n => <span class="str">$"Integer: </span>{n}<span class="str">"</span>,
+    <span class="type">string</span> s => <span class="str">$"String: </span>{s}<span class="str">"</span>,
+    <span class="kw">null</span> => <span class="str">"Nothing"</span>,
+    _ => <span class="str">"Unknown"</span>
+};</pre>
+
+          <h3>Property Patterns</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> message = person <span class="kw">switch</span>
+{
+    { Age: >= <span class="num">18</span>, Name: <span class="str">"Admin"</span> } => <span class="str">"Admin access"</span>,
+    { Age: >= <span class="num">18</span> } => <span class="str">"Adult access"</span>,
+    { Age: < <span class="num">18</span> } => <span class="str">"Minor access"</span>,
+    _ => <span class="str">"Unknown"</span>
+};
+
+<span class="cmt">// Nested properties</span>
+<span class="kw">if</span> (order <span class="kw">is</span> { Customer: { Address: { City: <span class="str">"NYC"</span> } } })
+{
+    <span class="cmt">// order.Customer.Address.City == "NYC"</span>
+}</pre>
+
+          <h3>Relational Patterns</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> grade = score <span class="kw">switch</span>
+{
+    >= <span class="num">90</span> => <span class="str">"A"</span>,
+    >= <span class="num">80</span> <span class="kw">and</span> < <span class="num">90</span> => <span class="str">"B"</span>,
+    >= <span class="num">70</span> <span class="kw">and</span> < <span class="num">80</span> => <span class="str">"C"</span>,
+    >= <span class="num">60</span> <span class="kw">and</span> < <span class="num">70</span> => <span class="str">"D"</span>,
+    _ => <span class="str">"F"</span>
+};</pre>
+
+          <h3>List Patterns (C# 11+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="type">int</span>[] nums = { <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> };
+
+<span class="kw">var</span> result = nums <span class="kw">switch</span>
+{
+    [] => <span class="str">"Empty"</span>,
+    [<span class="kw">var</span> single] => <span class="str">$"Single: </span>{single}<span class="str">"</span>,
+    [<span class="kw">var</span> first, ..] => <span class="str">$"Starts with: </span>{first}<span class="str">"</span>,
+    [.., <span class="kw">var</span> last] => <span class="str">$"Ends with: </span>{last}<span class="str">"</span>,
+    [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>] => <span class="str">"Exact match"</span>,
+    [<span class="num">1</span>, .. <span class="kw">var</span> rest] => <span class="str">$"Starts with 1, rest: </span>{rest.Length}<span class="str">"</span>
+};</pre>
+
+          <h3>Deconstruction Patterns</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">var</span> (x, y) = <span class="fn">GetPoint</span>();  <span class="cmt">// Deconstruct tuple</span>
+
+<span class="cmt">// In switch</span>
+<span class="kw">var</span> quadrant = point <span class="kw">switch</span>
+{
+    (<span class="num">0</span>, <span class="num">0</span>) => <span class="str">"Origin"</span>,
+    (> <span class="num">0</span>, > <span class="num">0</span>) => <span class="str">"Q1"</span>,
+    (< <span class="num">0</span>, > <span class="num">0</span>) => <span class="str">"Q2"</span>,
+    (< <span class="num">0</span>, < <span class="num">0</span>) => <span class="str">"Q3"</span>,
+    (> <span class="num">0</span>, < <span class="num">0</span>) => <span class="str">"Q4"</span>,
+    _ => <span class="str">"On axis"</span>
+};</pre>
+        </section>
+
+        <!-- Modern C# -->
+        <section id="modern">
+          <h2>Modern C# Features</h2>
+
+          <h3>Nullable Reference Types (C# 8+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Enable in project: &lt;Nullable&gt;enable&lt;/Nullable&gt;</span>
+
+<span class="type">string</span> name = <span class="str">"Alice"</span>;    <span class="cmt">// Cannot be null</span>
+<span class="type">string</span>? maybe = <span class="kw">null</span>;    <span class="cmt">// Explicitly nullable</span>
+
+<span class="cmt">// Null-forgiving operator (trust me, it's not null)</span>
+<span class="type">string</span> s = maybe!;
+
+<span class="cmt">// Null-conditional operators</span>
+<span class="kw">var</span> len = maybe?.Length;           <span class="cmt">// int?</span>
+<span class="kw">var</span> first = list?[<span class="num">0</span>];             <span class="cmt">// Access if not null</span>
+maybe?.ToUpper();                  <span class="cmt">// Call if not null</span>
+
+<span class="cmt">// Null coalescing</span>
+<span class="kw">var</span> value = maybe ?? <span class="str">"default"</span>;
+maybe ??= <span class="str">"assign if null"</span>;</pre>
+
+          <h3>File-Scoped Namespaces (C# 10+)</h3>
+          <pre data-lang="csharp"><span class="cmt">// Instead of:</span>
+<span class="kw">namespace</span> MyApp
+{
+    <span class="kw">class</span> <span class="type">Foo</span> { }
+}
+
+<span class="cmt">// Write:</span>
+<span class="kw">namespace</span> MyApp;
+
+<span class="kw">class</span> <span class="type">Foo</span> { }</pre>
+
+          <h3>Global Usings (C# 10+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// GlobalUsings.cs or in .csproj</span>
+<span class="kw">global</span> <span class="kw">using</span> System;
+<span class="kw">global</span> <span class="kw">using</span> System.Collections.Generic;
+<span class="kw">global</span> <span class="kw">using</span> System.Linq;
+
+<span class="cmt">// Implicit usings (SDK sets common ones)</span>
+<span class="cmt">// In .csproj: &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;</span></pre>
+
+          <h3>Required Members (C# 11+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="kw">public</span> <span class="kw">class</span> <span class="type">Person</span>
+{
+    <span class="kw">public</span> <span class="kw">required</span> <span class="type">string</span> Name { <span class="kw">get</span>; <span class="kw">init</span>; }
+    <span class="kw">public</span> <span class="kw">required</span> <span class="type">int</span> Age { <span class="kw">get</span>; <span class="kw">init</span>; }
+}
+
+<span class="cmt">// Must initialize required members</span>
+<span class="kw">var</span> p = <span class="kw">new</span> <span class="type">Person</span> { Name = <span class="str">"Alice"</span>, Age = <span class="num">30</span> };</pre>
+
+          <h3>Collection Expressions (C# 12+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// Unified syntax for all collection types</span>
+<span class="type">int</span>[] arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="type">List</span>&lt;<span class="type">int</span>&gt; list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="type">Span</span>&lt;<span class="type">int</span>&gt; span = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+
+<span class="cmt">// Spread operator</span>
+<span class="type">int</span>[] combined = [..<span class="num">first</span>, ..<span class="num">second</span>, <span class="num">99</span>];
+
+<span class="cmt">// Empty collection</span>
+<span class="type">List</span>&lt;<span class="type">string</span>&gt; empty = [];</pre>
+
+          <h3>params Collections (C# 13+)</h3>
+          <pre
+            data-lang="csharp"
+          ><span class="cmt">// params with any collection type</span>
+<span class="type">void</span> <span class="fn">PrintAll</span>(<span class="kw">params</span> <span class="type">ReadOnlySpan</span>&lt;<span class="type">string</span>&gt; items)
+{
+    <span class="kw">foreach</span> (<span class="kw">var</span> item <span class="kw">in</span> items)
+        Console.<span class="fn">WriteLine</span>(item);
+}
+
+<span class="fn">PrintAll</span>(<span class="str">"a"</span>, <span class="str">"b"</span>, <span class="str">"c"</span>);</pre>
+
+          <h3>Generics</h3>
+          <pre data-lang="csharp"><span class="cmt">// Generic class</span>
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">Box</span>&lt;T&gt;
+{
+    <span class="kw">public</span> T Value { <span class="kw">get</span>; <span class="kw">set</span>; }
+}
+
+<span class="cmt">// Generic method</span>
+<span class="kw">public</span> T <span class="fn">Max</span>&lt;T&gt;(T a, T b) <span class="kw">where</span> T : <span class="type">IComparable</span>&lt;T&gt;
+{
+    <span class="kw">return</span> a.<span class="fn">CompareTo</span>(b) > <span class="num">0</span> ? a : b;
+}
+
+<span class="cmt">// Constraints</span>
+<span class="kw">where</span> T : <span class="kw">class</span>              <span class="cmt">// Reference type</span>
+<span class="kw">where</span> T : <span class="kw">struct</span>             <span class="cmt">// Value type</span>
+<span class="kw">where</span> T : <span class="kw">new</span>()              <span class="cmt">// Has parameterless constructor</span>
+<span class="kw">where</span> T : <span class="type">BaseClass</span>          <span class="cmt">// Inherits from</span>
+<span class="kw">where</span> T : <span class="type">IInterface</span>         <span class="cmt">// Implements interface</span>
+<span class="kw">where</span> T : <span class="kw">notnull</span>            <span class="cmt">// Non-nullable</span></pre>
+
+          <h3>Attributes</h3>
+          <pre data-lang="csharp"><span class="cmt">// Using attributes</span>
+[<span class="type">Obsolete</span>(<span class="str">"Use NewMethod instead"</span>)]
+<span class="kw">public</span> <span class="type">void</span> <span class="fn">OldMethod</span>() { }
+
+[<span class="type">Serializable</span>]
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">MyClass</span> { }
+
+<span class="cmt">// Custom attribute</span>
+[<span class="type">AttributeUsage</span>(<span class="type">AttributeTargets</span>.Method)]
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">LogAttribute</span> : <span class="type">Attribute</span>
+{
+    <span class="kw">public</span> <span class="type">string</span> Message { <span class="kw">get</span>; <span class="kw">set</span>; }
+}</pre>
+        </section>
+
+        <!-- CLI & Project -->
+        <section id="dotnet">
+          <h2>CLI & Project Setup</h2>
+
+          <h3>.NET CLI Commands</h3>
+          <pre data-lang="shell"><span class="cmt"># Create new project</span>
+dotnet new console -n MyApp        <span class="cmt"># Console app</span>
+dotnet new webapi -n MyApi         <span class="cmt"># Web API</span>
+dotnet new classlib -n MyLib       <span class="cmt"># Class library</span>
+
+<span class="cmt"># Build and run</span>
+dotnet build
+dotnet run
+dotnet watch run                   <span class="cmt"># Hot reload</span>
+
+<span class="cmt"># Dependencies</span>
+dotnet add package Newtonsoft.Json
+dotnet remove package Newtonsoft.Json
+dotnet restore
+
+<span class="cmt"># Testing</span>
+dotnet new xunit -n MyApp.Tests
+dotnet test
+dotnet test --filter "Category=Unit"
+
+<span class="cmt"># Publish</span>
+dotnet publish -c Release
+dotnet publish -c Release -r win-x64 --self-contained</pre>
+
+          <h3>Project File (.csproj)</h3>
+          <pre
+            data-lang="xml"
+          >&lt;<span class="kw">Project</span> <span class="type">Sdk</span>=<span class="str">"Microsoft.NET.Sdk"</span>&gt;
+  &lt;<span class="kw">PropertyGroup</span>&gt;
+    &lt;<span class="type">TargetFramework</span>&gt;net9.0&lt;/<span class="type">TargetFramework</span>&gt;
+    &lt;<span class="type">OutputType</span>&gt;Exe&lt;/<span class="type">OutputType</span>&gt;
+    &lt;<span class="type">Nullable</span>&gt;enable&lt;/<span class="type">Nullable</span>&gt;
+    &lt;<span class="type">ImplicitUsings</span>&gt;enable&lt;/<span class="type">ImplicitUsings</span>&gt;
+  &lt;/<span class="kw">PropertyGroup</span>&gt;
+
+  &lt;<span class="kw">ItemGroup</span>&gt;
+    &lt;<span class="type">PackageReference</span> <span class="type">Include</span>=<span class="str">"Newtonsoft.Json"</span> <span class="type">Version</span>=<span class="str">"13.0.3"</span> /&gt;
+  &lt;/<span class="kw">ItemGroup</span>&gt;
+&lt;/<span class="kw">Project</span>&gt;</pre>
+
+          <h3>Configuration</h3>
+          <pre data-lang="csharp"><span class="cmt">// appsettings.json</span>
+{
+  <span class="str">"ConnectionStrings"</span>: {
+    <span class="str">"Default"</span>: <span class="str">"Server=localhost;Database=mydb"</span>
+  },
+  <span class="str">"Logging"</span>: {
+    <span class="str">"LogLevel"</span>: { <span class="str">"Default"</span>: <span class="str">"Information"</span> }
+  }
+}
+
+<span class="cmt">// Reading configuration</span>
+<span class="kw">var</span> builder = <span class="kw">new</span> <span class="type">ConfigurationBuilder</span>()
+    .<span class="fn">AddJsonFile</span>(<span class="str">"appsettings.json"</span>)
+    .<span class="fn">AddEnvironmentVariables</span>();
+
+<span class="kw">var</span> config = builder.<span class="fn">Build</span>();
+<span class="kw">var</span> connStr = config.<span class="fn">GetConnectionString</span>(<span class="str">"Default"</span>);</pre>
+
+          <h3>Dependency Injection</h3>
+          <pre data-lang="csharp"><span class="cmt">// Register services</span>
+<span class="kw">var</span> services = <span class="kw">new</span> <span class="type">ServiceCollection</span>();
+services.<span class="fn">AddSingleton</span>&lt;<span class="type">ILogger</span>, <span class="type">ConsoleLogger</span>&gt;();
+services.<span class="fn">AddScoped</span>&lt;<span class="type">IUserService</span>, <span class="type">UserService</span>&gt;();
+services.<span class="fn">AddTransient</span>&lt;<span class="type">IEmailSender</span>, <span class="type">SmtpEmailSender</span>&gt;();
+
+<span class="kw">var</span> provider = services.<span class="fn">BuildServiceProvider</span>();
+
+<span class="cmt">// Resolve</span>
+<span class="kw">var</span> logger = provider.<span class="fn">GetRequiredService</span>&lt;<span class="type">ILogger</span>&gt;();
+
+<span class="cmt">// In ASP.NET Core</span>
+<span class="kw">public</span> <span class="kw">class</span> <span class="type">MyController</span>(<span class="type">IUserService</span> users)
+{
+    <span class="cmt">// Primary constructor injection</span>
+}</pre>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          C# TLDR — Last updated December 2025 for C# 13 / .NET 9<br />
+          <a href="https://learn.microsoft.com/dotnet/csharp/" target="_blank"
+            >Official Docs</a
+          >
+          ·
+          <a
+            href="https://learn.microsoft.com/dotnet/csharp/whats-new/"
+            target="_blank"
+            >What's New</a
+          >
+          ·
+          <a href="https://dotnet.microsoft.com/" target="_blank">.NET Home</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

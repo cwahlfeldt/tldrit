@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gleam TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Gleam theme */
+        :root {
+            --accent: #ffaff3;
+            --accent-glow: rgba(255, 175, 243, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 50%;
+        }
+
+        .card h4::before {
+            content: '✨';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">G</div>
+            </div>
+            <h1>Gleam <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Gleam programming language. Type-safe functional programming on the BEAM.</p>
+            <div class="version-badge">v1.12.0 — October 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is Gleam?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#patterns">Pattern Matching</a></li>
+                <li><a href="#custom-types">Custom Types</a></li>
+                <li><a href="#results">Results & Options</a></li>
+                <li><a href="#use">Use Expression</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#otp">OTP & Concurrency</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Gleam? -->
+            <section id="what">
+                <h2>What is Gleam?</h2>
+                <p>Gleam is a friendly, type-safe functional programming language that compiles to Erlang and JavaScript. It runs on the battle-tested BEAM VM, giving you access to Erlang's world-class concurrency and fault tolerance.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Type Safety</h4>
+                        <p>Statically typed with full inference. Catch errors at compile time, not in production. No null, no exceptions.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fault Tolerant</h4>
+                        <p>Runs on the Erlang VM (BEAM). Millions of lightweight processes, self-healing supervisors, battle-tested since 1986.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Friendly</h4>
+                        <p>Helpful error messages, clean syntax inspired by Rust and Elixir. Designed to be approachable.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Dual Target</h4>
+                        <p>Compiles to Erlang for the BEAM or JavaScript for browsers and Node.js. Use existing libraries from both ecosystems.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="gleam"><span class="kw">import</span> gleam/io
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">main</span>() {
+  io.<span class="fn">println</span>(<span class="str">"Hello, world!"</span>)
+}</pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="gleam"><span class="cmt">// Variables are immutable</span>
+<span class="kw">let</span> name = <span class="str">"Gleam"</span>
+<span class="kw">let</span> age: <span class="type">Int</span> = <span class="num">1</span>  <span class="cmt">// optional type annotation</span>
+
+<span class="cmt">// Shadowing (rebinding) is allowed</span>
+<span class="kw">let</span> x = <span class="num">5</span>
+<span class="kw">let</span> x = x + <span class="num">1</span>  <span class="cmt">// x is now 6</span>
+
+<span class="cmt">// Type aliases</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">UserId</span> = <span class="type">Int</span></pre>
+
+                <h3>Basic Types</h3>
+                <pre data-lang="gleam"><span class="cmt">// Integers (arbitrary precision on BEAM)</span>
+<span class="kw">let</span> int = <span class="num">42</span>
+<span class="kw">let</span> big = <span class="num">1_000_000</span>
+<span class="kw">let</span> hex = <span class="num">0xF</span>
+<span class="kw">let</span> binary = <span class="num">0b1010</span>
+
+<span class="cmt">// Floats (64-bit, different operators!)</span>
+<span class="kw">let</span> float = <span class="num">3.14</span>
+<span class="kw">let</span> sum = <span class="num">1.0</span> <span class="op">+.</span> <span class="num">2.5</span>      <span class="cmt">// float addition</span>
+<span class="kw">let</span> product = <span class="num">3.0</span> <span class="op">*.</span> <span class="num">4.0</span>  <span class="cmt">// float multiplication</span>
+
+<span class="cmt">// Strings (UTF-8)</span>
+<span class="kw">let</span> greeting = <span class="str">"Hello, "</span> <span class="op">&lt;&gt;</span> <span class="str">"world!"</span>  <span class="cmt">// concatenation</span>
+
+<span class="cmt">// Booleans</span>
+<span class="kw">let</span> yes = <span class="type">True</span>
+<span class="kw">let</span> no = <span class="type">False</span>
+<span class="kw">let</span> result = <span class="type">True</span> <span class="op">&&</span> <span class="type">False</span>  <span class="cmt">// False</span>
+<span class="kw">let</span> either = <span class="type">True</span> <span class="op">||</span> <span class="type">False</span>  <span class="cmt">// True</span></pre>
+
+                <div class="warning">
+                    Gleam has separate operators for Int and Float arithmetic! <code>+</code> for Int, <code>+.</code> for Float.
+                </div>
+
+                <h3>Operators</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Int</th>
+                            <th>Float</th>
+                        </tr>
+                        <tr>
+                            <td>Addition</td>
+                            <td><code>+</code></td>
+                            <td><code>+.</code></td>
+                        </tr>
+                        <tr>
+                            <td>Subtraction</td>
+                            <td><code>-</code></td>
+                            <td><code>-.</code></td>
+                        </tr>
+                        <tr>
+                            <td>Multiplication</td>
+                            <td><code>*</code></td>
+                            <td><code>*.</code></td>
+                        </tr>
+                        <tr>
+                            <td>Division</td>
+                            <td><code>/</code></td>
+                            <td><code>/.</code></td>
+                        </tr>
+                        <tr>
+                            <td>Remainder</td>
+                            <td><code>%</code></td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>Comparison</td>
+                            <td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code></td>
+                            <td><code>&lt;.</code> <code>&gt;.</code> <code>&lt;=.</code> <code>&gt;=.</code></td>
+                        </tr>
+                        <tr>
+                            <td>Equality</td>
+                            <td colspan="2"><code>==</code> <code>!=</code> (works for all types)</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Data Types</h2>
+
+                <h3>Lists</h3>
+                <pre data-lang="gleam"><span class="cmt">// Lists are singly-linked, homogeneous</span>
+<span class="kw">let</span> numbers: <span class="type">List</span>(<span class="type">Int</span>) = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+<span class="kw">let</span> empty: <span class="type">List</span>(<span class="type">String</span>) = []
+
+<span class="cmt">// Prepend with spread</span>
+<span class="kw">let</span> more = [<span class="num">0</span>, ..numbers]  <span class="cmt">// [0, 1, 2, 3]</span>
+
+<span class="cmt">// Pattern match on lists</span>
+<span class="kw">case</span> numbers {
+  [] -> <span class="str">"empty"</span>
+  [first] -> <span class="str">"single element"</span>
+  [first, ..rest] -> <span class="str">"has elements"</span>
+}</pre>
+
+                <h3>Tuples</h3>
+                <pre data-lang="gleam"><span class="cmt">// Fixed-size, mixed types</span>
+<span class="kw">let</span> pair = #(<span class="num">1</span>, <span class="str">"hello"</span>)
+<span class="kw">let</span> triple = #(<span class="num">1</span>, <span class="num">2.0</span>, <span class="str">"three"</span>)
+
+<span class="cmt">// Access by index</span>
+<span class="kw">let</span> first = pair.<span class="num">0</span>   <span class="cmt">// 1</span>
+<span class="kw">let</span> second = pair.<span class="num">1</span>  <span class="cmt">// "hello"</span>
+
+<span class="cmt">// Destructure</span>
+<span class="kw">let</span> #(x, y) = pair</pre>
+
+                <h3>Nil</h3>
+                <pre data-lang="gleam"><span class="cmt">// Nil is Gleam's unit type (like void)</span>
+<span class="kw">let</span> nothing: <span class="type">Nil</span> = <span class="type">Nil</span>
+
+<span class="cmt">// Functions that don't return anything return Nil</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">say_hello</span>() -> <span class="type">Nil</span> {
+  io.<span class="fn">println</span>(<span class="str">"Hello!"</span>)
+}</pre>
+
+                <h3>Blocks</h3>
+                <pre data-lang="gleam"><span class="cmt">// Blocks create a new scope and return last expression</span>
+<span class="kw">let</span> value = {
+  <span class="kw">let</span> x = <span class="num">10</span>
+  <span class="kw">let</span> y = <span class="num">20</span>
+  x + y  <span class="cmt">// returns 30</span>
+}</pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Defining Functions</h3>
+                <pre data-lang="gleam"><span class="cmt">// Public function</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">add</span>(a: <span class="type">Int</span>, b: <span class="type">Int</span>) -> <span class="type">Int</span> {
+  a + b  <span class="cmt">// implicit return (last expression)</span>
+}
+
+<span class="cmt">// Private function (no pub)</span>
+<span class="kw">fn</span> <span class="fn">helper</span>(x: <span class="type">Int</span>) -> <span class="type">Int</span> {
+  x * <span class="num">2</span>
+}</pre>
+
+                <h3>Anonymous Functions</h3>
+                <pre data-lang="gleam"><span class="cmt">// Lambda syntax</span>
+<span class="kw">let</span> double = <span class="kw">fn</span>(x) { x * <span class="num">2</span> }
+<span class="kw">let</span> result = <span class="fn">double</span>(<span class="num">5</span>)  <span class="cmt">// 10</span>
+
+<span class="cmt">// With type annotations</span>
+<span class="kw">let</span> add = <span class="kw">fn</span>(a: <span class="type">Int</span>, b: <span class="type">Int</span>) -> <span class="type">Int</span> { a + b }
+
+<span class="cmt">// Closures capture environment</span>
+<span class="kw">let</span> multiplier = <span class="num">3</span>
+<span class="kw">let</span> triple = <span class="kw">fn</span>(x) { x * multiplier }</pre>
+
+                <h3>Labelled Arguments</h3>
+                <pre data-lang="gleam"><span class="cmt">// Define with labels</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">greet</span>(name name: <span class="type">String</span>, greeting msg: <span class="type">String</span>) -> <span class="type">String</span> {
+  msg <span class="op">&lt;&gt;</span> <span class="str">", "</span> <span class="op">&lt;&gt;</span> name <span class="op">&lt;&gt;</span> <span class="str">"!"</span>
+}
+
+<span class="cmt">// Call with labels (any order)</span>
+<span class="fn">greet</span>(greeting: <span class="str">"Hello"</span>, name: <span class="str">"Lucy"</span>)
+<span class="fn">greet</span>(name: <span class="str">"Lucy"</span>, greeting: <span class="str">"Hi"</span>)
+
+<span class="cmt">// Shorthand: same internal and external name</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">create_user</span>(name: <span class="type">String</span>, age age: <span class="type">Int</span>) -> <span class="type">User</span> {
+  <span class="type">User</span>(name: name, age: age)
+}</pre>
+
+                <h3>Function Capture</h3>
+                <pre data-lang="gleam"><span class="cmt">// Create partial function with _</span>
+<span class="kw">let</span> add_one = <span class="fn">add</span>(<span class="num">1</span>, _)
+<span class="kw">let</span> result = <span class="fn">add_one</span>(<span class="num">5</span>)  <span class="cmt">// 6</span>
+
+<span class="cmt">// Equivalent to:</span>
+<span class="kw">let</span> add_one = <span class="kw">fn</span>(x) { <span class="fn">add</span>(<span class="num">1</span>, x) }</pre>
+
+                <h3>Pipe Operator</h3>
+                <pre data-lang="gleam"><span class="cmt">// Chain function calls with |></span>
+<span class="str">"hello world"</span>
+|> string.<span class="fn">uppercase</span>
+|> string.<span class="fn">reverse</span>
+|> io.<span class="fn">println</span>
+
+<span class="cmt">// Equivalent to:</span>
+io.<span class="fn">println</span>(string.<span class="fn">reverse</span>(string.<span class="fn">uppercase</span>(<span class="str">"hello world"</span>)))
+
+<span class="cmt">// Pipe to any argument position</span>
+<span class="num">5</span>
+|> int.<span class="fn">to_string</span>
+|> string.<span class="fn">append</span>(<span class="str">"Number: "</span>, _)</pre>
+
+                <h3>Generic Functions</h3>
+                <pre data-lang="gleam"><span class="cmt">// Type variables are lowercase</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">identity</span>(x: a) -> a {
+  x
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">pair</span>(a: first, b: second) -> #(first, second) {
+  #(a, b)
+}
+
+<span class="cmt">// Higher-order generic function</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">twice</span>(f: <span class="kw">fn</span>(a) -> a, x: a) -> a {
+  <span class="fn">f</span>(<span class="fn">f</span>(x))
+}</pre>
+            </section>
+
+            <!-- Pattern Matching -->
+            <section id="patterns">
+                <h2>Pattern Matching</h2>
+                <p>Gleam uses <code>case</code> expressions for pattern matching. The compiler ensures all cases are handled.</p>
+
+                <h3>Case Expressions</h3>
+                <pre data-lang="gleam"><span class="cmt">// Basic case</span>
+<span class="kw">case</span> x {
+  <span class="num">0</span> -> <span class="str">"zero"</span>
+  <span class="num">1</span> -> <span class="str">"one"</span>
+  _ -> <span class="str">"other"</span>  <span class="cmt">// wildcard matches anything</span>
+}
+
+<span class="cmt">// With variable binding</span>
+<span class="kw">case</span> x {
+  <span class="num">0</span> -> <span class="str">"zero"</span>
+  n -> <span class="str">"got: "</span> <span class="op">&lt;&gt;</span> int.<span class="fn">to_string</span>(n)
+}</pre>
+
+                <h3>List Patterns</h3>
+                <pre data-lang="gleam"><span class="kw">case</span> my_list {
+  [] -> <span class="str">"empty"</span>
+  [only] -> <span class="str">"single: "</span> <span class="op">&lt;&gt;</span> only
+  [first, second] -> <span class="str">"exactly two"</span>
+  [head, ..tail] -> <span class="str">"first: "</span> <span class="op">&lt;&gt;</span> head
+  [_, _, ..rest] -> <span class="str">"at least two"</span>
+}</pre>
+
+                <h3>String Patterns</h3>
+                <pre data-lang="gleam"><span class="cmt">// Match string prefix</span>
+<span class="kw">case</span> text {
+  <span class="str">"Hello, "</span> <span class="op">&lt;&gt;</span> name -> <span class="str">"Greeting for: "</span> <span class="op">&lt;&gt;</span> name
+  <span class="str">"Goodbye, "</span> <span class="op">&lt;&gt;</span> name -> <span class="str">"Farewell to: "</span> <span class="op">&lt;&gt;</span> name
+  _ -> <span class="str">"Unknown format"</span>
+}</pre>
+
+                <h3>Alternative Patterns</h3>
+                <pre data-lang="gleam"><span class="cmt">// Multiple patterns with |</span>
+<span class="kw">case</span> month {
+  <span class="num">1</span> | <span class="num">3</span> | <span class="num">5</span> | <span class="num">7</span> | <span class="num">8</span> | <span class="num">10</span> | <span class="num">12</span> -> <span class="num">31</span>
+  <span class="num">4</span> | <span class="num">6</span> | <span class="num">9</span> | <span class="num">11</span> -> <span class="num">30</span>
+  <span class="num">2</span> -> <span class="num">28</span>
+  _ -> <span class="num">0</span>
+}</pre>
+
+                <h3>Guards</h3>
+                <pre data-lang="gleam"><span class="cmt">// Add conditions with if</span>
+<span class="kw">case</span> x {
+  n <span class="kw">if</span> n < <span class="num">0</span> -> <span class="str">"negative"</span>
+  n <span class="kw">if</span> n > <span class="num">0</span> -> <span class="str">"positive"</span>
+  _ -> <span class="str">"zero"</span>
+}
+
+<span class="cmt">// Guards with lists</span>
+<span class="kw">case</span> numbers {
+  [first, ..] <span class="kw">if</span> first > <span class="num">100</span> -> <span class="str">"starts big"</span>
+  [first, ..rest] -> <span class="str">"normal list"</span>
+  [] -> <span class="str">"empty"</span>
+}</pre>
+
+                <h3>Pattern Aliases</h3>
+                <pre data-lang="gleam"><span class="cmt">// Bind entire pattern with 'as'</span>
+<span class="kw">case</span> pair {
+  #(a, b) <span class="kw">as</span> tuple -> {
+    io.<span class="fn">debug</span>(tuple)  <span class="cmt">// use the whole thing</span>
+    a + b            <span class="cmt">// also use the parts</span>
+  }
+}</pre>
+
+                <h3>Multiple Subjects</h3>
+                <pre data-lang="gleam"><span class="cmt">// Match multiple values at once</span>
+<span class="kw">case</span> x, y {
+  <span class="num">0</span>, <span class="num">0</span> -> <span class="str">"both zero"</span>
+  <span class="num">0</span>, _ -> <span class="str">"x is zero"</span>
+  _, <span class="num">0</span> -> <span class="str">"y is zero"</span>
+  _, _ -> <span class="str">"neither zero"</span>
+}</pre>
+
+                <h3>Let Assert</h3>
+                <pre data-lang="gleam"><span class="cmt">// Assert pattern matches (panics on failure)</span>
+<span class="kw">let</span> <span class="kw">assert</span> [first, ..] = items
+<span class="kw">let</span> <span class="kw">assert</span> <span class="type">Ok</span>(value) = <span class="fn">risky_function</span>()
+
+<span class="cmt">// With custom error message</span>
+<span class="kw">let</span> <span class="kw">assert</span> <span class="type">Ok</span>(regex) = regex.<span class="fn">compile</span>(<span class="str">"ab?c+"</span>) <span class="kw">as</span> <span class="str">"Invalid regex"</span></pre>
+
+                <div class="warning">
+                    Use <code>let assert</code> sparingly! It causes a panic on failure. Prefer <code>case</code> or <code>Result</code> for recoverable errors.
+                </div>
+            </section>
+
+            <!-- Custom Types -->
+            <section id="custom-types">
+                <h2>Custom Types</h2>
+
+                <h3>Simple Enums</h3>
+                <pre data-lang="gleam"><span class="kw">pub</span> <span class="kw">type</span> <span class="type">Season</span> {
+  <span class="type">Spring</span>
+  <span class="type">Summer</span>
+  <span class="type">Autumn</span>
+  <span class="type">Winter</span>
+}
+
+<span class="kw">let</span> current = <span class="type">Summer</span>
+
+<span class="kw">case</span> current {
+  <span class="type">Spring</span> -> <span class="str">"Flowers bloom"</span>
+  <span class="type">Summer</span> -> <span class="str">"Beach time"</span>
+  <span class="type">Autumn</span> -> <span class="str">"Leaves fall"</span>
+  <span class="type">Winter</span> -> <span class="str">"Snow falls"</span>
+}</pre>
+
+                <h3>Records (Single Variant)</h3>
+                <pre data-lang="gleam"><span class="cmt">// Type with named fields</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">User</span> {
+  <span class="type">User</span>(name: <span class="type">String</span>, age: <span class="type">Int</span>, active: <span class="type">Bool</span>)
+}
+
+<span class="cmt">// Create instance</span>
+<span class="kw">let</span> alice = <span class="type">User</span>(name: <span class="str">"Alice"</span>, age: <span class="num">30</span>, active: <span class="type">True</span>)
+
+<span class="cmt">// Access fields</span>
+<span class="kw">let</span> name = alice.name
+<span class="kw">let</span> age = alice.age
+
+<span class="cmt">// Pattern match fields</span>
+<span class="kw">let</span> <span class="type">User</span>(name: n, age: a, active: _) = alice</pre>
+
+                <h3>Variants with Data</h3>
+                <pre data-lang="gleam"><span class="kw">pub</span> <span class="kw">type</span> <span class="type">Shape</span> {
+  <span class="type">Circle</span>(radius: <span class="type">Float</span>)
+  <span class="type">Rectangle</span>(width: <span class="type">Float</span>, height: <span class="type">Float</span>)
+  <span class="type">Triangle</span>(base: <span class="type">Float</span>, height: <span class="type">Float</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">area</span>(shape: <span class="type">Shape</span>) -> <span class="type">Float</span> {
+  <span class="kw">case</span> shape {
+    <span class="type">Circle</span>(r) -> <span class="num">3.14159</span> <span class="op">*.</span> r <span class="op">*.</span> r
+    <span class="type">Rectangle</span>(w, h) -> w <span class="op">*.</span> h
+    <span class="type">Triangle</span>(b, h) -> b <span class="op">*.</span> h <span class="op">/.</span> <span class="num">2.0</span>
+  }
+}</pre>
+
+                <h3>Record Updates</h3>
+                <pre data-lang="gleam"><span class="cmt">// Create new record with some fields changed</span>
+<span class="kw">let</span> alice = <span class="type">User</span>(name: <span class="str">"Alice"</span>, age: <span class="num">30</span>, active: <span class="type">True</span>)
+<span class="kw">let</span> older_alice = <span class="type">User</span>(..alice, age: <span class="num">31</span>)
+
+<span class="cmt">// Multiple updates</span>
+<span class="kw">let</span> inactive_bob = <span class="type">User</span>(..alice, name: <span class="str">"Bob"</span>, active: <span class="type">False</span>)</pre>
+
+                <h3>Generic Types</h3>
+                <pre data-lang="gleam"><span class="cmt">// Type with type parameter</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">Box</span>(inner) {
+  <span class="type">Box</span>(value: inner)
+}
+
+<span class="kw">let</span> int_box: <span class="type">Box</span>(<span class="type">Int</span>) = <span class="type">Box</span>(<span class="num">42</span>)
+<span class="kw">let</span> str_box: <span class="type">Box</span>(<span class="type">String</span>) = <span class="type">Box</span>(<span class="str">"hello"</span>)
+
+<span class="cmt">// Multiple type parameters</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">Pair</span>(a, b) {
+  <span class="type">Pair</span>(first: a, second: b)
+}</pre>
+
+                <h3>Opaque Types</h3>
+                <pre data-lang="gleam"><span class="cmt">// Hide constructor from other modules</span>
+<span class="kw">pub</span> <span class="kw">opaque</span> <span class="kw">type</span> <span class="type">PositiveInt</span> {
+  <span class="type">PositiveInt</span>(value: <span class="type">Int</span>)
+}
+
+<span class="cmt">// Only expose a validated constructor</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">new</span>(n: <span class="type">Int</span>) -> <span class="type">Result</span>(<span class="type">PositiveInt</span>, <span class="type">String</span>) {
+  <span class="kw">case</span> n > <span class="num">0</span> {
+    <span class="type">True</span> -> <span class="type">Ok</span>(<span class="type">PositiveInt</span>(n))
+    <span class="type">False</span> -> <span class="type">Error</span>(<span class="str">"must be positive"</span>)
+  }
+}</pre>
+            </section>
+
+            <!-- Results & Options -->
+            <section id="results">
+                <h2>Results & Options</h2>
+                <p>Gleam has no exceptions or null. Use <code>Result</code> for operations that can fail, and <code>Option</code> for values that may be absent.</p>
+
+                <h3>Result Type</h3>
+                <pre data-lang="gleam"><span class="cmt">// Result is defined as:</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">Result</span>(value, error) {
+  <span class="type">Ok</span>(value)
+  <span class="type">Error</span>(error)
+}
+
+<span class="cmt">// Function that can fail</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">divide</span>(a: <span class="type">Int</span>, b: <span class="type">Int</span>) -> <span class="type">Result</span>(<span class="type">Int</span>, <span class="type">String</span>) {
+  <span class="kw">case</span> b {
+    <span class="num">0</span> -> <span class="type">Error</span>(<span class="str">"division by zero"</span>)
+    _ -> <span class="type">Ok</span>(a / b)
+  }
+}
+
+<span class="cmt">// Handle result</span>
+<span class="kw">case</span> <span class="fn">divide</span>(<span class="num">10</span>, <span class="num">2</span>) {
+  <span class="type">Ok</span>(value) -> io.<span class="fn">println</span>(<span class="str">"Result: "</span> <span class="op">&lt;&gt;</span> int.<span class="fn">to_string</span>(value))
+  <span class="type">Error</span>(msg) -> io.<span class="fn">println</span>(<span class="str">"Error: "</span> <span class="op">&lt;&gt;</span> msg)
+}</pre>
+
+                <h3>Result Module Functions</h3>
+                <pre data-lang="gleam"><span class="kw">import</span> gleam/result
+
+<span class="cmt">// map: transform success value</span>
+<span class="type">Ok</span>(<span class="num">5</span>)
+|> result.<span class="fn">map</span>(<span class="kw">fn</span>(x) { x * <span class="num">2</span> })  <span class="cmt">// Ok(10)</span>
+
+<span class="cmt">// try: chain operations that can fail</span>
+<span class="type">Ok</span>(<span class="str">"42"</span>)
+|> result.<span class="fn">try</span>(int.<span class="fn">parse</span>)  <span class="cmt">// Ok(42) or Error</span>
+
+<span class="cmt">// unwrap: get value or provide default</span>
+<span class="type">Error</span>(<span class="str">"oops"</span>)
+|> result.<span class="fn">unwrap</span>(<span class="num">0</span>)  <span class="cmt">// 0</span>
+
+<span class="cmt">// is_ok / is_error</span>
+result.<span class="fn">is_ok</span>(<span class="type">Ok</span>(<span class="num">1</span>))     <span class="cmt">// True</span>
+result.<span class="fn">is_error</span>(<span class="type">Ok</span>(<span class="num">1</span>))  <span class="cmt">// False</span></pre>
+
+                <h3>Option Type</h3>
+                <pre data-lang="gleam"><span class="kw">import</span> gleam/option.{<span class="kw">type</span> <span class="type">Option</span>, <span class="type">Some</span>, <span class="type">None</span|}
+
+<span class="cmt">// Option is defined as:</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">Option</span>(a) {
+  <span class="type">Some</span>(a)
+  <span class="type">None</span>
+}
+
+<span class="cmt">// Optional fields</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">Person</span> {
+  <span class="type">Person</span>(name: <span class="type">String</span>, nickname: <span class="type">Option</span>(<span class="type">String</span>))
+}
+
+<span class="kw">let</span> alice = <span class="type">Person</span>(<span class="str">"Alice"</span>, <span class="type">Some</span>(<span class="str">"Ali"</span>))
+<span class="kw">let</span> bob = <span class="type">Person</span>(<span class="str">"Robert"</span>, <span class="type">None</span>)
+
+<span class="cmt">// Handle option</span>
+<span class="kw">case</span> alice.nickname {
+  <span class="type">Some</span>(nick) -> <span class="str">"Call me "</span> <span class="op">&lt;&gt;</span> nick
+  <span class="type">None</span> -> <span class="str">"No nickname"</span>
+}</pre>
+
+                <h3>Custom Error Types</h3>
+                <pre data-lang="gleam"><span class="kw">pub</span> <span class="kw">type</span> <span class="type">ParseError</span> {
+  <span class="type">InvalidFormat</span>
+  <span class="type">OutOfRange</span>(min: <span class="type">Int</span>, max: <span class="type">Int</span>)
+  <span class="type">UnknownField</span>(name: <span class="type">String</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">parse_age</span>(input: <span class="type">String</span>) -> <span class="type">Result</span>(<span class="type">Int</span>, <span class="type">ParseError</span>) {
+  <span class="kw">case</span> int.<span class="fn">parse</span>(input) {
+    <span class="type">Error</span>(_) -> <span class="type">Error</span>(<span class="type">InvalidFormat</span>)
+    <span class="type">Ok</span>(age) <span class="kw">if</span> age < <span class="num">0</span> -> <span class="type">Error</span>(<span class="type">OutOfRange</span>(<span class="num">0</span>, <span class="num">150</span>))
+    <span class="type">Ok</span>(age) <span class="kw">if</span> age > <span class="num">150</span> -> <span class="type">Error</span>(<span class="type">OutOfRange</span>(<span class="num">0</span>, <span class="num">150</span>))
+    <span class="type">Ok</span>(age) -> <span class="type">Ok</span>(age)
+  }
+}</pre>
+            </section>
+
+            <!-- Use Expression -->
+            <section id="use">
+                <h2>Use Expression</h2>
+                <p>The <code>use</code> expression reduces nesting when working with callbacks and Result/Option chains. It's Gleam's most distinctive feature.</p>
+
+                <h3>Basic Use</h3>
+                <pre data-lang="gleam"><span class="cmt">// Without use (deeply nested)</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">without_use</span>() -> <span class="type">Result</span>(<span class="type">Int</span>, <span class="type">String</span>) {
+  result.<span class="fn">try</span>(<span class="fn">get_a</span>(), <span class="kw">fn</span>(a) {
+    result.<span class="fn">try</span>(<span class="fn">get_b</span>(), <span class="kw">fn</span>(b) {
+      result.<span class="fn">try</span>(<span class="fn">get_c</span>(), <span class="kw">fn</span>(c) {
+        <span class="type">Ok</span>(a + b + c)
+      })
+    })
+  })
+}
+
+<span class="cmt">// With use (flat!)</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">with_use</span>() -> <span class="type">Result</span>(<span class="type">Int</span>, <span class="type">String</span>) {
+  <span class="kw">use</span> a <- result.<span class="fn">try</span>(<span class="fn">get_a</span>())
+  <span class="kw">use</span> b <- result.<span class="fn">try</span>(<span class="fn">get_b</span>())
+  <span class="kw">use</span> c <- result.<span class="fn">try</span>(<span class="fn">get_c</span>())
+  <span class="type">Ok</span>(a + b + c)
+}</pre>
+
+                <h3>How Use Works</h3>
+                <pre data-lang="gleam"><span class="cmt">// use turns remaining code into a callback</span>
+<span class="kw">use</span> x <- <span class="fn">some_function</span>(arg1, arg2)
+<span class="cmt">// ...rest of function...</span>
+
+<span class="cmt">// Is equivalent to:</span>
+<span class="fn">some_function</span>(arg1, arg2, <span class="kw">fn</span>(x) {
+  <span class="cmt">// ...rest of function...</span>
+})</pre>
+
+                <h3>Common Use Patterns</h3>
+                <pre data-lang="gleam"><span class="cmt">// Chaining Results</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">process_user</span>(id: <span class="type">Int</span>) -> <span class="type">Result</span>(<span class="type">String</span>, <span class="type">DbError</span>) {
+  <span class="kw">use</span> user <- result.<span class="fn">try</span>(<span class="fn">fetch_user</span>(id))
+  <span class="kw">use</span> profile <- result.<span class="fn">try</span>(<span class="fn">fetch_profile</span>(user))
+  <span class="kw">use</span> avatar <- result.<span class="fn">try</span>(<span class="fn">fetch_avatar</span>(profile))
+  <span class="type">Ok</span>(avatar.url)
+}
+
+<span class="cmt">// With list operations</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">process_items</span>(items: <span class="type">List</span>(<span class="type">Int</span>)) {
+  <span class="kw">use</span> item <- list.<span class="fn">each</span>(items)
+  io.<span class="fn">println</span>(int.<span class="fn">to_string</span>(item))
+}
+
+<span class="cmt">// Mapping over results</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">double_result</span>(r: <span class="type">Result</span>(<span class="type">Int</span>, e)) -> <span class="type">Result</span>(<span class="type">Int</span>, e) {
+  <span class="kw">use</span> value <- result.<span class="fn">map</span>(r)
+  value * <span class="num">2</span>
+}</pre>
+
+                <h3>Bool Module with Use</h3>
+                <pre data-lang="gleam"><span class="kw">import</span> gleam/bool
+
+<span class="cmt">// Early return pattern with bool.guard</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">validate</span>(x: <span class="type">Int</span>) -> <span class="type">Result</span>(<span class="type">Int</span>, <span class="type">String</span>) {
+  <span class="kw">use</span> <- bool.<span class="fn">guard</span>(x < <span class="num">0</span>, <span class="type">Error</span>(<span class="str">"must be positive"</span>))
+  <span class="kw">use</span> <- bool.<span class="fn">guard</span>(x > <span class="num">100</span>, <span class="type">Error</span>(<span class="str">"must be <= 100"</span>))
+  <span class="type">Ok</span>(x)
+}</pre>
+
+                <div class="tip">
+                    <code>use</code> works with any function that takes a callback as its last argument. The standard library is designed around this pattern.
+                </div>
+            </section>
+
+            <!-- Modules -->
+            <section id="modules">
+                <h2>Modules & Imports</h2>
+
+                <h3>Imports</h3>
+                <pre data-lang="gleam"><span class="cmt">// Qualified import (recommended)</span>
+<span class="kw">import</span> gleam/io
+<span class="kw">import</span> gleam/string
+
+io.<span class="fn">println</span>(<span class="str">"Hello"</span>)
+string.<span class="fn">uppercase</span>(<span class="str">"hello"</span>)
+
+<span class="cmt">// Aliased import</span>
+<span class="kw">import</span> gleam/string <span class="kw">as</span> text
+text.<span class="fn">reverse</span>(<span class="str">"hello"</span>)
+
+<span class="cmt">// Unqualified import</span>
+<span class="kw">import</span> gleam/io.{println, debug}
+<span class="fn">println</span>(<span class="str">"Hello"</span>)
+
+<span class="cmt">// Import types</span>
+<span class="kw">import</span> gleam/option.{<span class="kw">type</span> <span class="type">Option</span>, <span class="type">Some</span>, <span class="type">None</span>}
+<span class="kw">let</span> x: <span class="type">Option</span>(<span class="type">Int</span>) = <span class="type">Some</span>(<span class="num">42</span>)</pre>
+
+                <h3>Standard Library Highlights</h3>
+                <pre data-lang="gleam"><span class="cmt">// gleam/list</span>
+list.<span class="fn">map</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="kw">fn</span>(x) { x * <span class="num">2</span> })        <span class="cmt">// [2, 4, 6]</span>
+list.<span class="fn">filter</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="kw">fn</span>(x) { x > <span class="num">1</span> })    <span class="cmt">// [2, 3]</span>
+list.<span class="fn">fold</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="num">0</span>, <span class="kw">fn</span>(acc, x) { acc + x })  <span class="cmt">// 6</span>
+list.<span class="fn">find</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="kw">fn</span>(x) { x > <span class="num">1</span> })     <span class="cmt">// Ok(2)</span>
+
+<span class="cmt">// gleam/dict (hash map)</span>
+<span class="kw">import</span> gleam/dict
+<span class="kw">let</span> scores = dict.<span class="fn">from_list</span>([#(<span class="str">"alice"</span>, <span class="num">100</span>), #(<span class="str">"bob"</span>, <span class="num">85</span>)])
+dict.<span class="fn">get</span>(scores, <span class="str">"alice"</span>)  <span class="cmt">// Ok(100)</span>
+dict.<span class="fn">insert</span>(scores, <span class="str">"carol"</span>, <span class="num">90</span>)
+
+<span class="cmt">// gleam/string</span>
+string.<span class="fn">split</span>(<span class="str">"a,b,c"</span>, <span class="str">","</span>)   <span class="cmt">// ["a", "b", "c"]</span>
+string.<span class="fn">join</span>([<span class="str">"a"</span>, <span class="str">"b"</span>], <span class="str">"-"</span>) <span class="cmt">// "a-b"</span>
+string.<span class="fn">contains</span>(<span class="str">"hello"</span>, <span class="str">"ell"</span>)  <span class="cmt">// True</span>
+
+<span class="cmt">// gleam/int, gleam/float</span>
+int.<span class="fn">to_string</span>(<span class="num">42</span>)      <span class="cmt">// "42"</span>
+int.<span class="fn">parse</span>(<span class="str">"42"</span>)        <span class="cmt">// Ok(42)</span>
+float.<span class="fn">to_string</span>(<span class="num">3.14</span>)  <span class="cmt">// "3.14"</span></pre>
+
+                <h3>Debugging</h3>
+                <pre data-lang="gleam"><span class="cmt">// echo keyword for quick debugging</span>
+<span class="kw">let</span> result = <span class="kw">echo</span> <span class="fn">calculate</span>(<span class="num">42</span>)
+<span class="cmt">// Prints: [src/main.gleam:5] 84</span>
+
+<span class="cmt">// io.debug returns the value (can be chained)</span>
+<span class="num">42</span>
+|> int.<span class="fn">multiply</span>(<span class="num">2</span>)
+|> io.<span class="fn">debug</span>  <span class="cmt">// prints and passes through</span>
+|> int.<span class="fn">to_string</span></pre>
+
+                <h3>Todo & Panic</h3>
+                <pre data-lang="gleam"><span class="cmt">// Mark unfinished code</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">coming_soon</span>() {
+  <span class="kw">todo</span> <span class="kw">as</span> <span class="str">"implement this feature"</span>
+}
+
+<span class="cmt">// Crash with message (for truly impossible cases)</span>
+<span class="kw">case</span> impossible_value {
+  _ -> <span class="kw">panic</span> <span class="kw">as</span> <span class="str">"this should never happen"</span>
+}</pre>
+            </section>
+
+            <!-- OTP & Concurrency -->
+            <section id="otp">
+                <h2>OTP & Concurrency</h2>
+                <p>Gleam runs on the BEAM, giving you access to Erlang's legendary concurrency model. The <code>gleam_otp</code> library provides type-safe actors.</p>
+
+                <h3>Quick Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Create new project</span>
+gleam new myproject
+cd myproject
+
+<span class="cmt"># Build project</span>
+gleam build
+
+<span class="cmt"># Run project</span>
+gleam run
+
+<span class="cmt"># Run tests</span>
+gleam test
+
+<span class="cmt"># Add dependencies</span>
+gleam add gleam_json
+gleam add gleam_otp
+
+<span class="cmt"># Format code</span>
+gleam format
+
+<span class="cmt"># Type check</span>
+gleam check
+
+<span class="cmt"># Generate docs</span>
+gleam docs build</pre>
+
+                <h3>Project Structure</h3>
+                <pre data-lang="text">myproject/
+├── gleam.toml         <span class="cmt"># Project config</span>
+├── src/
+│   └── myproject.gleam  <span class="cmt"># Main module</span>
+├── test/
+│   └── myproject_test.gleam
+└── build/             <span class="cmt"># Generated (gitignored)</span></pre>
+
+                <h3>gleam.toml</h3>
+                <pre data-lang="toml">name = <span class="str">"myproject"</span>
+version = <span class="str">"1.0.0"</span>
+target = <span class="str">"erlang"</span>  <span class="cmt"># or "javascript"</span>
+
+[dependencies]
+gleam_stdlib = <span class="str">"~> 0.40"</span>
+gleam_otp = <span class="str">"~> 0.12"</span>
+gleam_json = <span class="str">"~> 2.0"</span>
+
+[dev-dependencies]
+gleeunit = <span class="str">"~> 1.0"</span></pre>
+
+                <h3>Processes</h3>
+                <pre data-lang="gleam"><span class="kw">import</span> gleam/erlang/process.{<span class="kw">type</span> <span class="type">Subject</span|}
+
+<span class="cmt">// Spawn a process</span>
+<span class="kw">let</span> pid = process.<span class="fn">start</span>(<span class="kw">fn</span>() {
+  io.<span class="fn">println</span>(<span class="str">"Hello from process!"</span>)
+}, <span class="type">True</span>)
+
+<span class="cmt">// Sleep</span>
+process.<span class="fn">sleep</span>(<span class="num">1000</span>)  <span class="cmt">// milliseconds</span></pre>
+
+                <h3>Actors (Type-Safe Message Passing)</h3>
+                <pre data-lang="gleam"><span class="kw">import</span> gleam/otp/actor.{<span class="kw">type</span> <span class="type">Next</span>}
+<span class="kw">import</span> gleam/erlang/process.{<span class="kw">type</span> <span class="type">Subject</span>}
+
+<span class="cmt">// Define message type</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="type">Message</span> {
+  <span class="type">Increment</span>
+  <span class="type">GetCount</span>(reply_to: <span class="type">Subject</span>(<span class="type">Int</span>))
+}
+
+<span class="cmt">// Message handler</span>
+<span class="kw">fn</span> <span class="fn">handle_message</span>(msg: <span class="type">Message</span>, count: <span class="type">Int</span>) -> <span class="type">Next</span>(<span class="type">Message</span>, <span class="type">Int</span>) {
+  <span class="kw">case</span> msg {
+    <span class="type">Increment</span> -> actor.<span class="fn">continue</span>(count + <span class="num">1</span>)
+    <span class="type">GetCount</span>(client) -> {
+      process.<span class="fn">send</span>(client, count)
+      actor.<span class="fn">continue</span>(count)
+    }
+  }
+}
+
+<span class="cmt">// Start actor</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">start_counter</span>() {
+  <span class="kw">let</span> <span class="kw">assert</span> <span class="type">Ok</span>(actor) = actor.<span class="fn">start</span>(<span class="num">0</span>, handle_message)
+
+  <span class="cmt">// Send messages</span>
+  process.<span class="fn">send</span>(actor, <span class="type">Increment</span>)
+  process.<span class="fn">send</span>(actor, <span class="type">Increment</span>)
+
+  <span class="cmt">// Request response</span>
+  <span class="kw">let</span> count = process.<span class="fn">call</span>(actor, <span class="type">GetCount</span>, <span class="num">1000</span>)
+  io.<span class="fn">debug</span>(count)  <span class="cmt">// 2</span>
+}</pre>
+
+                <div class="tip">
+                    Gleam's actor system is fully type-checked at compile time. You cannot send the wrong message type to an actor!
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Gleam TLDR — Last updated December 2025 for Gleam 1.12.0<br>
+                <a href="https://gleam.run" target="_blank">Official Site</a> ·
+                <a href="https://tour.gleam.run" target="_blank">Language Tour</a> ·
+                <a href="https://hexdocs.pm/gleam_stdlib/" target="_blank">Stdlib Docs</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

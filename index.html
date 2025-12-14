@@ -130,6 +130,41 @@
         box-shadow: 0 12px 40px rgba(55, 118, 171, 0.15);
       }
 
+      .guide-card.gleam {
+        --card-accent: #ffaff3;
+      }
+
+      .guide-card.gleam:hover {
+        border-color: #ffaff3;
+        box-shadow: 0 12px 40px rgba(255, 175, 243, 0.15);
+      }
+
+      .guide-card.csharp {
+        --card-accent: #9b4dca;
+      }
+
+      .guide-card.csharp:hover {
+        border-color: #9b4dca;
+        box-shadow: 0 12px 40px rgba(155, 77, 202, 0.15);
+      }
+
+      .guide-card.csharp .guide-icon {
+        border-radius: 12px;
+      }
+
+      .guide-card.elixir {
+        --card-accent: #9b59b6;
+      }
+
+      .guide-card.elixir:hover {
+        border-color: #9b59b6;
+        box-shadow: 0 12px 40px rgba(155, 89, 182, 0.15);
+      }
+
+      .guide-card.elixir .guide-icon {
+        border-radius: 50%;
+      }
+
       .guide-header {
         display: flex;
         align-items: center;
@@ -171,6 +206,10 @@
 
       .guide-card.python .guide-icon {
         border-radius: 8px;
+      }
+
+      .guide-card.gleam .guide-icon {
+        border-radius: 50%;
       }
 
       .guide-title {
@@ -355,6 +394,56 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">v3.13</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="gleam.html" class="guide-card gleam">
+            <div class="guide-header">
+              <div class="guide-icon">G</div>
+              <span class="guide-title">Gleam</span>
+            </div>
+            <p class="guide-desc">
+              A friendly, type-safe functional language for the Erlang VM and
+              JavaScript. Combines static typing with fault-tolerant
+              concurrency. Modern syntax, helpful errors, and seamless
+              interop with Erlang and Elixir ecosystems.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v1.12.0</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="csharp.html" class="guide-card csharp">
+            <div class="guide-header">
+              <div class="guide-icon">C#</div>
+              <span class="guide-title">C#</span>
+            </div>
+            <p class="guide-desc">
+              A modern, object-oriented language for the .NET platform. Strong
+              typing, LINQ, async/await, and pattern matching. Build web apps,
+              desktop apps, games with Unity, cloud services, and more.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">C# 13</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="elixir.html" class="guide-card elixir">
+            <div class="guide-header">
+              <div class="guide-icon">Ex</div>
+              <span class="guide-title">Elixir</span>
+            </div>
+            <p class="guide-desc">
+              A dynamic, functional language for building scalable and
+              maintainable applications. Runs on the Erlang VM (BEAM) for
+              fault-tolerant, distributed systems. Pattern matching, pipes,
+              and the actor model.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v1.19.4</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>

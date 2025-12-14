@@ -1,95 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Python TLDR — A Rapid Reference</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        /* Python theme */
-        :root {
-            --accent: #3776ab;
-            --accent-glow: rgba(55, 118, 171, 0.15);
-        }
+      /* Python theme */
+      :root {
+        --accent: #3776ab;
+        --accent-glow: rgba(55, 118, 171, 0.15);
+      }
 
-        .logo-icon {
-            border-radius: 8px;
-        }
+      .logo-icon {
+        border-radius: 8px;
+      }
 
-        .card h4::before {
-            content: '🐍';
-        }
+      .card h4::before {
+        content: "🐍";
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div class="container">
-            <a href="index.html" class="back-link">← Back to all guides</a>
-            <div class="logo">
-                <div class="logo-icon">Py</div>
-            </div>
-            <h1>Python <span>TLDR</span></h1>
-            <p class="tagline">A rapid reference guide to the Python programming language. Simple, powerful, and readable.</p>
-            <div class="version-badge">v3.13 — December 2025</div>
+      <div class="container">
+        <a href="index.html" class="back-link">← Back to all guides</a>
+        <div class="logo">
+          <div class="logo-icon">Py</div>
         </div>
+        <h1>Python <span>TLDR</span></h1>
+        <p class="tagline">
+          A rapid reference guide to the Python programming language. Simple,
+          powerful, and readable.
+        </p>
+        <div class="version-badge">v3.13 — December 2025</div>
+      </div>
     </header>
 
     <nav>
-        <div class="container">
-            <ul>
-                <li><a href="#what">What is Python?</a></li>
-                <li><a href="#basics">Basics</a></li>
-                <li><a href="#types">Types</a></li>
-                <li><a href="#collections">Collections</a></li>
-                <li><a href="#functions">Functions</a></li>
-                <li><a href="#classes">Classes</a></li>
-                <li><a href="#errors">Errors</a></li>
-                <li><a href="#comprehensions">Comprehensions</a></li>
-                <li><a href="#files">Files & I/O</a></li>
-                <li><a href="#modules">Modules</a></li>
-            </ul>
-        </div>
+      <div class="nav-container">
+        <ul>
+          <li><a href="#what">What is Python?</a></li>
+          <li><a href="#basics">Basics</a></li>
+          <li><a href="#types">Types</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#functions">Functions</a></li>
+          <li><a href="#classes">Classes</a></li>
+          <li><a href="#errors">Errors</a></li>
+          <li><a href="#comprehensions">Comprehensions</a></li>
+          <li><a href="#files">Files & I/O</a></li>
+          <li><a href="#modules">Modules</a></li>
+        </ul>
+      </div>
     </nav>
 
     <main>
-        <div class="container">
-            <!-- What is Python? -->
-            <section id="what">
-                <h2>What is Python?</h2>
-                <p>Python is a high-level, interpreted programming language emphasizing code readability and simplicity. It supports multiple paradigms: procedural, object-oriented, and functional programming.</p>
+      <div class="container">
+        <!-- What is Python? -->
+        <section id="what">
+          <h2>What is Python?</h2>
+          <p>
+            Python is a high-level, interpreted programming language emphasizing
+            code readability and simplicity. It supports multiple paradigms:
+            procedural, object-oriented, and functional programming.
+          </p>
 
-                <div class="cards">
-                    <div class="card">
-                        <h4>Readable Syntax</h4>
-                        <p>Clean, English-like syntax with significant whitespace. Code that's easy to write and easier to read.</p>
-                    </div>
-                    <div class="card">
-                        <h4>Dynamic Typing</h4>
-                        <p>No type declarations needed. Variables are assigned at runtime with automatic type inference.</p>
-                    </div>
-                    <div class="card">
-                        <h4>Batteries Included</h4>
-                        <p>Comprehensive standard library. From web servers to regex to JSON parsing, it's all built in.</p>
-                    </div>
-                    <div class="card">
-                        <h4>Versatile Ecosystem</h4>
-                        <p>Massive package ecosystem via pip. Data science, web dev, automation, AI — Python does it all.</p>
-                    </div>
-                </div>
-            </section>
+          <div class="cards">
+            <div class="card">
+              <h4>Readable Syntax</h4>
+              <p>
+                Clean, English-like syntax with significant whitespace. Code
+                that's easy to write and easier to read.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Dynamic Typing</h4>
+              <p>
+                No type declarations needed. Variables are assigned at runtime
+                with automatic type inference.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Batteries Included</h4>
+              <p>
+                Comprehensive standard library. From web servers to regex to
+                JSON parsing, it's all built in.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Versatile Ecosystem</h4>
+              <p>
+                Massive package ecosystem via pip. Data science, web dev,
+                automation, AI — Python does it all.
+              </p>
+            </div>
+          </div>
+        </section>
 
-            <!-- Basics -->
-            <section id="basics">
-                <h2>Basics</h2>
+        <!-- Basics -->
+        <section id="basics">
+          <h2>Basics</h2>
 
-                <h3>Hello World</h3>
-                <pre data-lang="python"><span class="fn">print</span>(<span class="str">"Hello, world!"</span>)</pre>
+          <h3>Hello World</h3>
+          <pre
+            data-lang="python"
+          ><span class="fn">print</span>(<span class="str">"Hello, world!"</span>)</pre>
 
-                <h3>Variables</h3>
-                <pre data-lang="python"><span class="cmt"># Dynamic typing, no declaration needed</span>
+          <h3>Variables</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Dynamic typing, no declaration needed</span>
 x = <span class="num">42</span>
 y = <span class="num">3.14</span>
 name = <span class="str">"Alice"</span>
@@ -104,8 +130,8 @@ age: <span class="type">int</span> = <span class="num">25</span>
 price: <span class="type">float</span> = <span class="num">19.99</span>
 username: <span class="type">str</span> = <span class="str">"bob"</span></pre>
 
-                <h3>Comments</h3>
-                <pre data-lang="python"><span class="cmt"># Single line comment</span>
+          <h3>Comments</h3>
+          <pre data-lang="python"><span class="cmt"># Single line comment</span>
 
 <span class="str">"""
 Multi-line string literal
@@ -113,8 +139,8 @@ Often used as multi-line comments
 Also used for docstrings
 """</span></pre>
 
-                <h3>Operators</h3>
-                <pre data-lang="python"><span class="cmt"># Arithmetic</span>
+          <h3>Operators</h3>
+          <pre data-lang="python"><span class="cmt"># Arithmetic</span>
 <span class="num">10</span> + <span class="num">3</span>      <span class="cmt"># 13 (addition)</span>
 <span class="num">10</span> - <span class="num">3</span>      <span class="cmt"># 7 (subtraction)</span>
 <span class="num">10</span> * <span class="num">3</span>      <span class="cmt"># 30 (multiplication)</span>
@@ -138,8 +164,8 @@ x <span class="kw">is not</span> y    <span class="cmt"># different object</span
 x <span class="kw">in</span> collection
 x <span class="kw">not in</span> collection</pre>
 
-                <h3>Control Flow</h3>
-                <pre data-lang="python"><span class="cmt"># if/elif/else</span>
+          <h3>Control Flow</h3>
+          <pre data-lang="python"><span class="cmt"># if/elif/else</span>
 <span class="kw">if</span> x &gt; <span class="num">0</span>:
     <span class="fn">print</span>(<span class="str">"positive"</span>)
 <span class="kw">elif</span> x &lt; <span class="num">0</span>:
@@ -170,8 +196,10 @@ result = <span class="str">"even"</span> <span class="kw">if</span> x % <span cl
         <span class="kw">break</span>      <span class="cmt"># exit loop</span>
     <span class="kw">pass</span>           <span class="cmt"># do nothing (placeholder)</span></pre>
 
-                <h3>match Statement (Python 3.10+)</h3>
-                <pre data-lang="python"><span class="cmt"># Structural pattern matching</span>
+          <h3>match Statement (Python 3.10+)</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Structural pattern matching</span>
 <span class="kw">match</span> status:
     <span class="kw">case</span> <span class="num">200</span>:
         <span class="fn">print</span>(<span class="str">"OK"</span>)
@@ -188,50 +216,50 @@ result = <span class="str">"even"</span> <span class="kw">if</span> x % <span cl
         <span class="fn">print</span>(<span class="str">f"On y-axis at {y}"</span>)
     <span class="kw">case</span> (x, y):
         <span class="fn">print</span>(<span class="str">f"Point at ({x}, {y})"</span>)</pre>
-            </section>
+        </section>
 
-            <!-- Types -->
-            <section id="types">
-                <h2>Data Types</h2>
+        <!-- Types -->
+        <section id="types">
+          <h2>Data Types</h2>
 
-                <h3>Primitive Types</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <tr>
-                            <th>Type</th>
-                            <th>Example</th>
-                            <th>Notes</th>
-                        </tr>
-                        <tr>
-                            <td>int</td>
-                            <td><code>42</code>, <code>-17</code>, <code>0xFF</code></td>
-                            <td>Arbitrary precision integers</td>
-                        </tr>
-                        <tr>
-                            <td>float</td>
-                            <td><code>3.14</code>, <code>2.0e-8</code></td>
-                            <td>Double precision (64-bit)</td>
-                        </tr>
-                        <tr>
-                            <td>bool</td>
-                            <td><code>True</code>, <code>False</code></td>
-                            <td>Subclass of int</td>
-                        </tr>
-                        <tr>
-                            <td>str</td>
-                            <td><code>"hello"</code>, <code>'world'</code></td>
-                            <td>Immutable Unicode strings</td>
-                        </tr>
-                        <tr>
-                            <td>NoneType</td>
-                            <td><code>None</code></td>
-                            <td>Null value</td>
-                        </tr>
-                    </table>
-                </div>
+          <h3>Primitive Types</h3>
+          <div class="table-wrapper">
+            <table>
+              <tr>
+                <th>Type</th>
+                <th>Example</th>
+                <th>Notes</th>
+              </tr>
+              <tr>
+                <td>int</td>
+                <td><code>42</code>, <code>-17</code>, <code>0xFF</code></td>
+                <td>Arbitrary precision integers</td>
+              </tr>
+              <tr>
+                <td>float</td>
+                <td><code>3.14</code>, <code>2.0e-8</code></td>
+                <td>Double precision (64-bit)</td>
+              </tr>
+              <tr>
+                <td>bool</td>
+                <td><code>True</code>, <code>False</code></td>
+                <td>Subclass of int</td>
+              </tr>
+              <tr>
+                <td>str</td>
+                <td><code>"hello"</code>, <code>'world'</code></td>
+                <td>Immutable Unicode strings</td>
+              </tr>
+              <tr>
+                <td>NoneType</td>
+                <td><code>None</code></td>
+                <td>Null value</td>
+              </tr>
+            </table>
+          </div>
 
-                <h3>Strings</h3>
-                <pre data-lang="python"><span class="cmt"># String literals</span>
+          <h3>Strings</h3>
+          <pre data-lang="python"><span class="cmt"># String literals</span>
 s1 = <span class="str">"double quotes"</span>
 s2 = <span class="str">'single quotes'</span>
 s3 = <span class="str">"""triple quotes
@@ -271,8 +299,10 @@ s[:<span class="num">5</span>]    <span class="cmt"># first 5 characters</span>
 s[<span class="num">5</span>:]    <span class="cmt"># from index 5 to end</span>
 s[::-<span class="num">1</span>]  <span class="cmt"># reverse string</span></pre>
 
-                <h3>Type Conversion</h3>
-                <pre data-lang="python"><span class="cmt"># Convert between types</span>
+          <h3>Type Conversion</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Convert between types</span>
 <span class="fn">int</span>(<span class="str">"42"</span>)          <span class="cmt"># str to int</span>
 <span class="fn">float</span>(<span class="str">"3.14"</span>)       <span class="cmt"># str to float</span>
 <span class="fn">str</span>(<span class="num">42</span>)            <span class="cmt"># any to str</span>
@@ -280,14 +310,14 @@ s[::-<span class="num">1</span>]  <span class="cmt"># reverse string</span></pre
 
 <span class="cmt"># Falsy values: False, None, 0, 0.0, "", [], {}, ()</span>
 <span class="cmt"># Everything else is truthy</span></pre>
-            </section>
+        </section>
 
-            <!-- Collections -->
-            <section id="collections">
-                <h2>Collections</h2>
+        <!-- Collections -->
+        <section id="collections">
+          <h2>Collections</h2>
 
-                <h3>Lists (Mutable, Ordered)</h3>
-                <pre data-lang="python"><span class="cmt"># Create list</span>
+          <h3>Lists (Mutable, Ordered)</h3>
+          <pre data-lang="python"><span class="cmt"># Create list</span>
 fruits = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>]
 numbers = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
 mixed = [<span class="num">1</span>, <span class="str">"hello"</span>, <span class="num">3.14</span>, <span class="kw">True</span>]
@@ -318,8 +348,8 @@ fruits.<span class="fn">reverse</span>()         <span class="cmt"># reverse in 
 [<span class="num">1</span>, <span class="num">2</span>] + [<span class="num">3</span>, <span class="num">4</span>]       <span class="cmt"># [1, 2, 3, 4]</span>
 [<span class="num">1</span>, <span class="num">2</span>] * <span class="num">3</span>            <span class="cmt"># [1, 2, 1, 2, 1, 2]</span></pre>
 
-                <h3>Tuples (Immutable, Ordered)</h3>
-                <pre data-lang="python"><span class="cmt"># Create tuple</span>
+          <h3>Tuples (Immutable, Ordered)</h3>
+          <pre data-lang="python"><span class="cmt"># Create tuple</span>
 point = (<span class="num">10</span>, <span class="num">20</span>)
 person = (<span class="str">"Alice"</span>, <span class="num">30</span>, <span class="str">"Engineer"</span>)
 single = (<span class="num">42</span>,)        <span class="cmt"># trailing comma for single element</span>
@@ -336,8 +366,8 @@ name, age, job = person
 point.<span class="fn">count</span>(<span class="num">10</span>)
 point.<span class="fn">index</span>(<span class="num">20</span>)</pre>
 
-                <h3>Sets (Mutable, Unordered, Unique)</h3>
-                <pre data-lang="python"><span class="cmt"># Create set</span>
+          <h3>Sets (Mutable, Unordered, Unique)</h3>
+          <pre data-lang="python"><span class="cmt"># Create set</span>
 colors = {<span class="str">"red"</span>, <span class="str">"green"</span>, <span class="str">"blue"</span>}
 numbers = <span class="fn">set</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>])  <span class="cmt"># {1, 2, 3}</span>
 empty = <span class="fn">set</span>()             <span class="cmt"># empty set (not {})</span>
@@ -358,8 +388,8 @@ a - b                  <span class="cmt"># difference: {1, 2}</span>
 a ^ b                  <span class="cmt"># symmetric difference: {1, 2, 4, 5}</span>
 <span class="num">1</span> <span class="kw">in</span> a                <span class="cmt"># membership test</span></pre>
 
-                <h3>Dictionaries (Mutable, Key-Value Pairs)</h3>
-                <pre data-lang="python"><span class="cmt"># Create dictionary</span>
+          <h3>Dictionaries (Mutable, Key-Value Pairs)</h3>
+          <pre data-lang="python"><span class="cmt"># Create dictionary</span>
 person = {
     <span class="str">"name"</span>: <span class="str">"Alice"</span>,
     <span class="str">"age"</span>: <span class="num">30</span>,
@@ -393,14 +423,14 @@ person.<span class="fn">items</span>()          <span class="cmt"># dict_items([
 d1 = {<span class="str">"a"</span>: <span class="num">1</span>}
 d2 = {<span class="str">"b"</span>: <span class="num">2</span>}
 merged = d1 | d2      <span class="cmt"># {'a': 1, 'b': 2}</span></pre>
-            </section>
+        </section>
 
-            <!-- Functions -->
-            <section id="functions">
-                <h2>Functions</h2>
+        <!-- Functions -->
+        <section id="functions">
+          <h2>Functions</h2>
 
-                <h3>Defining Functions</h3>
-                <pre data-lang="python"><span class="cmt"># Basic function</span>
+          <h3>Defining Functions</h3>
+          <pre data-lang="python"><span class="cmt"># Basic function</span>
 <span class="kw">def</span> <span class="fn">greet</span>(name):
     <span class="kw">return</span> <span class="str">f"Hello, {name}!"</span>
 
@@ -418,8 +448,10 @@ merged = d1 | d2      <span class="cmt"># {'a': 1, 'b': 2}</span></pre>
 
 minimum, maximum = <span class="fn">min_max</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])</pre>
 
-                <h3>Arguments</h3>
-                <pre data-lang="python"><span class="cmt"># *args: variable positional arguments</span>
+          <h3>Arguments</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># *args: variable positional arguments</span>
 <span class="kw">def</span> <span class="fn">sum_all</span>(*args):
     <span class="kw">return</span> <span class="fn">sum</span>(args)
 
@@ -438,8 +470,10 @@ minimum, maximum = <span class="fn">min_max</span>([<span class="num">1</span>, 
 
 <span class="fn">divide</span>(<span class="num">10</span>, <span class="num">3</span>, precision=<span class="num">4</span>)  <span class="cmt"># must use keyword</span></pre>
 
-                <h3>Lambda Functions</h3>
-                <pre data-lang="python"><span class="cmt"># Anonymous functions for simple operations</span>
+          <h3>Lambda Functions</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Anonymous functions for simple operations</span>
 square = <span class="kw">lambda</span> x: x ** <span class="num">2</span>
 add = <span class="kw">lambda</span> x, y: x + y
 
@@ -449,8 +483,10 @@ squared = <span class="fn">list</span>(<span class="fn">map</span>(<span class="
 evens = <span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> x: x % <span class="num">2</span> == <span class="num">0</span>, numbers))
 <span class="fn">sorted</span>(students, key=<span class="kw">lambda</span> s: s[<span class="str">"grade"</span>])</pre>
 
-                <h3>Decorators</h3>
-                <pre data-lang="python"><span class="cmt"># Function wrapper that modifies behavior</span>
+          <h3>Decorators</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Function wrapper that modifies behavior</span>
 <span class="kw">def</span> <span class="fn">timer</span>(func):
     <span class="kw">def</span> <span class="fn">wrapper</span>(*args, **kwargs):
         <span class="kw">import</span> time
@@ -468,14 +504,14 @@ evens = <span class="fn">list</span>(<span class="fn">filter</span>(<span class=
 <span class="attr">@staticmethod</span>   <span class="cmt"># method doesn't need self/cls</span>
 <span class="attr">@classmethod</span>    <span class="cmt"># method receives class as first arg</span>
 <span class="attr">@property</span>       <span class="cmt"># getter for computed attribute</span></pre>
-            </section>
+        </section>
 
-            <!-- Classes -->
-            <section id="classes">
-                <h2>Classes & Objects</h2>
+        <!-- Classes -->
+        <section id="classes">
+          <h2>Classes & Objects</h2>
 
-                <h3>Defining Classes</h3>
-                <pre data-lang="python"><span class="cmt"># Basic class</span>
+          <h3>Defining Classes</h3>
+          <pre data-lang="python"><span class="cmt"># Basic class</span>
 <span class="kw">class</span> <span class="type">Person</span>:
     <span class="cmt"># Constructor</span>
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, age):
@@ -495,8 +531,10 @@ alice = <span class="fn">Person</span>(<span class="str">"Alice"</span>, <span c
 <span class="fn">print</span>(alice.<span class="fn">greet</span>())
 <span class="fn">print</span>(alice)  <span class="cmt"># calls __str__</span></pre>
 
-                <h3>Class & Static Methods</h3>
-                <pre data-lang="python"><span class="kw">class</span> <span class="type">Circle</span>:
+          <h3>Class & Static Methods</h3>
+          <pre
+            data-lang="python"
+          ><span class="kw">class</span> <span class="type">Circle</span>:
     <span class="cmt"># Class variable (shared by all instances)</span>
     pi = <span class="num">3.14159</span>
 
@@ -517,8 +555,8 @@ alice = <span class="fn">Person</span>(<span class="str">"Alice"</span>, <span c
     <span class="kw">def</span> <span class="fn">is_valid_radius</span>(radius):
         <span class="kw">return</span> radius > <span class="num">0</span></pre>
 
-                <h3>Inheritance</h3>
-                <pre data-lang="python"><span class="cmt"># Parent class</span>
+          <h3>Inheritance</h3>
+          <pre data-lang="python"><span class="cmt"># Parent class</span>
 <span class="kw">class</span> <span class="type">Animal</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name):
         <span class="kw">self</span>.name = name
@@ -538,8 +576,10 @@ alice = <span class="fn">Person</span>(<span class="str">"Alice"</span>, <span c
 dog = <span class="fn">Dog</span>(<span class="str">"Buddy"</span>, <span class="str">"Golden Retriever"</span>)
 <span class="fn">print</span>(dog.<span class="fn">speak</span>())</pre>
 
-                <h3>Properties & Magic Methods</h3>
-                <pre data-lang="python"><span class="kw">class</span> <span class="type">Rectangle</span>:
+          <h3>Properties & Magic Methods</h3>
+          <pre
+            data-lang="python"
+          ><span class="kw">class</span> <span class="type">Rectangle</span>:
     <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, width, height):
         <span class="kw">self</span>._width = width
         <span class="kw">self</span>._height = height
@@ -562,17 +602,21 @@ r = <span class="fn">Rectangle</span>(<span class="num">10</span>, <span class="
 <span class="fn">print</span>(r.area)  <span class="cmt"># 50 (calls getter)</span>
 r.area = <span class="num">100</span>    <span class="cmt"># calls setter</span></pre>
 
-                <div class="tip">
-                    Common magic methods: <code>__init__</code>, <code>__str__</code>, <code>__repr__</code>, <code>__len__</code>, <code>__getitem__</code>, <code>__add__</code>, <code>__eq__</code>
-                </div>
-            </section>
+          <div class="tip">
+            Common magic methods: <code>__init__</code>, <code>__str__</code>,
+            <code>__repr__</code>, <code>__len__</code>,
+            <code>__getitem__</code>, <code>__add__</code>, <code>__eq__</code>
+          </div>
+        </section>
 
-            <!-- Error Handling -->
-            <section id="errors">
-                <h2>Error Handling</h2>
+        <!-- Error Handling -->
+        <section id="errors">
+          <h2>Error Handling</h2>
 
-                <h3>Try/Except</h3>
-                <pre data-lang="python"><span class="cmt"># Basic exception handling</span>
+          <h3>Try/Except</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Basic exception handling</span>
 <span class="kw">try</span>:
     result = <span class="num">10</span> / <span class="num">0</span>
 <span class="kw">except</span> ZeroDivisionError:
@@ -602,8 +646,8 @@ r.area = <span class="num">100</span>    <span class="cmt"># calls setter</span>
     <span class="kw">if</span> <span class="str">'file'</span> <span class="kw">in</span> <span class="fn">locals</span>():
         file.<span class="fn">close</span>()</pre>
 
-                <h3>Raising Exceptions</h3>
-                <pre data-lang="python"><span class="cmt"># Raise an exception</span>
+          <h3>Raising Exceptions</h3>
+          <pre data-lang="python"><span class="cmt"># Raise an exception</span>
 <span class="kw">def</span> <span class="fn">divide</span>(a, b):
     <span class="kw">if</span> b == <span class="num">0</span>:
         <span class="kw">raise</span> ValueError(<span class="str">"Divisor cannot be zero"</span>)
@@ -618,41 +662,43 @@ r.area = <span class="num">100</span>    <span class="cmt"># calls setter</span>
         <span class="kw">raise</span> InvalidAgeError(<span class="str">"Age cannot be negative"</span>)
     <span class="kw">return</span> age</pre>
 
-                <h3>Common Exceptions</h3>
-                <dl class="concept-list">
-                    <div class="concept">
-                        <dt>ValueError</dt>
-                        <dd>Invalid value for operation</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>TypeError</dt>
-                        <dd>Wrong type for operation</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>KeyError</dt>
-                        <dd>Dictionary key not found</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>IndexError</dt>
-                        <dd>List index out of range</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>FileNotFoundError</dt>
-                        <dd>File doesn't exist</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>AttributeError</dt>
-                        <dd>Attribute doesn't exist</dd>
-                    </div>
-                </dl>
-            </section>
+          <h3>Common Exceptions</h3>
+          <dl class="concept-list">
+            <div class="concept">
+              <dt>ValueError</dt>
+              <dd>Invalid value for operation</dd>
+            </div>
+            <div class="concept">
+              <dt>TypeError</dt>
+              <dd>Wrong type for operation</dd>
+            </div>
+            <div class="concept">
+              <dt>KeyError</dt>
+              <dd>Dictionary key not found</dd>
+            </div>
+            <div class="concept">
+              <dt>IndexError</dt>
+              <dd>List index out of range</dd>
+            </div>
+            <div class="concept">
+              <dt>FileNotFoundError</dt>
+              <dd>File doesn't exist</dd>
+            </div>
+            <div class="concept">
+              <dt>AttributeError</dt>
+              <dd>Attribute doesn't exist</dd>
+            </div>
+          </dl>
+        </section>
 
-            <!-- Comprehensions -->
-            <section id="comprehensions">
-                <h2>Comprehensions & Generators</h2>
+        <!-- Comprehensions -->
+        <section id="comprehensions">
+          <h2>Comprehensions & Generators</h2>
 
-                <h3>List Comprehensions</h3>
-                <pre data-lang="python"><span class="cmt"># Basic list comprehension</span>
+          <h3>List Comprehensions</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Basic list comprehension</span>
 squares = [x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)]
 
 <span class="cmt"># With condition</span>
@@ -669,8 +715,10 @@ upper = [w.<span class="fn">upper</span>() <span class="kw">for</span> w <span c
 nested = [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>], [<span class="num">5</span>, <span class="num">6</span>]]
 flat = [item <span class="kw">for</span> sublist <span class="kw">in</span> nested <span class="kw">for</span> item <span class="kw">in</span> sublist]</pre>
 
-                <h3>Dict & Set Comprehensions</h3>
-                <pre data-lang="python"><span class="cmt"># Dictionary comprehension</span>
+          <h3>Dict & Set Comprehensions</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Dictionary comprehension</span>
 squares = {x: x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)}
 <span class="cmt"># {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</span>
 
@@ -681,8 +729,10 @@ inverted = {v: k <span class="kw">for</span> k, v <span class="kw">in</span> ori
 <span class="cmt"># Set comprehension</span>
 unique = {x % <span class="num">10</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">100</span>)}</pre>
 
-                <h3>Generator Expressions</h3>
-                <pre data-lang="python"><span class="cmt"># Generator (lazy evaluation, memory efficient)</span>
+          <h3>Generator Expressions</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Generator (lazy evaluation, memory efficient)</span>
 gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1000000</span>))
 
 <span class="cmt"># Generator function</span>
@@ -700,14 +750,14 @@ gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="
     <span class="kw">while</span> <span class="kw">True</span>:
         <span class="kw">yield</span> start
         start += <span class="num">1</span></pre>
-            </section>
+        </section>
 
-            <!-- Files & I/O -->
-            <section id="files">
-                <h2>Files & I/O</h2>
+        <!-- Files & I/O -->
+        <section id="files">
+          <h2>Files & I/O</h2>
 
-                <h3>Reading Files</h3>
-                <pre data-lang="python"><span class="cmt"># Read entire file</span>
+          <h3>Reading Files</h3>
+          <pre data-lang="python"><span class="cmt"># Read entire file</span>
 <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"file.txt"</span>, <span class="str">"r"</span>) <span class="kw">as</span> f:
     content = f.<span class="fn">read</span>()
 
@@ -720,8 +770,10 @@ gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="
     <span class="kw">for</span> line <span class="kw">in</span> f:
         <span class="fn">print</span>(line.<span class="fn">strip</span>())</pre>
 
-                <h3>Writing Files</h3>
-                <pre data-lang="python"><span class="cmt"># Write (overwrites existing)</span>
+          <h3>Writing Files</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Write (overwrites existing)</span>
 <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:
     f.<span class="fn">write</span>(<span class="str">"Hello, world!\n"</span>)
     f.<span class="fn">writelines</span>([<span class="str">"Line 1\n"</span>, <span class="str">"Line 2\n"</span>])
@@ -730,8 +782,8 @@ gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="
 <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"output.txt"</span>, <span class="str">"a"</span>) <span class="kw">as</span> f:
     f.<span class="fn">write</span>(<span class="str">"Appended line\n"</span>)</pre>
 
-                <h3>File Modes & Working with Paths</h3>
-                <pre data-lang="python"><span class="cmt"># File modes</span>
+          <h3>File Modes & Working with Paths</h3>
+          <pre data-lang="python"><span class="cmt"># File modes</span>
 <span class="str">"r"</span>   <span class="cmt"># read (default)</span>
 <span class="str">"w"</span>   <span class="cmt"># write (overwrites)</span>
 <span class="str">"a"</span>   <span class="cmt"># append</span>
@@ -757,8 +809,8 @@ p.<span class="fn">write_text</span>(<span class="str">"New content"</span>)
 <span class="kw">for</span> file <span class="kw">in</span> Path(<span class="str">"."</span>).<span class="fn">glob</span>(<span class="str">"*.py"</span>):
     <span class="fn">print</span>(file)</pre>
 
-                <h3>JSON & CSV</h3>
-                <pre data-lang="python"><span class="cmt"># JSON</span>
+          <h3>JSON & CSV</h3>
+          <pre data-lang="python"><span class="cmt"># JSON</span>
 <span class="kw">import</span> json
 
 data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span class="str">"age"</span>: <span class="num">30</span>}
@@ -785,14 +837,16 @@ data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span
     reader = csv.<span class="fn">reader</span>(f)
     <span class="kw">for</span> row <span class="kw">in</span> reader:
         <span class="fn">print</span>(row)</pre>
-            </section>
+        </section>
 
-            <!-- Modules -->
-            <section id="modules">
-                <h2>Modules & Packages</h2>
+        <!-- Modules -->
+        <section id="modules">
+          <h2>Modules & Packages</h2>
 
-                <h3>Importing Modules</h3>
-                <pre data-lang="python"><span class="cmt"># Import entire module</span>
+          <h3>Importing Modules</h3>
+          <pre
+            data-lang="python"
+          ><span class="cmt"># Import entire module</span>
 <span class="kw">import</span> math
 <span class="fn">print</span>(math.pi)
 
@@ -806,8 +860,8 @@ data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span
 <span class="cmt"># Import all (not recommended)</span>
 <span class="kw">from</span> math <span class="kw">import</span> *</pre>
 
-                <h3>Creating Modules</h3>
-                <pre data-lang="python"><span class="cmt"># mymodule.py</span>
+          <h3>Creating Modules</h3>
+          <pre data-lang="python"><span class="cmt"># mymodule.py</span>
 <span class="kw">def</span> <span class="fn">greet</span>(name):
     <span class="kw">return</span> <span class="str">f"Hello, {name}"</span>
 
@@ -819,8 +873,8 @@ data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span
 <span class="kw">import</span> mymodule
 <span class="fn">print</span>(mymodule.<span class="fn">greet</span>(<span class="str">"Alice"</span>))</pre>
 
-                <h3>Package Structure</h3>
-                <pre data-lang="text">mypackage/
+          <h3>Package Structure</h3>
+          <pre data-lang="text">mypackage/
 ├── __init__.py      <span class="cmt"># Makes it a package</span>
 ├── module1.py
 ├── module2.py
@@ -832,8 +886,10 @@ data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span
 <span class="kw">from</span> mypackage <span class="kw">import</span> module1
 <span class="kw">from</span> mypackage.subpackage <span class="kw">import</span> module3</pre>
 
-                <h3>Common Standard Library Modules</h3>
-                <pre data-lang="python"><span class="kw">import</span> os           <span class="cmt"># OS interface</span>
+          <h3>Common Standard Library Modules</h3>
+          <pre
+            data-lang="python"
+          ><span class="kw">import</span> os           <span class="cmt"># OS interface</span>
 <span class="kw">import</span> sys          <span class="cmt"># System parameters</span>
 <span class="kw">import</span> re           <span class="cmt"># Regular expressions</span>
 <span class="kw">import</span> datetime     <span class="cmt"># Date and time</span>
@@ -844,8 +900,8 @@ data = {<span class="str">"name"</span>: <span class="str">"Alice"</span>, <span
 <span class="kw">import</span> itertools    <span class="cmt"># Iterator tools</span>
 <span class="kw">import</span> functools    <span class="cmt"># Higher-order functions</span></pre>
 
-                <h3>pip & Virtual Environments</h3>
-                <pre data-lang="shell"><span class="cmt"># Install packages</span>
+          <h3>pip & Virtual Environments</h3>
+          <pre data-lang="shell"><span class="cmt"># Install packages</span>
 pip install requests
 pip install pandas numpy matplotlib
 
@@ -861,22 +917,24 @@ source venv/bin/activate  <span class="cmt"># Linux/Mac</span>
 venv\Scripts\activate     <span class="cmt"># Windows</span>
 deactivate                <span class="cmt"># Exit virtual environment</span></pre>
 
-                <div class="tip">
-                    Always use virtual environments to isolate project dependencies. Use <code>venv</code> (built-in) or <code>virtualenv</code> for this.
-                </div>
-            </section>
-        </div>
+          <div class="tip">
+            Always use virtual environments to isolate project dependencies. Use
+            <code>venv</code> (built-in) or <code>virtualenv</code> for this.
+          </div>
+        </section>
+      </div>
     </main>
 
     <footer>
-        <div class="container">
-            <p>
-                Python TLDR — Last updated December 2025 for Python 3.13<br>
-                <a href="https://python.org" target="_blank">Official Site</a> ·
-                <a href="https://docs.python.org/3/" target="_blank">Documentation</a> ·
-                <a href="https://pypi.org" target="_blank">PyPI</a>
-            </p>
-        </div>
+      <div class="container">
+        <p>
+          Python TLDR — Last updated December 2025 for Python 3.13<br />
+          <a href="https://python.org" target="_blank">Official Site</a> ·
+          <a href="https://docs.python.org/3/" target="_blank">Documentation</a>
+          ·
+          <a href="https://pypi.org" target="_blank">PyPI</a>
+        </p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>

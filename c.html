@@ -1,101 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>C TLDR — A Rapid Reference</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        /* C theme */
-        :root {
-            --accent: #5c6bc0;
-            --accent-glow: rgba(92, 107, 192, 0.15);
-        }
+      /* C theme */
+      :root {
+        --accent: #5c6bc0;
+        --accent-glow: rgba(92, 107, 192, 0.15);
+      }
 
-        .logo-icon {
-            border-radius: 50%;
-        }
+      .logo-icon {
+        border-radius: 50%;
+      }
 
-        .card h4::before {
-            content: '//';
-            font-family: 'JetBrains Mono', monospace;
-        }
+      .card h4::before {
+        content: "//";
+        font-family: "JetBrains Mono", monospace;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <div class="container">
-            <a href="index.html" class="back-link">&larr; Back to all guides</a>
-            <div class="logo">
-                <div class="logo-icon">C</div>
-            </div>
-            <h1>C <span>TLDR</span></h1>
-            <p class="tagline">A rapid reference guide to the C programming language. The foundation of modern computing.</p>
-            <div class="version-badge">C23 — December 2025</div>
+      <div class="container">
+        <a href="index.html" class="back-link">&larr; Back to all guides</a>
+        <div class="logo">
+          <div class="logo-icon">C</div>
         </div>
+        <h1>C <span>TLDR</span></h1>
+        <p class="tagline">
+          A rapid reference guide to the C programming language. The foundation
+          of modern computing.
+        </p>
+        <div class="version-badge">C23 — December 2025</div>
+      </div>
     </header>
 
     <nav>
-        <div class="container">
-            <ul>
-                <li><a href="#what">What is C?</a></li>
-                <li><a href="#basics">Basics</a></li>
-                <li><a href="#types">Types</a></li>
-                <li><a href="#pointers">Pointers</a></li>
-                <li><a href="#arrays">Arrays & Strings</a></li>
-                <li><a href="#structs">Structs & Unions</a></li>
-                <li><a href="#memory">Memory</a></li>
-                <li><a href="#preprocessor">Preprocessor</a></li>
-                <li><a href="#io">I/O</a></li>
-                <li><a href="#compile">Compilation</a></li>
-            </ul>
-        </div>
+      <div class="nav-container">
+        <ul>
+          <li><a href="#what">What is C?</a></li>
+          <li><a href="#basics">Basics</a></li>
+          <li><a href="#types">Types</a></li>
+          <li><a href="#pointers">Pointers</a></li>
+          <li><a href="#arrays">Arrays & Strings</a></li>
+          <li><a href="#structs">Structs & Unions</a></li>
+          <li><a href="#memory">Memory</a></li>
+          <li><a href="#preprocessor">Preprocessor</a></li>
+          <li><a href="#io">I/O</a></li>
+          <li><a href="#compile">Compilation</a></li>
+        </ul>
+      </div>
     </nav>
 
     <main>
-        <div class="container">
-            <!-- What is C? -->
-            <section id="what">
-                <h2>What is C?</h2>
-                <p>C is a general-purpose, procedural programming language developed in 1972. It provides low-level access to memory, maps efficiently to machine instructions, and is the foundation for operating systems, embedded systems, and countless other languages.</p>
+      <div class="container">
+        <!-- What is C? -->
+        <section id="what">
+          <h2>What is C?</h2>
+          <p>
+            C is a general-purpose, procedural programming language developed in
+            1972. It provides low-level access to memory, maps efficiently to
+            machine instructions, and is the foundation for operating systems,
+            embedded systems, and countless other languages.
+          </p>
 
-                <div class="cards">
-                    <div class="card">
-                        <h4>Low-Level Control</h4>
-                        <p>Direct memory access via pointers. Manual memory management. Minimal runtime overhead.</p>
-                    </div>
-                    <div class="card">
-                        <h4>Portable</h4>
-                        <p>Compiles to native code on virtually every platform. Write once, compile anywhere.</p>
-                    </div>
-                    <div class="card">
-                        <h4>Fast</h4>
-                        <p>Minimal abstraction between code and hardware. Predictable performance characteristics.</p>
-                    </div>
-                    <div class="card">
-                        <h4>Foundational</h4>
-                        <p>Linux, Windows, databases, interpreters — most system software is written in C.</p>
-                    </div>
-                </div>
-            </section>
+          <div class="cards">
+            <div class="card">
+              <h4>Low-Level Control</h4>
+              <p>
+                Direct memory access via pointers. Manual memory management.
+                Minimal runtime overhead.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Portable</h4>
+              <p>
+                Compiles to native code on virtually every platform. Write once,
+                compile anywhere.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Fast</h4>
+              <p>
+                Minimal abstraction between code and hardware. Predictable
+                performance characteristics.
+              </p>
+            </div>
+            <div class="card">
+              <h4>Foundational</h4>
+              <p>
+                Linux, Windows, databases, interpreters — most system software
+                is written in C.
+              </p>
+            </div>
+          </div>
+        </section>
 
-            <!-- Basics -->
-            <section id="basics">
-                <h2>Basics</h2>
+        <!-- Basics -->
+        <section id="basics">
+          <h2>Basics</h2>
 
-                <h3>Hello World</h3>
-                <pre data-lang="c"><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+          <h3>Hello World</h3>
+          <pre
+            data-lang="c"
+          ><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
 
 <span class="type">int</span> <span class="fn">main</span>(<span class="type">void</span>) {
     <span class="fn">printf</span>(<span class="str">"Hello, world!\n"</span>);
     <span class="kw">return</span> <span class="num">0</span>;
 }</pre>
 
-                <h3>Variables</h3>
-                <pre data-lang="c"><span class="cmt">// Declaration and initialization</span>
+          <h3>Variables</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Declaration and initialization</span>
 <span class="type">int</span> x = <span class="num">42</span>;
 <span class="type">int</span> y;           <span class="cmt">// uninitialized (contains garbage)</span>
 y = <span class="num">10</span>;
@@ -113,8 +140,10 @@ y = <span class="num">10</span>;
 <span class="cmt">// Volatile (prevent optimization)</span>
 <span class="kw">volatile</span> <span class="type">int</span> hardware_reg;</pre>
 
-                <h3>Functions</h3>
-                <pre data-lang="c"><span class="cmt">// Function declaration (prototype)</span>
+          <h3>Functions</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Function declaration (prototype)</span>
 <span class="type">int</span> <span class="fn">add</span>(<span class="type">int</span> a, <span class="type">int</span> b);
 
 <span class="cmt">// Function definition</span>
@@ -137,8 +166,8 @@ y = <span class="num">10</span>;
     <span class="kw">return</span> x * <span class="num">2</span>;
 }</pre>
 
-                <h3>Control Flow</h3>
-                <pre data-lang="c"><span class="cmt">// if-else</span>
+          <h3>Control Flow</h3>
+          <pre data-lang="c"><span class="cmt">// if-else</span>
 <span class="kw">if</span> (x &gt; <span class="num">0</span>) {
     <span class="fn">printf</span>(<span class="str">"positive\n"</span>);
 } <span class="kw">else if</span> (x &lt; <span class="num">0</span>) {
@@ -184,8 +213,8 @@ y = <span class="num">10</span>;
     <span class="kw">if</span> (i == <span class="num">50</span>) <span class="kw">break</span>;    <span class="cmt">// exit loop</span>
 }</pre>
 
-                <h3>Operators</h3>
-                <pre data-lang="c"><span class="cmt">// Arithmetic</span>
+          <h3>Operators</h3>
+          <pre data-lang="c"><span class="cmt">// Arithmetic</span>
 a + b    a - b    a * b    a / b    a % b
 
 <span class="cmt">// Comparison</span>
@@ -211,60 +240,62 @@ a %= b   a &amp;= b   a |= b   a ^= b   a &lt;&lt;= n  a &gt;&gt;= n
 <span class="cmt">// sizeof</span>
 <span class="kw">sizeof</span>(<span class="type">int</span>)      <span class="cmt">// size in bytes</span>
 <span class="kw">sizeof</span>(arr)      <span class="cmt">// array size in bytes</span></pre>
-            </section>
+        </section>
 
-            <!-- Types -->
-            <section id="types">
-                <h2>Types</h2>
+        <!-- Types -->
+        <section id="types">
+          <h2>Types</h2>
 
-                <h3>Primitive Types</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <tr>
-                            <th>Type</th>
-                            <th>Size (typical)</th>
-                            <th>Range</th>
-                        </tr>
-                        <tr>
-                            <td><code>char</code></td>
-                            <td>1 byte</td>
-                            <td>-128 to 127 or 0 to 255</td>
-                        </tr>
-                        <tr>
-                            <td><code>short</code></td>
-                            <td>2 bytes</td>
-                            <td>-32,768 to 32,767</td>
-                        </tr>
-                        <tr>
-                            <td><code>int</code></td>
-                            <td>4 bytes</td>
-                            <td>-2.1B to 2.1B</td>
-                        </tr>
-                        <tr>
-                            <td><code>long</code></td>
-                            <td>4-8 bytes</td>
-                            <td>Platform dependent</td>
-                        </tr>
-                        <tr>
-                            <td><code>long long</code></td>
-                            <td>8 bytes</td>
-                            <td>-9.2E18 to 9.2E18</td>
-                        </tr>
-                        <tr>
-                            <td><code>float</code></td>
-                            <td>4 bytes</td>
-                            <td>~6 decimal digits</td>
-                        </tr>
-                        <tr>
-                            <td><code>double</code></td>
-                            <td>8 bytes</td>
-                            <td>~15 decimal digits</td>
-                        </tr>
-                    </table>
-                </div>
+          <h3>Primitive Types</h3>
+          <div class="table-wrapper">
+            <table>
+              <tr>
+                <th>Type</th>
+                <th>Size (typical)</th>
+                <th>Range</th>
+              </tr>
+              <tr>
+                <td><code>char</code></td>
+                <td>1 byte</td>
+                <td>-128 to 127 or 0 to 255</td>
+              </tr>
+              <tr>
+                <td><code>short</code></td>
+                <td>2 bytes</td>
+                <td>-32,768 to 32,767</td>
+              </tr>
+              <tr>
+                <td><code>int</code></td>
+                <td>4 bytes</td>
+                <td>-2.1B to 2.1B</td>
+              </tr>
+              <tr>
+                <td><code>long</code></td>
+                <td>4-8 bytes</td>
+                <td>Platform dependent</td>
+              </tr>
+              <tr>
+                <td><code>long long</code></td>
+                <td>8 bytes</td>
+                <td>-9.2E18 to 9.2E18</td>
+              </tr>
+              <tr>
+                <td><code>float</code></td>
+                <td>4 bytes</td>
+                <td>~6 decimal digits</td>
+              </tr>
+              <tr>
+                <td><code>double</code></td>
+                <td>8 bytes</td>
+                <td>~15 decimal digits</td>
+              </tr>
+            </table>
+          </div>
 
-                <h3>Fixed-Width Types (stdint.h)</h3>
-                <pre data-lang="c"><span class="pp">#include</span> <span class="str">&lt;stdint.h&gt;</span>
+          <h3>Fixed-Width Types (stdint.h)</h3>
+          <pre
+            data-lang="c"
+          ><span class="pp">#include</span> <span class="str">&lt;stdint.h&gt;</span>
 
 <span class="cmt">// Exact width</span>
 <span class="type">int8_t</span>   <span class="type">int16_t</span>   <span class="type">int32_t</span>   <span class="type">int64_t</span>
@@ -277,8 +308,8 @@ a %= b   a &amp;= b   a |= b   a ^= b   a &lt;&lt;= n  a &gt;&gt;= n
 <span class="type">size_t</span>     <span class="cmt">// unsigned, for sizes/indices</span>
 <span class="type">ptrdiff_t</span>  <span class="cmt">// signed, for pointer differences</span></pre>
 
-                <h3>Type Modifiers</h3>
-                <pre data-lang="c"><span class="cmt">// Signed/Unsigned</span>
+          <h3>Type Modifiers</h3>
+          <pre data-lang="c"><span class="cmt">// Signed/Unsigned</span>
 <span class="kw">signed</span> <span class="type">int</span> x;      <span class="cmt">// can be negative (default for int)</span>
 <span class="kw">unsigned</span> <span class="type">int</span> y;    <span class="cmt">// non-negative only</span>
 <span class="kw">unsigned</span> <span class="type">char</span> byte; <span class="cmt">// 0 to 255</span>
@@ -292,8 +323,10 @@ a %= b   a &amp;= b   a |= b   a ^= b   a &lt;&lt;= n  a &gt;&gt;= n
 <span class="type">bool</span> flag = <span class="kw">true</span>;
 <span class="type">bool</span> done = <span class="kw">false</span>;</pre>
 
-                <h3>Type Casting</h3>
-                <pre data-lang="c"><span class="type">int</span> x = <span class="num">10</span>;
+          <h3>Type Casting</h3>
+          <pre
+            data-lang="c"
+          ><span class="type">int</span> x = <span class="num">10</span>;
 <span class="type">double</span> d = (<span class="type">double</span>)x;       <span class="cmt">// explicit cast</span>
 <span class="type">int</span> y = (<span class="type">int</span>)<span class="num">3.14</span>;          <span class="cmt">// truncates to 3</span>
 
@@ -301,8 +334,8 @@ a %= b   a &amp;= b   a |= b   a ^= b   a &lt;&lt;= n  a &gt;&gt;= n
 <span class="type">void</span> *generic = &amp;x;
 <span class="type">int</span> *int_ptr = (<span class="type">int</span> *)generic;</pre>
 
-                <h3>Typedef</h3>
-                <pre data-lang="c"><span class="cmt">// Create type aliases</span>
+          <h3>Typedef</h3>
+          <pre data-lang="c"><span class="cmt">// Create type aliases</span>
 <span class="kw">typedef</span> <span class="kw">unsigned</span> <span class="type">int</span> <span class="type">uint</span>;
 <span class="kw">typedef</span> <span class="kw">unsigned</span> <span class="type">char</span> <span class="type">byte</span>;
 
@@ -313,15 +346,20 @@ a %= b   a &amp;= b   a |= b   a ^= b   a &lt;&lt;= n  a &gt;&gt;= n
 <span class="kw">typedef</span> <span class="kw">struct</span> {
     <span class="type">int</span> x, y;
 } <span class="type">Point</span>;</pre>
-            </section>
+        </section>
 
-            <!-- Pointers -->
-            <section id="pointers">
-                <h2>Pointers</h2>
-                <p>A pointer stores the memory address of a variable. Pointers enable dynamic memory, data structures, and efficient function arguments.</p>
+        <!-- Pointers -->
+        <section id="pointers">
+          <h2>Pointers</h2>
+          <p>
+            A pointer stores the memory address of a variable. Pointers enable
+            dynamic memory, data structures, and efficient function arguments.
+          </p>
 
-                <h3>Pointer Basics</h3>
-                <pre data-lang="c"><span class="type">int</span> x = <span class="num">42</span>;
+          <h3>Pointer Basics</h3>
+          <pre
+            data-lang="c"
+          ><span class="type">int</span> x = <span class="num">42</span>;
 <span class="type">int</span> *ptr = &amp;x;      <span class="cmt">// ptr holds address of x</span>
 
 <span class="fn">printf</span>(<span class="str">"%p\n"</span>, (<span class="type">void</span> *)ptr);  <span class="cmt">// print address</span>
@@ -336,8 +374,10 @@ a %= b   a &amp;= b   a |= b   a ^= b   a &lt;&lt;= n  a &gt;&gt;= n
     <span class="cmt">// safe to dereference</span>
 }</pre>
 
-                <h3>Pointer Arithmetic</h3>
-                <pre data-lang="c"><span class="type">int</span> arr[] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>};
+          <h3>Pointer Arithmetic</h3>
+          <pre
+            data-lang="c"
+          ><span class="type">int</span> arr[] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>};
 <span class="type">int</span> *ptr = arr;      <span class="cmt">// points to arr[0]</span>
 
 ptr++;               <span class="cmt">// now points to arr[1]</span>
@@ -351,8 +391,8 @@ ptr += <span class="num">2</span>;            <span class="cmt">// now points to
 <span class="cmt">// Array indexing is pointer arithmetic</span>
 arr[<span class="num">2</span>] == *(arr + <span class="num">2</span>)  <span class="cmt">// equivalent</span></pre>
 
-                <h3>Pointers and Functions</h3>
-                <pre data-lang="c"><span class="cmt">// Pass by reference</span>
+          <h3>Pointers and Functions</h3>
+          <pre data-lang="c"><span class="cmt">// Pass by reference</span>
 <span class="type">void</span> <span class="fn">swap</span>(<span class="type">int</span> *a, <span class="type">int</span> *b) {
     <span class="type">int</span> temp = *a;
     *a = *b;
@@ -368,8 +408,10 @@ arr[<span class="num">2</span>] == *(arr + <span class="num">2</span>)  <span cl
     <span class="kw">return</span> arr;  <span class="cmt">// caller must free</span>
 }</pre>
 
-                <h3>Pointers to Pointers</h3>
-                <pre data-lang="c"><span class="type">int</span> x = <span class="num">5</span>;
+          <h3>Pointers to Pointers</h3>
+          <pre
+            data-lang="c"
+          ><span class="type">int</span> x = <span class="num">5</span>;
 <span class="type">int</span> *ptr = &amp;x;
 <span class="type">int</span> **pptr = &amp;ptr;   <span class="cmt">// pointer to pointer</span>
 
@@ -380,8 +422,8 @@ arr[<span class="num">2</span>] == *(arr + <span class="num">2</span>)  <span cl
     *ptr = <span class="fn">malloc</span>(size * <span class="kw">sizeof</span>(<span class="type">int</span>));
 }</pre>
 
-                <h3>Function Pointers</h3>
-                <pre data-lang="c"><span class="cmt">// Declaration</span>
+          <h3>Function Pointers</h3>
+          <pre data-lang="c"><span class="cmt">// Declaration</span>
 <span class="type">int</span> (*<span class="fn">operation</span>)(<span class="type">int</span>, <span class="type">int</span>);
 
 <span class="cmt">// Functions to point to</span>
@@ -402,17 +444,18 @@ result = operation(<span class="num">3</span>, <span class="num">4</span>);     
     }
 }</pre>
 
-                <div class="tip">
-                    Always initialize pointers. Dereferencing uninitialized or NULL pointers causes undefined behavior (usually a crash).
-                </div>
-            </section>
+          <div class="tip">
+            Always initialize pointers. Dereferencing uninitialized or NULL
+            pointers causes undefined behavior (usually a crash).
+          </div>
+        </section>
 
-            <!-- Arrays & Strings -->
-            <section id="arrays">
-                <h2>Arrays & Strings</h2>
+        <!-- Arrays & Strings -->
+        <section id="arrays">
+          <h2>Arrays & Strings</h2>
 
-                <h3>Arrays</h3>
-                <pre data-lang="c"><span class="cmt">// Fixed-size array</span>
+          <h3>Arrays</h3>
+          <pre data-lang="c"><span class="cmt">// Fixed-size array</span>
 <span class="type">int</span> arr[<span class="num">5</span>];                    <span class="cmt">// uninitialized</span>
 <span class="type">int</span> arr[<span class="num">5</span>] = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>};
 <span class="type">int</span> arr[] = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};        <span class="cmt">// size inferred (3)</span>
@@ -430,8 +473,8 @@ arr[<span class="num">0</span>] = <span class="num">10</span>;
 <span class="type">void</span> <span class="fn">process</span>(<span class="type">int</span> *arr, <span class="type">size_t</span> len);
 <span class="type">void</span> <span class="fn">process</span>(<span class="type">int</span> arr[], <span class="type">size_t</span> len);  <span class="cmt">// equivalent</span></pre>
 
-                <h3>Multidimensional Arrays</h3>
-                <pre data-lang="c"><span class="cmt">// 2D array</span>
+          <h3>Multidimensional Arrays</h3>
+          <pre data-lang="c"><span class="cmt">// 2D array</span>
 <span class="type">int</span> matrix[<span class="num">3</span>][<span class="num">4</span>];   <span class="cmt">// 3 rows, 4 columns</span>
 <span class="type">int</span> matrix[<span class="num">2</span>][<span class="num">3</span>] = {
     {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>},
@@ -444,8 +487,10 @@ matrix[<span class="num">0</span>][<span class="num">1</span>] = <span class="nu
 <span class="cmt">// Pass to function (must specify all but first dimension)</span>
 <span class="type">void</span> <span class="fn">process</span>(<span class="type">int</span> mat[][<span class="num">4</span>], <span class="type">size_t</span> rows);</pre>
 
-                <h3>Strings</h3>
-                <pre data-lang="c"><span class="cmt">// String = char array with null terminator '\0'</span>
+          <h3>Strings</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// String = char array with null terminator '\0'</span>
 <span class="type">char</span> str[] = <span class="str">"hello"</span>;          <span class="cmt">// {'h','e','l','l','o','\0'}</span>
 <span class="type">char</span> str[<span class="num">10</span>] = <span class="str">"hello"</span>;        <span class="cmt">// remaining filled with '\0'</span>
 <span class="type">char</span> *str = <span class="str">"hello"</span>;           <span class="cmt">// pointer to string literal (read-only!)</span>
@@ -464,8 +509,10 @@ matrix[<span class="num">0</span>][<span class="num">1</span>] = <span class="nu
 <span class="fn">strchr</span>(str, c);                 <span class="cmt">// find char, return ptr</span>
 <span class="fn">strstr</span>(haystack, needle);       <span class="cmt">// find substring</span></pre>
 
-                <h3>String Formatting</h3>
-                <pre data-lang="c"><span class="type">char</span> buffer[<span class="num">100</span>];
+          <h3>String Formatting</h3>
+          <pre
+            data-lang="c"
+          ><span class="type">char</span> buffer[<span class="num">100</span>];
 
 <span class="cmt">// Format into buffer</span>
 <span class="fn">sprintf</span>(buffer, <span class="str">"Name: %s, Age: %d"</span>, <span class="str">"Alice"</span>, <span class="num">30</span>);
@@ -483,17 +530,19 @@ matrix[<span class="num">0</span>][<span class="num">1</span>] = <span class="nu
 <span class="type">long</span> l = <span class="fn">strtol</span>(<span class="str">"42"</span>, <span class="builtin">NULL</span>, <span class="num">10</span>);
 <span class="type">double</span> d = <span class="fn">strtod</span>(<span class="str">"3.14"</span>, <span class="builtin">NULL</span>);</pre>
 
-                <div class="tip">
-                    Always use <code>strncpy</code>/<code>snprintf</code> instead of <code>strcpy</code>/<code>sprintf</code> to prevent buffer overflows.
-                </div>
-            </section>
+          <div class="tip">
+            Always use <code>strncpy</code>/<code>snprintf</code> instead of
+            <code>strcpy</code>/<code>sprintf</code> to prevent buffer
+            overflows.
+          </div>
+        </section>
 
-            <!-- Structs & Unions -->
-            <section id="structs">
-                <h2>Structs & Unions</h2>
+        <!-- Structs & Unions -->
+        <section id="structs">
+          <h2>Structs & Unions</h2>
 
-                <h3>Structs</h3>
-                <pre data-lang="c"><span class="cmt">// Define struct</span>
+          <h3>Structs</h3>
+          <pre data-lang="c"><span class="cmt">// Define struct</span>
 <span class="kw">struct</span> <span class="type">Point</span> {
     <span class="type">int</span> x;
     <span class="type">int</span> y;
@@ -516,8 +565,8 @@ p1.y = <span class="num">20</span>;
 
 <span class="type">Person</span> alice = {<span class="str">"Alice"</span>, <span class="num">30</span>};</pre>
 
-                <h3>Struct Pointers</h3>
-                <pre data-lang="c"><span class="type">Person</span> *ptr = &amp;alice;
+          <h3>Struct Pointers</h3>
+          <pre data-lang="c"><span class="type">Person</span> *ptr = &amp;alice;
 
 <span class="cmt">// Access via pointer</span>
 (*ptr).age = <span class="num">31</span>;    <span class="cmt">// dereference then access</span>
@@ -529,8 +578,10 @@ p-&gt;age = <span class="num">25</span>;
 <span class="fn">strcpy</span>(p-&gt;name, <span class="str">"Bob"</span>);
 <span class="fn">free</span>(p);</pre>
 
-                <h3>Nested Structs</h3>
-                <pre data-lang="c"><span class="kw">typedef</span> <span class="kw">struct</span> {
+          <h3>Nested Structs</h3>
+          <pre
+            data-lang="c"
+          ><span class="kw">typedef</span> <span class="kw">struct</span> {
     <span class="type">int</span> x, y;
 } <span class="type">Point</span>;
 
@@ -542,8 +593,10 @@ p-&gt;age = <span class="num">25</span>;
 <span class="type">Rectangle</span> rect = {{<span class="num">0</span>, <span class="num">0</span>}, {<span class="num">100</span>, <span class="num">50</span>}};
 rect.top_left.x = <span class="num">10</span>;</pre>
 
-                <h3>Unions</h3>
-                <pre data-lang="c"><span class="cmt">// All members share same memory location</span>
+          <h3>Unions</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// All members share same memory location</span>
 <span class="kw">union</span> <span class="type">Data</span> {
     <span class="type">int</span> i;
     <span class="type">float</span> f;
@@ -557,8 +610,10 @@ data.f = <span class="num">3.14</span>;      <span class="cmt">// now contains f
 <span class="cmt">// Size = size of largest member</span>
 <span class="fn">printf</span>(<span class="str">"%zu\n"</span>, <span class="kw">sizeof</span>(<span class="kw">union</span> <span class="type">Data</span>));  <span class="cmt">// 20</span></pre>
 
-                <h3>Tagged Unions</h3>
-                <pre data-lang="c"><span class="cmt">// Common pattern: struct with enum tag + union</span>
+          <h3>Tagged Unions</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Common pattern: struct with enum tag + union</span>
 <span class="kw">typedef</span> <span class="kw">enum</span> { INT, FLOAT, STRING } <span class="type">DataType</span>;
 
 <span class="kw">typedef</span> <span class="kw">struct</span> {
@@ -572,8 +627,8 @@ data.f = <span class="num">3.14</span>;      <span class="cmt">// now contains f
 
 <span class="type">Variant</span> v = {.type = INT, .value.i = <span class="num">42</span>};</pre>
 
-                <h3>Enums</h3>
-                <pre data-lang="c"><span class="cmt">// Define enumeration</span>
+          <h3>Enums</h3>
+          <pre data-lang="c"><span class="cmt">// Define enumeration</span>
 <span class="kw">enum</span> <span class="type">Color</span> { RED, GREEN, BLUE };        <span class="cmt">// 0, 1, 2</span>
 <span class="kw">enum</span> <span class="type">Status</span> { OK = <span class="num">0</span>, ERROR = -<span class="num">1</span> };    <span class="cmt">// explicit values</span>
 
@@ -586,15 +641,20 @@ data.f = <span class="num">3.14</span>;      <span class="cmt">// now contains f
     WEDNESDAY,  <span class="cmt">// 3</span>
     <span class="cmt">// ...</span>
 } <span class="type">Day</span>;</pre>
-            </section>
+        </section>
 
-            <!-- Memory Management -->
-            <section id="memory">
-                <h2>Memory Management</h2>
-                <p>C requires manual memory management. You must explicitly allocate and free heap memory.</p>
+        <!-- Memory Management -->
+        <section id="memory">
+          <h2>Memory Management</h2>
+          <p>
+            C requires manual memory management. You must explicitly allocate
+            and free heap memory.
+          </p>
 
-                <h3>Stack vs Heap</h3>
-                <pre data-lang="c"><span class="cmt">// Stack allocation (automatic, fast, limited size)</span>
+          <h3>Stack vs Heap</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Stack allocation (automatic, fast, limited size)</span>
 <span class="type">int</span> x = <span class="num">42</span>;                  <span class="cmt">// freed when scope ends</span>
 <span class="type">int</span> arr[<span class="num">100</span>];               <span class="cmt">// fixed size at compile time</span>
 
@@ -603,8 +663,10 @@ data.f = <span class="num">3.14</span>;      <span class="cmt">// now contains f
 *ptr = <span class="num">42</span>;
 <span class="fn">free</span>(ptr);                  <span class="cmt">// must free when done!</span></pre>
 
-                <h3>Memory Functions (stdlib.h)</h3>
-                <pre data-lang="c"><span class="pp">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+          <h3>Memory Functions (stdlib.h)</h3>
+          <pre
+            data-lang="c"
+          ><span class="pp">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
 
 <span class="cmt">// malloc: allocate uninitialized memory</span>
 <span class="type">int</span> *arr = <span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="type">int</span>));
@@ -622,8 +684,10 @@ arr = <span class="fn">realloc</span>(arr, new_size * <span class="kw">sizeof</s
 <span class="fn">free</span>(arr);
 arr = <span class="builtin">NULL</span>;  <span class="cmt">// good practice: avoid dangling pointer</span></pre>
 
-                <h3>Memory Operations (string.h)</h3>
-                <pre data-lang="c"><span class="pp">#include</span> <span class="str">&lt;string.h&gt;</span>
+          <h3>Memory Operations (string.h)</h3>
+          <pre
+            data-lang="c"
+          ><span class="pp">#include</span> <span class="str">&lt;string.h&gt;</span>
 
 <span class="cmt">// Copy memory</span>
 <span class="fn">memcpy</span>(dest, src, n);       <span class="cmt">// copy n bytes (no overlap)</span>
@@ -636,8 +700,10 @@ arr = <span class="builtin">NULL</span>;  <span class="cmt">// good practice: av
 <span class="cmt">// Compare memory</span>
 <span class="type">int</span> result = <span class="fn">memcmp</span>(a, b, n);  <span class="cmt">// 0 if equal</span></pre>
 
-                <h3>Common Pitfalls</h3>
-                <pre data-lang="c"><span class="cmt">// Memory leak: forgetting to free</span>
+          <h3>Common Pitfalls</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Memory leak: forgetting to free</span>
 <span class="type">void</span> <span class="fn">leak</span>() {
     <span class="type">int</span> *p = <span class="fn">malloc</span>(<span class="num">100</span>);
     <span class="cmt">// forgot free(p) - memory leaked!</span>
@@ -655,22 +721,30 @@ arr = <span class="builtin">NULL</span>;  <span class="cmt">// good practice: av
 <span class="type">char</span> buf[<span class="num">10</span>];
 <span class="fn">strcpy</span>(buf, <span class="str">"this is way too long"</span>);  <span class="cmt">// overflow!</span></pre>
 
-                <div class="tip">
-                    Use tools like Valgrind or AddressSanitizer (<code>-fsanitize=address</code>) to detect memory errors.
-                </div>
-            </section>
+          <div class="tip">
+            Use tools like Valgrind or AddressSanitizer
+            (<code>-fsanitize=address</code>) to detect memory errors.
+          </div>
+        </section>
 
-            <!-- Preprocessor -->
-            <section id="preprocessor">
-                <h2>Preprocessor</h2>
-                <p>The C preprocessor runs before compilation, handling includes, macros, and conditional compilation.</p>
+        <!-- Preprocessor -->
+        <section id="preprocessor">
+          <h2>Preprocessor</h2>
+          <p>
+            The C preprocessor runs before compilation, handling includes,
+            macros, and conditional compilation.
+          </p>
 
-                <h3>Include Directives</h3>
-                <pre data-lang="c"><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>      <span class="cmt">// system header (search system paths)</span>
+          <h3>Include Directives</h3>
+          <pre
+            data-lang="c"
+          ><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>      <span class="cmt">// system header (search system paths)</span>
 <span class="pp">#include</span> <span class="str">"myheader.h"</span>   <span class="cmt">// local header (search current dir first)</span></pre>
 
-                <h3>Macros</h3>
-                <pre data-lang="c"><span class="cmt">// Object-like macros (constants)</span>
+          <h3>Macros</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Object-like macros (constants)</span>
 <span class="pp">#define</span> PI <span class="num">3.14159</span>
 <span class="pp">#define</span> MAX_SIZE <span class="num">1024</span>
 
@@ -696,8 +770,8 @@ arr = <span class="builtin">NULL</span>;  <span class="cmt">// good practice: av
 <span class="pp">#define</span> <span class="fn">CONCAT</span>(a, b) a##b
 <span class="type">int</span> <span class="fn">CONCAT</span>(my, var) = <span class="num">10</span>;   <span class="cmt">// creates: int myvar = 10;</span></pre>
 
-                <h3>Conditional Compilation</h3>
-                <pre data-lang="c"><span class="cmt">// Check if defined</span>
+          <h3>Conditional Compilation</h3>
+          <pre data-lang="c"><span class="cmt">// Check if defined</span>
 <span class="pp">#ifdef</span> DEBUG
     <span class="fn">printf</span>(<span class="str">"Debug mode\n"</span>);
 <span class="pp">#endif</span>
@@ -721,8 +795,10 @@ arr = <span class="builtin">NULL</span>;  <span class="cmt">// good practice: av
     <span class="cmt">// ...</span>
 <span class="pp">#endif</span></pre>
 
-                <h3>Predefined Macros</h3>
-                <pre data-lang="c">__FILE__     <span class="cmt">// current filename</span>
+          <h3>Predefined Macros</h3>
+          <pre
+            data-lang="c"
+          >__FILE__     <span class="cmt">// current filename</span>
 __LINE__     <span class="cmt">// current line number</span>
 __DATE__     <span class="cmt">// compilation date</span>
 __TIME__     <span class="cmt">// compilation time</span>
@@ -731,19 +807,23 @@ __func__     <span class="cmt">// current function name (C99)</span>
 <span class="cmt">// Common debug macro</span>
 <span class="pp">#define</span> <span class="fn">LOG</span>(msg) <span class="fn">printf</span>(<span class="str">"[%s:%d] %s\n"</span>, __FILE__, __LINE__, msg)</pre>
 
-                <h3>Pragma</h3>
-                <pre data-lang="c"><span class="cmt">// Compiler-specific directives</span>
+          <h3>Pragma</h3>
+          <pre
+            data-lang="c"
+          ><span class="cmt">// Compiler-specific directives</span>
 <span class="pp">#pragma</span> once           <span class="cmt">// include guard (non-standard but widely supported)</span>
 <span class="pp">#pragma</span> pack(push, <span class="num">1</span>)  <span class="cmt">// pack struct with no padding</span>
 <span class="pp">#pragma</span> pack(pop)</pre>
-            </section>
+        </section>
 
-            <!-- File I/O -->
-            <section id="io">
-                <h2>Input/Output</h2>
+        <!-- File I/O -->
+        <section id="io">
+          <h2>Input/Output</h2>
 
-                <h3>Standard I/O</h3>
-                <pre data-lang="c"><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+          <h3>Standard I/O</h3>
+          <pre
+            data-lang="c"
+          ><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
 
 <span class="cmt">// Output</span>
 <span class="fn">printf</span>(<span class="str">"Hello %s, you are %d years old\n"</span>, name, age);
@@ -759,86 +839,88 @@ __func__     <span class="cmt">// current function name (C99)</span>
 
 <span class="type">int</span> c = <span class="fn">getchar</span>();       <span class="cmt">// single character</span></pre>
 
-                <h3>Format Specifiers</h3>
-                <div class="table-wrapper">
-                    <table>
-                        <tr>
-                            <th>Specifier</th>
-                            <th>Type</th>
-                            <th>Example</th>
-                        </tr>
-                        <tr>
-                            <td><code>%d, %i</code></td>
-                            <td>signed int</td>
-                            <td>-42</td>
-                        </tr>
-                        <tr>
-                            <td><code>%u</code></td>
-                            <td>unsigned int</td>
-                            <td>42</td>
-                        </tr>
-                        <tr>
-                            <td><code>%ld, %lu</code></td>
-                            <td>long</td>
-                            <td>123456789</td>
-                        </tr>
-                        <tr>
-                            <td><code>%lld, %llu</code></td>
-                            <td>long long</td>
-                            <td>large numbers</td>
-                        </tr>
-                        <tr>
-                            <td><code>%f</code></td>
-                            <td>float/double</td>
-                            <td>3.140000</td>
-                        </tr>
-                        <tr>
-                            <td><code>%e</code></td>
-                            <td>scientific</td>
-                            <td>3.14e+00</td>
-                        </tr>
-                        <tr>
-                            <td><code>%c</code></td>
-                            <td>char</td>
-                            <td>A</td>
-                        </tr>
-                        <tr>
-                            <td><code>%s</code></td>
-                            <td>string</td>
-                            <td>hello</td>
-                        </tr>
-                        <tr>
-                            <td><code>%p</code></td>
-                            <td>pointer</td>
-                            <td>0x7fff...</td>
-                        </tr>
-                        <tr>
-                            <td><code>%x, %X</code></td>
-                            <td>hex</td>
-                            <td>ff, FF</td>
-                        </tr>
-                        <tr>
-                            <td><code>%zu</code></td>
-                            <td>size_t</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td><code>%%</code></td>
-                            <td>literal %</td>
-                            <td>%</td>
-                        </tr>
-                    </table>
-                </div>
+          <h3>Format Specifiers</h3>
+          <div class="table-wrapper">
+            <table>
+              <tr>
+                <th>Specifier</th>
+                <th>Type</th>
+                <th>Example</th>
+              </tr>
+              <tr>
+                <td><code>%d, %i</code></td>
+                <td>signed int</td>
+                <td>-42</td>
+              </tr>
+              <tr>
+                <td><code>%u</code></td>
+                <td>unsigned int</td>
+                <td>42</td>
+              </tr>
+              <tr>
+                <td><code>%ld, %lu</code></td>
+                <td>long</td>
+                <td>123456789</td>
+              </tr>
+              <tr>
+                <td><code>%lld, %llu</code></td>
+                <td>long long</td>
+                <td>large numbers</td>
+              </tr>
+              <tr>
+                <td><code>%f</code></td>
+                <td>float/double</td>
+                <td>3.140000</td>
+              </tr>
+              <tr>
+                <td><code>%e</code></td>
+                <td>scientific</td>
+                <td>3.14e+00</td>
+              </tr>
+              <tr>
+                <td><code>%c</code></td>
+                <td>char</td>
+                <td>A</td>
+              </tr>
+              <tr>
+                <td><code>%s</code></td>
+                <td>string</td>
+                <td>hello</td>
+              </tr>
+              <tr>
+                <td><code>%p</code></td>
+                <td>pointer</td>
+                <td>0x7fff...</td>
+              </tr>
+              <tr>
+                <td><code>%x, %X</code></td>
+                <td>hex</td>
+                <td>ff, FF</td>
+              </tr>
+              <tr>
+                <td><code>%zu</code></td>
+                <td>size_t</td>
+                <td>100</td>
+              </tr>
+              <tr>
+                <td><code>%%</code></td>
+                <td>literal %</td>
+                <td>%</td>
+              </tr>
+            </table>
+          </div>
 
-                <h3>Format Modifiers</h3>
-                <pre data-lang="c"><span class="fn">printf</span>(<span class="str">"%10d"</span>, <span class="num">42</span>);      <span class="cmt">// width 10, right-aligned</span>
+          <h3>Format Modifiers</h3>
+          <pre
+            data-lang="c"
+          ><span class="fn">printf</span>(<span class="str">"%10d"</span>, <span class="num">42</span>);      <span class="cmt">// width 10, right-aligned</span>
 <span class="fn">printf</span>(<span class="str">"%-10d"</span>, <span class="num">42</span>);     <span class="cmt">// width 10, left-aligned</span>
 <span class="fn">printf</span>(<span class="str">"%010d"</span>, <span class="num">42</span>);     <span class="cmt">// zero-padded</span>
 <span class="fn">printf</span>(<span class="str">"%.2f"</span>, <span class="num">3.14159</span>); <span class="cmt">// 2 decimal places: 3.14</span>
 <span class="fn">printf</span>(<span class="str">"%8.2f"</span>, <span class="num">3.14</span>);   <span class="cmt">// width 8, 2 decimals</span></pre>
 
-                <h3>File I/O</h3>
-                <pre data-lang="c"><span class="type">FILE</span> *fp;
+          <h3>File I/O</h3>
+          <pre data-lang="c"><span class="type">FILE</span> *fp;
 
 <span class="cmt">// Open file</span>
 fp = <span class="fn">fopen</span>(<span class="str">"file.txt"</span>, <span class="str">"r"</span>);   <span class="cmt">// read</span>
@@ -874,8 +956,10 @@ fp = <span class="fn">fopen</span>(<span class="str">"file.bin"</span>, <span cl
 <span class="cmt">// Close</span>
 <span class="fn">fclose</span>(fp);</pre>
 
-                <h3>Error Handling</h3>
-                <pre data-lang="c"><span class="kw">if</span> (<span class="fn">ferror</span>(fp)) {
+          <h3>Error Handling</h3>
+          <pre
+            data-lang="c"
+          ><span class="kw">if</span> (<span class="fn">ferror</span>(fp)) {
     <span class="fn">perror</span>(<span class="str">"File error"</span>);
     <span class="fn">clearerr</span>(fp);
 }
@@ -883,14 +967,14 @@ fp = <span class="fn">fopen</span>(<span class="str">"file.bin"</span>, <span cl
 <span class="kw">if</span> (<span class="fn">feof</span>(fp)) {
     <span class="fn">printf</span>(<span class="str">"End of file reached\n"</span>);
 }</pre>
-            </section>
+        </section>
 
-            <!-- Compilation -->
-            <section id="compile">
-                <h2>Compilation</h2>
+        <!-- Compilation -->
+        <section id="compile">
+          <h2>Compilation</h2>
 
-                <h3>GCC/Clang Basics</h3>
-                <pre data-lang="shell"><span class="cmt"># Compile and link</span>
+          <h3>GCC/Clang Basics</h3>
+          <pre data-lang="shell"><span class="cmt"># Compile and link</span>
 gcc main.c -o program
 ./program
 
@@ -925,8 +1009,8 @@ gcc -I./include main.c -o program
 gcc main.c -lm -o program   <span class="cmt"># link math library</span>
 gcc main.c -L./lib -lmylib -o program</pre>
 
-                <h3>Header Files</h3>
-                <pre data-lang="c"><span class="cmt">// myheader.h</span>
+          <h3>Header Files</h3>
+          <pre data-lang="c"><span class="cmt">// myheader.h</span>
 <span class="pp">#ifndef</span> MYHEADER_H
 <span class="pp">#define</span> MYHEADER_H
 
@@ -949,8 +1033,9 @@ gcc main.c -L./lib -lmylib -o program</pre>
     <span class="cmt">// implementation</span>
 }</pre>
 
-                <h3>Simple Makefile</h3>
-                <pre data-lang="makefile">CC = gcc
+          <h3>Simple Makefile</h3>
+          <pre data-lang="makefile">
+CC = gcc
 CFLAGS = -Wall -Wextra -std=c17 -g
 LDFLAGS = -lm
 
@@ -967,48 +1052,55 @@ $(TARGET): $(OBJS)
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-.PHONY: clean</pre>
+.PHONY: clean</pre
+          >
 
-                <h3>Useful Compiler Flags</h3>
-                <dl class="concept-list">
-                    <div class="concept">
-                        <dt>-Wall</dt>
-                        <dd>Enable common warnings</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>-Wextra</dt>
-                        <dd>Enable extra warnings</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>-Werror</dt>
-                        <dd>Treat warnings as errors</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>-pedantic</dt>
-                        <dd>Strict ISO C compliance</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>-fsanitize=address</dt>
-                        <dd>Enable AddressSanitizer</dd>
-                    </div>
-                    <div class="concept">
-                        <dt>-fsanitize=undefined</dt>
-                        <dd>Catch undefined behavior</dd>
-                    </div>
-                </dl>
-            </section>
-        </div>
+          <h3>Useful Compiler Flags</h3>
+          <dl class="concept-list">
+            <div class="concept">
+              <dt>-Wall</dt>
+              <dd>Enable common warnings</dd>
+            </div>
+            <div class="concept">
+              <dt>-Wextra</dt>
+              <dd>Enable extra warnings</dd>
+            </div>
+            <div class="concept">
+              <dt>-Werror</dt>
+              <dd>Treat warnings as errors</dd>
+            </div>
+            <div class="concept">
+              <dt>-pedantic</dt>
+              <dd>Strict ISO C compliance</dd>
+            </div>
+            <div class="concept">
+              <dt>-fsanitize=address</dt>
+              <dd>Enable AddressSanitizer</dd>
+            </div>
+            <div class="concept">
+              <dt>-fsanitize=undefined</dt>
+              <dd>Catch undefined behavior</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
     </main>
 
     <footer>
-        <div class="container">
-            <p>
-                C TLDR — Last updated December 2025 for C23<br>
-                <a href="https://en.cppreference.com/w/c" target="_blank">C Reference</a> ·
-                <a href="https://www.gnu.org/software/gnu-c-manual/" target="_blank">GNU C Manual</a> ·
-                <a href="https://gcc.gnu.org/onlinedocs/" target="_blank">GCC Docs</a>
-            </p>
-        </div>
+      <div class="container">
+        <p>
+          C TLDR — Last updated December 2025 for C23<br />
+          <a href="https://en.cppreference.com/w/c" target="_blank"
+            >C Reference</a
+          >
+          ·
+          <a href="https://www.gnu.org/software/gnu-c-manual/" target="_blank"
+            >GNU C Manual</a
+          >
+          ·
+          <a href="https://gcc.gnu.org/onlinedocs/" target="_blank">GCC Docs</a>
+        </p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>

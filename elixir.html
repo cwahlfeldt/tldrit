@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elixir TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Elixir theme */
+        :root {
+            --accent: #9b59b6;
+            --accent-glow: rgba(155, 89, 182, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 50%;
+        }
+
+        .card h4::before {
+            content: '💧';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">Ex</div>
+            </div>
+            <h1>Elixir <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Elixir programming language. Everything you need to know, distilled.</p>
+            <div class="version-badge">v1.19.4 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is Elixir?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#pattern">Pattern Matching</a></li>
+                <li><a href="#control">Control Flow</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#processes">Processes</a></li>
+                <li><a href="#genserver">GenServer</a></li>
+                <li><a href="#otp">OTP</a></li>
+                <li><a href="#mix">Mix</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Elixir? -->
+            <section id="what">
+                <h2>What is Elixir?</h2>
+                <p>Elixir is a dynamic, functional language designed for building scalable and maintainable applications. It runs on the Erlang VM (BEAM), known for running low-latency, distributed, and fault-tolerant systems.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Functional</h4>
+                        <p>Immutable data, first-class functions, and pattern matching. Code that's easy to reason about.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Concurrent</h4>
+                        <p>Lightweight processes, message passing, and the actor model. Scale to millions of connections.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fault-Tolerant</h4>
+                        <p>Supervisors and "let it crash" philosophy. Build systems that self-heal from failures.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Extensible</h4>
+                        <p>Powerful macros and DSLs. Elixir is written in Elixir. Build tools like Phoenix and Ecto.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="elixir"><span class="cmt"># hello.exs</span>
+<span class="type">IO</span>.<span class="fn">puts</span>(<span class="str">"Hello, World!"</span>)
+
+<span class="cmt"># Run with: elixir hello.exs</span></pre>
+
+                <h3>Interactive Shell (IEx)</h3>
+                <pre data-lang="shell"><span class="cmt"># Start interactive Elixir</span>
+iex
+
+<span class="cmt"># Start with your project</span>
+iex -S mix
+
+<span class="cmt"># Compile and run</span>
+elixir script.exs</pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="elixir"><span class="cmt"># Variables are immutable (rebinding creates new value)</span>
+x = <span class="num">1</span>
+x = <span class="num">2</span>          <span class="cmt"># rebinding, not mutation</span>
+
+<span class="cmt"># Naming conventions</span>
+snake_case = <span class="str">"variables and functions"</span>
+<span class="type">PascalCase</span>  <span class="cmt"># modules only</span>
+_unused     <span class="cmt"># underscore prefix for unused vars</span>
+
+<span class="cmt"># Pin operator - match against existing value</span>
+x = <span class="num">1</span>
+<span class="op">^</span>x = <span class="num">1</span>       <span class="cmt"># matches (x is still 1)</span>
+<span class="op">^</span>x = <span class="num">2</span>       <span class="cmt"># raises MatchError</span></pre>
+
+                <h3>Comments</h3>
+                <pre data-lang="elixir"><span class="cmt"># Single line comment</span>
+
+<span class="cmt"># No multi-line comments</span>
+<span class="cmt"># Just use multiple single-line comments</span></pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Data Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Example</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>Integer</td>
+                            <td><code>42, 1_000_000, 0xFF</code></td>
+                            <td>Arbitrary precision</td>
+                        </tr>
+                        <tr>
+                            <td>Float</td>
+                            <td><code>3.14, 1.0e-10</code></td>
+                            <td>64-bit double precision</td>
+                        </tr>
+                        <tr>
+                            <td>Boolean</td>
+                            <td><code>true, false</code></td>
+                            <td>Actually atoms</td>
+                        </tr>
+                        <tr>
+                            <td>Atom</td>
+                            <td><code>:ok, :error, nil</code></td>
+                            <td>Named constants</td>
+                        </tr>
+                        <tr>
+                            <td>String</td>
+                            <td><code>"hello"</code></td>
+                            <td>UTF-8 encoded binary</td>
+                        </tr>
+                        <tr>
+                            <td>Charlist</td>
+                            <td><code>'hello'</code></td>
+                            <td>List of code points</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Atoms</h3>
+                <pre data-lang="elixir"><span class="cmt"># Atoms are constants whose value is their name</span>
+<span class="atom">:ok</span>
+<span class="atom">:error</span>
+<span class="atom">:hello_world</span>
+
+<span class="cmt"># Module names are atoms</span>
+<span class="type">Enum</span> == <span class="atom">:"Elixir.Enum"</span>  <span class="cmt"># true</span>
+
+<span class="cmt"># nil, true, false are atoms</span>
+<span class="kw">nil</span> == <span class="atom">:nil</span>    <span class="cmt"># true</span>
+<span class="kw">true</span> == <span class="atom">:true</span>  <span class="cmt"># true</span></pre>
+
+                <h3>Strings</h3>
+                <pre data-lang="elixir"><span class="cmt"># Double-quoted strings (binaries)</span>
+name = <span class="str">"world"</span>
+<span class="str">"Hello, </span><span class="op">#{</span>name<span class="op">}</span><span class="str">!"</span>  <span class="cmt"># interpolation</span>
+
+<span class="cmt"># Multi-line strings (heredoc)</span>
+<span class="str">"""
+Multi-line
+string
+"""</span>
+
+<span class="cmt"># String functions</span>
+<span class="type">String</span>.<span class="fn">length</span>(<span class="str">"hello"</span>)           <span class="cmt"># 5</span>
+<span class="type">String</span>.<span class="fn">upcase</span>(<span class="str">"hello"</span>)            <span class="cmt"># "HELLO"</span>
+<span class="type">String</span>.<span class="fn">split</span>(<span class="str">"a,b,c"</span>, <span class="str">","</span>)        <span class="cmt"># ["a", "b", "c"]</span>
+<span class="type">String</span>.<span class="fn">replace</span>(<span class="str">"hello"</span>, <span class="str">"l"</span>, <span class="str">"r"</span>) <span class="cmt"># "herro"</span>
+<span class="str">"hello"</span> <span class="op"><></span> <span class="str">" world"</span>              <span class="cmt"># "hello world"</span></pre>
+
+                <h3>Collections</h3>
+                <pre data-lang="elixir"><span class="cmt"># List (linked list)</span>
+list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+[<span class="num">0</span> | list]          <span class="cmt"># [0, 1, 2, 3] - prepend</span>
+[head | tail] = list  <span class="cmt"># head = 1, tail = [2, 3]</span>
+
+<span class="cmt"># Tuple (fixed size, contiguous memory)</span>
+tuple = {<span class="atom">:ok</span>, <span class="str">"value"</span>}
+<span class="fn">elem</span>(tuple, <span class="num">1</span>)       <span class="cmt"># "value"</span>
+
+<span class="cmt"># Map (key-value store)</span>
+map = %{<span class="str">"name"</span> => <span class="str">"Alice"</span>, <span class="str">"age"</span> => <span class="num">30</span|}
+map[<span class="str">"name"</span>]         <span class="cmt"># "Alice"</span>
+
+<span class="cmt"># Map with atom keys (shorthand)</span>
+map = %{<span class="atom">name:</span> <span class="str">"Alice"</span>, <span class="atom">age:</span> <span class="num">30</span>}
+map.<span class="fn">name</span>             <span class="cmt"># "Alice"</span>
+map[<span class="atom">:name</span>]          <span class="cmt"># "Alice"</span>
+
+<span class="cmt"># Keyword list (ordered, duplicate keys allowed)</span>
+opts = [<span class="atom">name:</span> <span class="str">"Alice"</span>, <span class="atom">age:</span> <span class="num">30</span>]
+opts[<span class="atom">:name</span>]          <span class="cmt"># "Alice"</span></pre>
+
+                <h3>Range</h3>
+                <pre data-lang="elixir"><span class="cmt"># Inclusive range</span>
+<span class="num">1</span>..<span class="num">5</span>     <span class="cmt"># 1, 2, 3, 4, 5</span>
+
+<span class="cmt"># Exclusive range</span>
+<span class="num">1</span>...<span class="num">5</span>    <span class="cmt"># 1, 2, 3, 4 (excludes 5)</span>
+
+<span class="cmt"># Descending range</span>
+<span class="num">5</span>..<span class="num">1</span>//<span class="num">-1</span>  <span class="cmt"># 5, 4, 3, 2, 1</span></pre>
+
+                <h3>Sigils</h3>
+                <pre data-lang="elixir"><span class="cmt"># String</span>
+<span class="op">~s</span>(Hello "world")   <span class="cmt"># "Hello \"world\""</span>
+<span class="op">~S</span>(No \n escapes)   <span class="cmt"># "No \\n escapes"</span>
+
+<span class="cmt"># Charlist</span>
+<span class="op">~c</span>(hello)           <span class="cmt"># 'hello'</span>
+
+<span class="cmt"># Word list</span>
+<span class="op">~w</span>(foo bar baz)     <span class="cmt"># ["foo", "bar", "baz"]</span>
+<span class="op">~w</span>(foo bar baz)<span class="atom">a</span>    <span class="cmt"># [:foo, :bar, :baz]</span>
+
+<span class="cmt"># Regex</span>
+<span class="op">~r</span>/hello/i          <span class="cmt"># case-insensitive regex</span>
+<span class="type">Regex</span>.<span class="fn">match?</span>(<span class="op">~r</span>/foo/, <span class="str">"foobar"</span>)  <span class="cmt"># true</span></pre>
+            </section>
+
+            <!-- Pattern Matching -->
+            <section id="pattern">
+                <h2>Pattern Matching</h2>
+                <p>The <code>=</code> operator is the match operator, not just assignment. It tries to make the left side match the right side.</p>
+
+                <h3>Basic Matching</h3>
+                <pre data-lang="elixir"><span class="cmt"># Simple binding</span>
+x = <span class="num">1</span>                <span class="cmt"># x = 1</span>
+<span class="num">1</span> = x                <span class="cmt"># matches! (x is 1)</span>
+<span class="num">2</span> = x                <span class="cmt"># MatchError!</span>
+
+<span class="cmt"># Destructuring tuples</span>
+{<span class="atom">:ok</span>, result} = {<span class="atom">:ok</span>, <span class="num">42</span|}
+result               <span class="cmt"># 42</span>
+
+<span class="cmt"># Destructuring lists</span>
+[head | tail] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+head                 <span class="cmt"># 1</span>
+tail                 <span class="cmt"># [2, 3]</span>
+
+[a, b, c] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+[a, _, c] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]  <span class="cmt"># ignore middle element</span></pre>
+
+                <h3>Map Matching</h3>
+                <pre data-lang="elixir"><span class="cmt"># Extract values from map</span>
+%{<span class="atom">name:</span> name} = %{<span class="atom">name:</span> <span class="str">"Alice"</span>, <span class="atom">age:</span> <span class="num">30</span>}
+name                 <span class="cmt"># "Alice"</span>
+
+<span class="cmt"># Match partial structure</span>
+%{<span class="atom">age:</span> age} = %{<span class="atom">name:</span> <span class="str">"Alice"</span>, <span class="atom">age:</span> <span class="num">30</span>}
+age                  <span class="cmt"># 30</span></pre>
+
+                <h3>Pin Operator</h3>
+                <pre data-lang="elixir">x = <span class="num">1</span>
+
+<span class="cmt"># Without pin: rebinds x</span>
+{x, y} = {<span class="num">2</span>, <span class="num">3</span>}     <span class="cmt"># x = 2, y = 3</span>
+
+x = <span class="num">1</span>
+<span class="cmt"># With pin: matches against x's value</span>
+{<span class="op">^</span>x, y} = {<span class="num">1</span>, <span class="num">3</span>}    <span class="cmt"># matches! y = 3</span>
+{<span class="op">^</span>x, y} = {<span class="num">2</span>, <span class="num">3</span>}    <span class="cmt"># MatchError! (x is 1, not 2)</span></pre>
+
+                <h3>Function Clause Matching</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">Math</span> <span class="kw">do</span>
+  <span class="kw">def</span> <span class="fn">zero?</span>(<span class="num">0</span>), <span class="kw">do:</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">zero?</span>(_), <span class="kw">do:</span> <span class="kw">false</span>
+<span class="kw">end</span>
+
+<span class="type">Math</span>.<span class="fn">zero?</span>(<span class="num">0</span>)   <span class="cmt"># true</span>
+<span class="type">Math</span>.<span class="fn">zero?</span>(<span class="num">1</span>)   <span class="cmt"># false</span></pre>
+
+                <div class="tip">
+                    Pattern matching is pervasive in Elixir. Use it in function heads, case expressions, with statements, and receive blocks.
+                </div>
+            </section>
+
+            <!-- Control Flow -->
+            <section id="control">
+                <h2>Control Flow</h2>
+
+                <h3>if / unless</h3>
+                <pre data-lang="elixir"><span class="cmt"># if expression</span>
+<span class="kw">if</span> condition <span class="kw">do</span>
+  <span class="str">"truthy"</span>
+<span class="kw">else</span>
+  <span class="str">"falsy"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># One-liner</span>
+<span class="kw">if</span> condition, <span class="kw">do:</span> <span class="str">"yes"</span>, <span class="kw">else:</span> <span class="str">"no"</span>
+
+<span class="cmt"># unless (negated if)</span>
+<span class="kw">unless</span> condition, <span class="kw">do:</span> <span class="str">"falsy"</span></pre>
+
+                <h3>case</h3>
+                <pre data-lang="elixir"><span class="kw">case</span> value <span class="kw">do</span>
+  {<span class="atom">:ok</span>, result} ->
+    <span class="str">"Success: </span><span class="op">#{</span>result<span class="op">}</span><span class="str">"</span>
+  {<span class="atom">:error</span>, reason} ->
+    <span class="str">"Error: </span><span class="op">#{</span>reason<span class="op">}</span><span class="str">"</span>
+  _ ->
+    <span class="str">"Unknown"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># With guards</span>
+<span class="kw">case</span> x <span class="kw">do</span>
+  n <span class="kw">when</span> n < <span class="num">0</span> -> <span class="str">"negative"</span>
+  n <span class="kw">when</span> n > <span class="num">0</span> -> <span class="str">"positive"</span>
+  _ -> <span class="str">"zero"</span>
+<span class="kw">end</span></pre>
+
+                <h3>cond</h3>
+                <pre data-lang="elixir"><span class="cmt"># Multiple conditions (like else-if)</span>
+<span class="kw">cond</span> <span class="kw">do</span>
+  x > <span class="num">10</span> -> <span class="str">"big"</span>
+  x > <span class="num">5</span>  -> <span class="str">"medium"</span>
+  <span class="kw">true</span>   -> <span class="str">"small"</span>  <span class="cmt"># default case</span>
+<span class="kw">end</span></pre>
+
+                <h3>with</h3>
+                <pre data-lang="elixir"><span class="cmt"># Chain pattern matches (happy path)</span>
+<span class="kw">with</span> {<span class="atom">:ok</span>, user} <- <span class="fn">fetch_user</span>(id),
+     {<span class="atom">:ok</span>, posts} <- <span class="fn">fetch_posts</span>(user),
+     {<span class="atom">:ok</span>, comments} <- <span class="fn">fetch_comments</span>(posts) <span class="kw">do</span>
+  <span class="cmt"># All matched successfully</span>
+  {<span class="atom">:ok</span>, %{<span class="atom">user:</span> user, <span class="atom">posts:</span> posts, <span class="atom">comments:</span> comments|}
+<span class="kw">else</span>
+  {<span class="atom">:error</span>, reason} -> {<span class="atom">:error</span>, reason}
+  _ -> {<span class="atom">:error</span>, <span class="atom">:unknown</span>}
+<span class="kw">end</span></pre>
+
+                <h3>for (Comprehensions)</h3>
+                <pre data-lang="elixir"><span class="cmt"># Basic list comprehension</span>
+<span class="kw">for</span> x <- [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="kw">do:</span> x * <span class="num">2</span>
+<span class="cmt"># [2, 4, 6]</span>
+
+<span class="cmt"># With filter</span>
+<span class="kw">for</span> x <- <span class="num">1</span>..<span class="num">10</span>, <span class="fn">rem</span>(x, <span class="num">2</span>) == <span class="num">0</span>, <span class="kw">do:</span> x
+<span class="cmt"># [2, 4, 6, 8, 10]</span>
+
+<span class="cmt"># Multiple generators (nested)</span>
+<span class="kw">for</span> x <- [<span class="num">1</span>, <span class="num">2</span>], y <- [<span class="atom">:a</span>, <span class="atom">:b</span>], <span class="kw">do:</span> {x, y}
+<span class="cmt"># [{1, :a}, {1, :b}, {2, :a}, {2, :b}]</span>
+
+<span class="cmt"># Into different collection</span>
+<span class="kw">for</span> {k, v} <- %{<span class="atom">a:</span> <span class="num">1</span>, <span class="atom">b:</span> <span class="num">2</span>}, <span class="kw">into:</span> %{}, <span class="kw">do:</span> {k, v * <span class="num">2</span>}
+<span class="cmt"># %{a: 2, b: 4}</span></pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Anonymous Functions</h3>
+                <pre data-lang="elixir"><span class="cmt"># Define with fn</span>
+add = <span class="kw">fn</span> a, b -> a + b <span class="kw">end</span>
+add.(<span class="num">1</span>, <span class="num">2</span>)  <span class="cmt"># 3 (note the dot)</span>
+
+<span class="cmt"># Shorthand capture syntax</span>
+add = &(&<span class="num">1</span> + &<span class="num">2</span>)
+add.(<span class="num">1</span>, <span class="num">2</span>)  <span class="cmt"># 3</span>
+
+<span class="cmt"># Multiple clauses</span>
+handle = <span class="kw">fn</span>
+  {<span class="atom">:ok</span>, result} -> <span class="str">"Success: </span><span class="op">#{</span>result<span class="op">}</span><span class="str">"</span>
+  {<span class="atom">:error</span>, msg} -> <span class="str">"Error: </span><span class="op">#{</span>msg<span class="op">}</span><span class="str">"</span>
+<span class="kw">end</span></pre>
+
+                <h3>Named Functions</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">Math</span> <span class="kw">do</span>
+  <span class="cmt"># Public function</span>
+  <span class="kw">def</span> <span class="fn">add</span>(a, b) <span class="kw">do</span>
+    a + b
+  <span class="kw">end</span>
+
+  <span class="cmt"># One-liner</span>
+  <span class="kw">def</span> <span class="fn">multiply</span>(a, b), <span class="kw">do:</span> a * b
+
+  <span class="cmt"># Private function</span>
+  <span class="kw">defp</span> <span class="fn">helper</span>(x), <span class="kw">do:</span> x * <span class="num">2</span>
+<span class="kw">end</span></pre>
+
+                <h3>Default Arguments</h3>
+                <pre data-lang="elixir"><span class="kw">def</span> <span class="fn">greet</span>(name, greeting \\ <span class="str">"Hello"</span>) <span class="kw">do</span>
+  <span class="str">"</span><span class="op">#{</span>greeting<span class="op">}</span><span class="str">, </span><span class="op">#{</span>name<span class="op">}</span><span class="str">!"</span>
+<span class="kw">end</span>
+
+<span class="fn">greet</span>(<span class="str">"Alice"</span>)          <span class="cmt"># "Hello, Alice!"</span>
+<span class="fn">greet</span>(<span class="str">"Alice"</span>, <span class="str">"Hi"</span>)   <span class="cmt"># "Hi, Alice!"</span></pre>
+
+                <h3>Guards</h3>
+                <pre data-lang="elixir"><span class="kw">def</span> <span class="fn">abs</span>(x) <span class="kw">when</span> x >= <span class="num">0</span>, <span class="kw">do:</span> x
+<span class="kw">def</span> <span class="fn">abs</span>(x) <span class="kw">when</span> x < <span class="num">0</span>, <span class="kw">do:</span> -x
+
+<span class="cmt"># Guard expressions</span>
+<span class="kw">when</span> <span class="fn">is_integer</span>(x)
+<span class="kw">when</span> <span class="fn">is_binary</span>(s)      <span class="cmt"># strings are binaries</span>
+<span class="kw">when</span> <span class="fn">is_list</span>(l)
+<span class="kw">when</span> <span class="fn">is_map</span>(m)
+<span class="kw">when</span> <span class="fn">is_atom</span>(a)
+<span class="kw">when</span> <span class="fn">is_nil</span>(x)
+<span class="kw">when</span> x <span class="kw">in</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+<span class="kw">when</span> x > <span class="num">0</span> <span class="kw">and</span> x < <span class="num">10</span></pre>
+
+                <h3>Pipe Operator</h3>
+                <pre data-lang="elixir"><span class="cmt"># Transform data through a pipeline</span>
+result =
+  data
+  |> <span class="fn">parse</span>()
+  |> <span class="type">Enum</span>.<span class="fn">filter</span>(&<span class="fn">valid?</span>/1)
+  |> <span class="type">Enum</span>.<span class="fn">map</span>(&<span class="fn">transform</span>/1)
+  |> <span class="type">Enum</span>.<span class="fn">sort</span>()
+
+<span class="cmt"># Pipes pass result as first argument</span>
+<span class="str">"hello"</span>
+|> <span class="type">String</span>.<span class="fn">upcase</span>()
+|> <span class="type">String</span>.<span class="fn">reverse</span>()
+<span class="cmt"># "OLLEH"</span></pre>
+
+                <h3>Function Capturing</h3>
+                <pre data-lang="elixir"><span class="cmt"># Capture named function</span>
+<span class="type">Enum</span>.<span class="fn">map</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], &<span class="type">Math</span>.<span class="fn">double</span>/1)
+
+<span class="cmt"># Capture with arity</span>
+add = &<span class="type">Kernel</span>.+/2
+add.(<span class="num">1</span>, <span class="num">2</span>)  <span class="cmt"># 3</span>
+
+<span class="cmt"># Create partial application</span>
+add_one = &(&<span class="num">1</span> + <span class="num">1</span>)
+add_one.(<span class="num">5</span>)  <span class="cmt"># 6</span></pre>
+            </section>
+
+            <!-- Modules -->
+            <section id="modules">
+                <h2>Modules & Structs</h2>
+
+                <h3>Defining Modules</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">MyApp.User</span> <span class="kw">do</span>
+  <span class="cmt"># Module attribute (compile-time constant)</span>
+  <span class="attr">@default_role</span> <span class="atom">:member</span>
+
+  <span class="kw">def</span> <span class="fn">new</span>(name) <span class="kw">do</span>
+    %{<span class="atom">name:</span> name, <span class="atom">role:</span> <span class="attr">@default_role</span>}
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <h3>Structs</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">User</span> <span class="kw">do</span>
+  <span class="cmt"># Define struct with defaults</span>
+  <span class="kw">defstruct</span> [<span class="atom">:name</span>, <span class="atom">:email</span>, <span class="atom">age:</span> <span class="num">0</span>, <span class="atom">active:</span> <span class="kw">true</span>]
+
+  <span class="cmt"># Enforce required keys</span>
+  <span class="attr">@enforce_keys</span> [<span class="atom">:name</span>, <span class="atom">:email</span>]
+<span class="kw">end</span>
+
+<span class="cmt"># Create struct</span>
+user = %<span class="type">User</span>{<span class="atom">name:</span> <span class="str">"Alice"</span>, <span class="atom">email:</span> <span class="str">"alice@example.com"</span>}
+
+<span class="cmt"># Access fields</span>
+user.<span class="fn">name</span>         <span class="cmt"># "Alice"</span>
+
+<span class="cmt"># Update struct</span>
+%{user | <span class="atom">age:</span> <span class="num">30</span|}
+
+<span class="cmt"># Pattern match on struct</span>
+%<span class="type">User</span>{<span class="atom">name:</span> name} = user</pre>
+
+                <h3>Protocols</h3>
+                <pre data-lang="elixir"><span class="cmt"># Define a protocol (interface)</span>
+<span class="kw">defprotocol</span> <span class="type">Displayable</span> <span class="kw">do</span>
+  <span class="kw">def</span> <span class="fn">display</span>(data)
+<span class="kw">end</span>
+
+<span class="cmt"># Implement for a type</span>
+<span class="kw">defimpl</span> <span class="type">Displayable</span>, <span class="kw">for:</span> <span class="type">User</span> <span class="kw">do</span>
+  <span class="kw">def</span> <span class="fn">display</span>(user) <span class="kw">do</span>
+    <span class="str">"User: </span><span class="op">#{</span>user.name<span class="op">}</span><span class="str">"</span>
+  <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Use protocol</span>
+<span class="type">Displayable</span>.<span class="fn">display</span>(user)</pre>
+
+                <h3>Behaviours</h3>
+                <pre data-lang="elixir"><span class="cmt"># Define a behaviour (interface for modules)</span>
+<span class="kw">defmodule</span> <span class="type">Parser</span> <span class="kw">do</span>
+  <span class="attr">@callback</span> <span class="fn">parse</span>(<span class="type">String</span>.t()) :: {<span class="atom">:ok</span>, <span class="fn">term</span>()} | {<span class="atom">:error</span>, <span class="type">String</span>.t()}
+<span class="kw">end</span>
+
+<span class="cmt"># Implement behaviour</span>
+<span class="kw">defmodule</span> <span class="type">JSONParser</span> <span class="kw">do</span>
+  <span class="attr">@behaviour</span> <span class="type">Parser</span>
+
+  <span class="attr">@impl</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">parse</span>(json) <span class="kw">do</span>
+    <span class="cmt"># implementation</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <h3>Module Directives</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">MyModule</span> <span class="kw">do</span>
+  <span class="cmt"># Import functions from another module</span>
+  <span class="kw">import</span> <span class="type">Enum</span>, <span class="atom">only:</span> [<span class="fn">map:</span> <span class="num">2</span>, <span class="fn">filter:</span> <span class="num">2</span>]
+
+  <span class="cmt"># Alias a module</span>
+  <span class="kw">alias</span> <span class="type">MyApp.Accounts.User</span>
+  <span class="kw">alias</span> <span class="type">MyApp.Accounts.User</span>, <span class="kw">as:</span> <span class="type">U</span>
+
+  <span class="cmt"># Require for macros</span>
+  <span class="kw">require</span> <span class="type">Logger</span>
+
+  <span class="cmt"># Use (invoke __using__ macro)</span>
+  <span class="kw">use</span> <span class="type">GenServer</span>
+<span class="kw">end</span></pre>
+            </section>
+
+            <!-- Collections -->
+            <section id="collections">
+                <h2>Enum & Stream</h2>
+                <p>The <code>Enum</code> module provides functions for working with collections. <code>Stream</code> provides lazy equivalents.</p>
+
+                <h3>Common Enum Functions</h3>
+                <pre data-lang="elixir">list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+
+<span class="cmt"># Transform</span>
+<span class="type">Enum</span>.<span class="fn">map</span>(list, &(&<span class="num">1</span> * <span class="num">2</span>))           <span class="cmt"># [2, 4, 6, 8, 10]</span>
+<span class="type">Enum</span>.<span class="fn">filter</span>(list, &(&<span class="num">1</span> > <span class="num">2</span>))        <span class="cmt"># [3, 4, 5]</span>
+<span class="type">Enum</span>.<span class="fn">reject</span>(list, &(&<span class="num">1</span> > <span class="num">2</span>))        <span class="cmt"># [1, 2]</span>
+
+<span class="cmt"># Reduce</span>
+<span class="type">Enum</span>.<span class="fn">reduce</span>(list, <span class="num">0</span>, &(&<span class="num">1</span> + &<span class="num">2</span>))    <span class="cmt"># 15 (sum)</span>
+<span class="type">Enum</span>.<span class="fn">sum</span>(list)                      <span class="cmt"># 15</span>
+<span class="type">Enum</span>.<span class="fn">product</span>(list)                  <span class="cmt"># 120</span>
+
+<span class="cmt"># Search</span>
+<span class="type">Enum</span>.<span class="fn">find</span>(list, &(&<span class="num">1</span> > <span class="num">3</span>))         <span class="cmt"># 4</span>
+<span class="type">Enum</span>.<span class="fn">any?</span>(list, &(&<span class="num">1</span> > <span class="num">4</span>))         <span class="cmt"># true</span>
+<span class="type">Enum</span>.<span class="fn">all?</span>(list, &(&<span class="num">1</span> > <span class="num">0</span>))         <span class="cmt"># true</span>
+<span class="type">Enum</span>.<span class="fn">member?</span>(list, <span class="num">3</span>)              <span class="cmt"># true</span>
+
+<span class="cmt"># Access</span>
+<span class="type">Enum</span>.<span class="fn">at</span>(list, <span class="num">2</span>)                   <span class="cmt"># 3</span>
+<span class="type">Enum</span>.<span class="fn">take</span>(list, <span class="num">3</span>)                 <span class="cmt"># [1, 2, 3]</span>
+<span class="type">Enum</span>.<span class="fn">drop</span>(list, <span class="num">2</span>)                 <span class="cmt"># [3, 4, 5]</span>
+<span class="type">Enum</span>.<span class="fn">first</span>(list)                   <span class="cmt"># 1</span>
+<span class="type">Enum</span>.<span class="fn">last</span>(list)                    <span class="cmt"># 5</span>
+
+<span class="cmt"># Sort & Organize</span>
+<span class="type">Enum</span>.<span class="fn">sort</span>([<span class="num">3</span>, <span class="num">1</span>, <span class="num">2</span>])               <span class="cmt"># [1, 2, 3]</span>
+<span class="type">Enum</span>.<span class="fn">sort_by</span>(users, & &<span class="num">1</span>.<span class="fn">age</span>)      <span class="cmt"># sort by field</span>
+<span class="type">Enum</span>.<span class="fn">reverse</span>(list)                 <span class="cmt"># [5, 4, 3, 2, 1]</span>
+<span class="type">Enum</span>.<span class="fn">uniq</span>([<span class="num">1</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>])            <span class="cmt"># [1, 2]</span>
+<span class="type">Enum</span>.<span class="fn">group_by</span>(users, & &<span class="num">1</span>.<span class="fn">role</span>)   <span class="cmt"># group by field</span>
+
+<span class="cmt"># Join</span>
+<span class="type">Enum</span>.<span class="fn">join</span>([<span class="str">"a"</span>, <span class="str">"b"</span>], <span class="str">","</span>)         <span class="cmt"># "a,b"</span>
+<span class="type">Enum</span>.<span class="fn">zip</span>([<span class="num">1</span>, <span class="num">2</span>], [<span class="atom">:a</span>, <span class="atom">:b</span>])         <span class="cmt"># [{1, :a}, {2, :b}]</span></pre>
+
+                <h3>Stream (Lazy Evaluation)</h3>
+                <pre data-lang="elixir"><span class="cmt"># Streams are lazy - no computation until needed</span>
+stream = <span class="num">1</span>..<span class="num">1_000_000</span>
+         |> <span class="type">Stream</span>.<span class="fn">map</span>(&(&<span class="num">1</span> * <span class="num">2</span>))
+         |> <span class="type">Stream</span>.<span class="fn">filter</span>(&(<span class="fn">rem</span>(&<span class="num">1</span>, <span class="num">2</span>) == <span class="num">0</span>))
+         |> <span class="type">Stream</span>.<span class="fn">take</span>(<span class="num">10</span>)
+
+<span class="cmt"># Force evaluation</span>
+<span class="type">Enum</span>.<span class="fn">to_list</span>(stream)  <span class="cmt"># [4, 8, 12, 16, 20, 24, 28, 32, 36, 40]</span>
+
+<span class="cmt"># Infinite streams</span>
+<span class="type">Stream</span>.<span class="fn">iterate</span>(<span class="num">0</span>, &(&<span class="num">1</span> + <span class="num">1</span>))  <span class="cmt"># 0, 1, 2, 3, ...</span>
+<span class="type">Stream</span>.<span class="fn">cycle</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])       <span class="cmt"># 1, 2, 3, 1, 2, 3, ...</span>
+<span class="type">Stream</span>.<span class="fn">repeatedly</span>(&<span class="type">:rand</span>.<span class="fn">uniform</span>/0)</pre>
+
+                <h3>Map Operations</h3>
+                <pre data-lang="elixir">map = %{<span class="atom">a:</span> <span class="num">1</span>, <span class="atom">b:</span> <span class="num">2</span>, <span class="atom">c:</span> <span class="num">3</span|}
+
+<span class="type">Map</span>.<span class="fn">get</span>(map, <span class="atom">:a</span>)                   <span class="cmt"># 1</span>
+<span class="type">Map</span>.<span class="fn">get</span>(map, <span class="atom">:z</span>, <span class="atom">:default</span>)        <span class="cmt"># :default</span>
+<span class="type">Map</span>.<span class="fn">put</span>(map, <span class="atom">:d</span>, <span class="num">4</span>)                <span class="cmt"># %{a: 1, b: 2, c: 3, d: 4}</span>
+<span class="type">Map</span>.<span class="fn">delete</span>(map, <span class="atom">:a</span>)                <span class="cmt"># %{b: 2, c: 3}</span>
+<span class="type">Map</span>.<span class="fn">keys</span>(map)                      <span class="cmt"># [:a, :b, :c]</span>
+<span class="type">Map</span>.<span class="fn">values</span>(map)                    <span class="cmt"># [1, 2, 3]</span>
+<span class="type">Map</span>.<span class="fn">merge</span>(map, %{<span class="atom">d:</span> <span class="num">4</span>})           <span class="cmt"># %{a: 1, b: 2, c: 3, d: 4}</span>
+<span class="type">Map</span>.<span class="fn">update!</span>(map, <span class="atom">:a</span>, &(&<span class="num">1</span> + <span class="num">10</span>))  <span class="cmt"># %{a: 11, b: 2, c: 3}</span></pre>
+            </section>
+
+            <!-- Processes -->
+            <section id="processes">
+                <h2>Processes</h2>
+                <p>Elixir processes are lightweight (not OS processes). They're isolated and communicate via message passing.</p>
+
+                <h3>Spawning Processes</h3>
+                <pre data-lang="elixir"><span class="cmt"># Spawn a process</span>
+pid = <span class="fn">spawn</span>(<span class="kw">fn</span> ->
+  <span class="type">IO</span>.<span class="fn">puts</span>(<span class="str">"Hello from process!"</span>)
+<span class="kw">end</span>)
+
+<span class="cmt"># Check if alive</span>
+<span class="type">Process</span>.<span class="fn">alive?</span>(pid)
+
+<span class="cmt"># Get current process</span>
+<span class="fn">self</span>()  <span class="cmt"># returns PID</span>
+
+<span class="cmt"># Spawn with link (crash together)</span>
+<span class="fn">spawn_link</span>(<span class="kw">fn</span> -> <span class="fn">raise</span> <span class="str">"oops"</span> <span class="kw">end</span>)</pre>
+
+                <h3>Message Passing</h3>
+                <pre data-lang="elixir"><span class="cmt"># Send message</span>
+<span class="fn">send</span>(pid, {<span class="atom">:hello</span>, <span class="str">"world"</span>})
+
+<span class="cmt"># Receive messages</span>
+<span class="kw">receive</span> <span class="kw">do</span>
+  {<span class="atom">:hello</span>, msg} ->
+    <span class="type">IO</span>.<span class="fn">puts</span>(<span class="str">"Got: </span><span class="op">#{</span>msg<span class="op">}</span><span class="str">"</span>)
+  _ ->
+    <span class="type">IO</span>.<span class="fn">puts</span>(<span class="str">"Unknown message"</span>)
+<span class="kw">after</span>
+  <span class="num">5000</span> -> <span class="type">IO</span>.<span class="fn">puts</span>(<span class="str">"Timeout!"</span>)
+<span class="kw">end</span></pre>
+
+                <h3>Simple Process Example</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">Counter</span> <span class="kw">do</span>
+  <span class="kw">def</span> <span class="fn">start</span>(initial \\ <span class="num">0</span>) <span class="kw">do</span>
+    <span class="fn">spawn</span>(<span class="kw">fn</span> -> <span class="fn">loop</span>(initial) <span class="kw">end</span>)
+  <span class="kw">end</span>
+
+  <span class="kw">defp</span> <span class="fn">loop</span>(count) <span class="kw">do</span>
+    <span class="kw">receive</span> <span class="kw">do</span>
+      <span class="atom">:increment</span> ->
+        <span class="fn">loop</span>(count + <span class="num">1</span>)
+      {<span class="atom">:get</span>, caller} ->
+        <span class="fn">send</span>(caller, {<span class="atom">:count</span>, count})
+        <span class="fn">loop</span>(count)
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Usage</span>
+pid = <span class="type">Counter</span>.<span class="fn">start</span>()
+<span class="fn">send</span>(pid, <span class="atom">:increment</span>)
+<span class="fn">send</span>(pid, {<span class="atom">:get</span>, <span class="fn">self</span>()})
+<span class="kw">receive</span> <span class="kw">do</span>
+  {<span class="atom">:count</span>, n} -> <span class="type">IO</span>.<span class="fn">puts</span>(<span class="str">"Count: </span><span class="op">#{</span>n<span class="op">}</span><span class="str">"</span>)
+<span class="kw">end</span></pre>
+
+                <h3>Tasks</h3>
+                <pre data-lang="elixir"><span class="cmt"># Async task</span>
+task = <span class="type">Task</span>.<span class="fn">async</span>(<span class="kw">fn</span> -> <span class="fn">expensive_operation</span>() <span class="kw">end</span>)
+result = <span class="type">Task</span>.<span class="fn">await</span>(task)  <span class="cmt"># blocks until done</span>
+
+<span class="cmt"># Multiple concurrent tasks</span>
+tasks = <span class="type">Enum</span>.<span class="fn">map</span>(urls, <span class="kw">fn</span> url ->
+  <span class="type">Task</span>.<span class="fn">async</span>(<span class="kw">fn</span> -> <span class="fn">fetch</span>(url) <span class="kw">end</span>)
+<span class="kw">end</span>)
+results = <span class="type">Task</span>.<span class="fn">await_many</span>(tasks)</pre>
+
+                <h3>Agents (Simple State)</h3>
+                <pre data-lang="elixir"><span class="cmt"># Start an agent with initial state</span>
+{<span class="atom">:ok</span>, agent} = <span class="type">Agent</span>.<span class="fn">start_link</span>(<span class="kw">fn</span> -> [] <span class="kw">end</span>)
+
+<span class="cmt"># Get state</span>
+<span class="type">Agent</span>.<span class="fn">get</span>(agent, <span class="kw">fn</span> list -> list <span class="kw">end</span>)
+
+<span class="cmt"># Update state</span>
+<span class="type">Agent</span>.<span class="fn">update</span>(agent, <span class="kw">fn</span> list -> [<span class="num">1</span> | list] <span class="kw">end</span>)
+
+<span class="cmt"># Get and update</span>
+<span class="type">Agent</span>.<span class="fn">get_and_update</span>(agent, <span class="kw">fn</span> list ->
+  {<span class="fn">length</span>(list), [<span class="num">2</span> | list]}
+<span class="kw">end</span>)</pre>
+            </section>
+
+            <!-- GenServer -->
+            <section id="genserver">
+                <h2>GenServer</h2>
+                <p>GenServer is a behaviour for implementing server processes. It handles sync/async calls, state management, and supervision.</p>
+
+                <h3>Basic GenServer</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">Counter</span> <span class="kw">do</span>
+  <span class="kw">use</span> <span class="type">GenServer</span>
+
+  <span class="cmt"># Client API</span>
+  <span class="kw">def</span> <span class="fn">start_link</span>(initial \\ <span class="num">0</span>) <span class="kw">do</span>
+    <span class="type">GenServer</span>.<span class="fn">start_link</span>(__MODULE__, initial, <span class="atom">name:</span> __MODULE__)
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="fn">increment</span>() <span class="kw">do</span>
+    <span class="type">GenServer</span>.<span class="fn">cast</span>(__MODULE__, <span class="atom">:increment</span>)
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="fn">get</span>() <span class="kw">do</span>
+    <span class="type">GenServer</span>.<span class="fn">call</span>(__MODULE__, <span class="atom">:get</span>)
+  <span class="kw">end</span>
+
+  <span class="cmt"># Server Callbacks</span>
+  <span class="attr">@impl</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">init</span>(initial) <span class="kw">do</span>
+    {<span class="atom">:ok</span>, initial}
+  <span class="kw">end</span>
+
+  <span class="attr">@impl</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">handle_cast</span>(<span class="atom">:increment</span>, count) <span class="kw">do</span>
+    {<span class="atom">:noreply</span>, count + <span class="num">1</span>}
+  <span class="kw">end</span>
+
+  <span class="attr">@impl</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">handle_call</span>(<span class="atom">:get</span>, _from, count) <span class="kw">do</span>
+    {<span class="atom">:reply</span>, count, count}
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <h3>GenServer Callbacks</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Callback</th>
+                            <th>Triggered By</th>
+                            <th>Returns</th>
+                        </tr>
+                        <tr>
+                            <td><code>init/1</code></td>
+                            <td><code>start_link/3</code></td>
+                            <td><code>{:ok, state}</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>handle_call/3</code></td>
+                            <td><code>GenServer.call/2</code></td>
+                            <td><code>{:reply, response, state}</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>handle_cast/2</code></td>
+                            <td><code>GenServer.cast/2</code></td>
+                            <td><code>{:noreply, state}</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>handle_info/2</code></td>
+                            <td>Any other message</td>
+                            <td><code>{:noreply, state}</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>terminate/2</code></td>
+                            <td>Process shutdown</td>
+                            <td><code>:ok</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Call vs Cast</h3>
+                <pre data-lang="elixir"><span class="cmt"># call - synchronous, blocks until reply</span>
+result = <span class="type">GenServer</span>.<span class="fn">call</span>(pid, <span class="atom">:some_request</span>)
+
+<span class="cmt"># cast - asynchronous, fire and forget</span>
+<span class="type">GenServer</span>.<span class="fn">cast</span>(pid, <span class="atom">:some_request</span>)</pre>
+
+                <div class="tip">
+                    Use <code>call</code> when you need a response. Use <code>cast</code> for fire-and-forget operations where you don't need confirmation.
+                </div>
+            </section>
+
+            <!-- OTP -->
+            <section id="otp">
+                <h2>OTP & Supervisors</h2>
+                <p>OTP (Open Telecom Platform) provides behaviours for building fault-tolerant applications. Supervisors monitor and restart failed processes.</p>
+
+                <h3>Supervisor</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">MyApp.Supervisor</span> <span class="kw">do</span>
+  <span class="kw">use</span> <span class="type">Supervisor</span>
+
+  <span class="kw">def</span> <span class="fn">start_link</span>(opts) <span class="kw">do</span>
+    <span class="type">Supervisor</span>.<span class="fn">start_link</span>(__MODULE__, <span class="atom">:ok</span>, opts)
+  <span class="kw">end</span>
+
+  <span class="attr">@impl</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">init</span>(<span class="atom">:ok</span>) <span class="kw">do</span>
+    children = [
+      <span class="cmt"># Child specifications</span>
+      {<span class="type">Counter</span>, <span class="num">0</span>},
+      {<span class="type">Cache</span>, []},
+      %{
+        <span class="atom">id:</span> <span class="type">MyWorker</span>,
+        <span class="atom">start:</span> {<span class="type">MyWorker</span>, <span class="atom">:start_link</span>, [[]]|}
+      }
+    ]
+
+    <span class="type">Supervisor</span>.<span class="fn">init</span>(children, <span class="atom">strategy:</span> <span class="atom">:one_for_one</span>)
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <h3>Supervision Strategies</h3>
+                <dl class="concept-list">
+                    <div class="concept">
+                        <dt>:one_for_one</dt>
+                        <dd>Only the crashed child is restarted. Other children are unaffected.</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>:one_for_all</dt>
+                        <dd>All children are restarted when one crashes. Use when children are interdependent.</dd>
+                    </div>
+                    <div class="concept">
+                        <dt>:rest_for_one</dt>
+                        <dd>Crashed child and all children started after it are restarted.</dd>
+                    </div>
+                </dl>
+
+                <h3>Application</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">MyApp.Application</span> <span class="kw">do</span>
+  <span class="kw">use</span> <span class="type">Application</span>
+
+  <span class="attr">@impl</span> <span class="kw">true</span>
+  <span class="kw">def</span> <span class="fn">start</span>(_type, _args) <span class="kw">do</span>
+    children = [
+      <span class="type">MyApp.Supervisor</span>,
+      {<span class="type">Phoenix.PubSub</span>, <span class="atom">name:</span> <span class="type">MyApp.PubSub</span>}
+    ]
+
+    opts = [<span class="atom">strategy:</span> <span class="atom">:one_for_one</span>, <span class="atom">name:</span> <span class="type">MyApp.Supervisor</span>]
+    <span class="type">Supervisor</span>.<span class="fn">start_link</span>(children, opts)
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <div class="warning">
+                    The "let it crash" philosophy means you don't defensively handle every error. Let processes crash and let supervisors restart them in a known good state.
+                </div>
+            </section>
+
+            <!-- Mix -->
+            <section id="mix">
+                <h2>Mix Build Tool</h2>
+
+                <h3>Project Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Create new project</span>
+mix new my_app
+mix new my_app --sup  <span class="cmt"># with supervision tree</span>
+
+<span class="cmt"># Dependencies</span>
+mix deps.get          <span class="cmt"># fetch dependencies</span>
+mix deps.update --all <span class="cmt"># update all deps</span>
+
+<span class="cmt"># Compile</span>
+mix compile
+
+<span class="cmt"># Run</span>
+mix run               <span class="cmt"># run project</span>
+mix run --no-halt     <span class="cmt"># keep running</span>
+iex -S mix            <span class="cmt"># interactive with project</span>
+
+<span class="cmt"># Test</span>
+mix test
+mix test test/my_test.exs  <span class="cmt"># specific file</span>
+mix test --cover           <span class="cmt"># with coverage</span>
+
+<span class="cmt"># Format code</span>
+mix format</pre>
+
+                <h3>mix.exs</h3>
+                <pre data-lang="elixir"><span class="kw">defmodule</span> <span class="type">MyApp.MixProject</span> <span class="kw">do</span>
+  <span class="kw">use</span> <span class="type">Mix.Project</span>
+
+  <span class="kw">def</span> <span class="fn">project</span> <span class="kw">do</span>
+    [
+      <span class="atom">app:</span> <span class="atom">:my_app</span>,
+      <span class="atom">version:</span> <span class="str">"0.1.0"</span>,
+      <span class="atom">elixir:</span> <span class="str">"~> 1.19"</span>,
+      <span class="atom">deps:</span> <span class="fn">deps</span>()
+    ]
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="fn">application</span> <span class="kw">do</span>
+    [
+      <span class="atom">extra_applications:</span> [<span class="atom">:logger</span>],
+      <span class="atom">mod:</span> {<span class="type">MyApp.Application</span>, []}
+    ]
+  <span class="kw">end</span>
+
+  <span class="kw">defp</span> <span class="fn">deps</span> <span class="kw">do</span>
+    [
+      {<span class="atom">:phoenix</span>, <span class="str">"~> 1.7"</span>},
+      {<span class="atom">:ecto_sql</span>, <span class="str">"~> 3.10"</span>},
+      {<span class="atom">:jason</span>, <span class="str">"~> 1.4"</span>}
+    ]
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <h3>Testing</h3>
+                <pre data-lang="elixir"><span class="cmt"># test/my_app_test.exs</span>
+<span class="kw">defmodule</span> <span class="type">MyAppTest</span> <span class="kw">do</span>
+  <span class="kw">use</span> <span class="type">ExUnit.Case</span>
+  <span class="kw">doctest</span> <span class="type">MyApp</span>
+
+  <span class="fn">describe</span> <span class="str">"add/2"</span> <span class="kw">do</span>
+    <span class="fn">test</span> <span class="str">"adds two numbers"</span> <span class="kw">do</span>
+      <span class="fn">assert</span> <span class="type">MyApp</span>.<span class="fn">add</span>(<span class="num">1</span>, <span class="num">2</span>) == <span class="num">3</span>
+    <span class="kw">end</span>
+
+    <span class="fn">test</span> <span class="str">"handles negative numbers"</span> <span class="kw">do</span>
+      <span class="fn">assert</span> <span class="type">MyApp</span>.<span class="fn">add</span>(-<span class="num">1</span>, <span class="num">1</span>) == <span class="num">0</span>
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+
+  <span class="fn">test</span> <span class="str">"raises on invalid input"</span> <span class="kw">do</span>
+    <span class="fn">assert_raise</span> <span class="type">ArgumentError</span>, <span class="kw">fn</span> ->
+      <span class="type">MyApp</span>.<span class="fn">parse!</span>(<span class="atom">:invalid</span>)
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></pre>
+
+                <h3>Common Assertions</h3>
+                <pre data-lang="elixir"><span class="fn">assert</span> <span class="num">1</span> + <span class="num">1</span> == <span class="num">2</span>
+<span class="fn">refute</span> <span class="num">1</span> + <span class="num">1</span> == <span class="num">3</span>
+<span class="fn">assert_raise</span> <span class="type">RuntimeError</span>, <span class="kw">fn</span> -> <span class="fn">raise</span> <span class="str">"boom"</span> <span class="kw">end</span>
+<span class="fn">assert_receive</span> {<span class="atom">:msg</span>, _}, <span class="num">1000</span>  <span class="cmt"># wait up to 1s</span>
+<span class="fn">assert</span> result =~ <span class="str">"pattern"</span>       <span class="cmt"># regex/string match</span></pre>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Elixir TLDR — Last updated December 2025 for Elixir 1.19.4<br>
+                <a href="https://elixir-lang.org" target="_blank">Official Site</a> ·
+                <a href="https://hexdocs.pm/elixir" target="_blank">Docs</a> ·
+                <a href="https://elixirschool.com" target="_blank">Elixir School</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

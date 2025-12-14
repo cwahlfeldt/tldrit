@@ -37,8 +37,8 @@
         </div>
     </header>
 
-    <nav>
-        <div class="container">
+    <nav class="nav-container">
+        <div>
             <ul>
                 <li><a href="#what">What is Zig?</a></li>
                 <li><a href="#basics">Basics</a></li>
@@ -49,6 +49,8 @@
                 <li><a href="#comptime">Comptime</a></li>
                 <li><a href="#structs">Structs</a></li>
                 <li><a href="#stdlib">Std Library</a></li>
+                <li><a href="#testing">Testing</a></li>
+                <li><a href="#cinterop">C Interop</a></li>
                 <li><a href="#build">Build System</a></li>
             </ul>
         </div>
@@ -523,6 +525,213 @@ opt_ptr = &x;</pre>
 <span class="kw">const</span> file = <span class="kw">try</span> std.fs.<span class="fn">cwd</span>().<span class="fn">createFile</span>(<span class="str">"out.txt"</span>, .{});
 <span class="kw">defer</span> file.<span class="fn">close</span>();
 <span class="kw">try</span> file.<span class="fn">writeAll</span>(<span class="str">"Hello!"</span>);</pre>
+
+                <h3>Strings</h3>
+                <pre data-lang="zig"><span class="cmt">// Strings are []const u8</span>
+<span class="kw">const</span> str: []<span class="kw">const</span> <span class="type">u8</span> = <span class="str">"hello"</span>;
+
+<span class="cmt">// String comparison</span>
+<span class="kw">const</span> equal = std.mem.<span class="fn">eql</span>(<span class="type">u8</span>, str, <span class="str">"hello"</span>);
+
+<span class="cmt">// Split string</span>
+<span class="kw">var</span> iter = std.mem.<span class="fn">splitScalar</span>(<span class="type">u8</span>, <span class="str">"a,b,c"</span>, <span class="str">','</span>);
+<span class="kw">while</span> (iter.<span class="fn">next</span>()) |part| {
+    std.debug.<span class="fn">print</span>(<span class="str">"{s}\n"</span>, .{part});
+}
+
+<span class="cmt">// Join strings</span>
+<span class="kw">const</span> parts = [_][]<span class="kw">const</span> <span class="type">u8</span>{ <span class="str">"hello"</span>, <span class="str">"world"</span> };
+<span class="kw">const</span> joined = <span class="kw">try</span> std.mem.<span class="fn">join</span>(allocator, <span class="str">" "</span>, &parts);
+
+<span class="cmt">// Format to buffer</span>
+<span class="kw">var</span> buf: [<span class="num">100</span>]<span class="type">u8</span> = <span class="kw">undefined</span>;
+<span class="kw">const</span> result = <span class="kw">try</span> std.fmt.<span class="fn">bufPrint</span>(&buf, <span class="str">"Value: {d}"</span>, .{<span class="num">42</span>});</pre>
+
+                <h3>Sorting & Searching</h3>
+                <pre data-lang="zig"><span class="cmt">// Sort slice</span>
+<span class="kw">var</span> items = [_]<span class="type">i32</span>{ <span class="num">5</span>, <span class="num">2</span>, <span class="num">8</span>, <span class="num">1</span>, <span class="num">9</span> };
+std.mem.<span class="fn">sort</span>(<span class="type">i32</span>, &items, {}, std.sort.asc(<span class="type">i32</span>));
+
+<span class="cmt">// Binary search (requires sorted)</span>
+<span class="kw">const</span> idx = std.sort.<span class="fn">binarySearch</span>(
+    <span class="type">i32</span>,
+    &items,
+    <span class="num">8</span>,
+    {},
+    <span class="kw">struct</span> {
+        <span class="kw">fn</span> <span class="fn">cmp</span>(_: <span class="type">void</span>, a: <span class="type">i32</span>, b: <span class="type">i32</span>) std.math.Order {
+            <span class="kw">return</span> std.math.<span class="fn">order</span>(a, b);
+        }
+    }.cmp,
+);</pre>
+
+                <h3>Random</h3>
+                <pre data-lang="zig"><span class="kw">var</span> prng = std.Random.DefaultPrng.<span class="fn">init</span>(<span class="num">0</span>);
+<span class="kw">const</span> rand = prng.<span class="fn">random</span>();
+
+<span class="kw">const</span> n = rand.<span class="fn">int</span>(<span class="type">u32</span>);              <span class="cmt">// random u32</span>
+<span class="kw">const</span> bounded = rand.<span class="fn">intRangeAtMost</span>(<span class="type">u8</span>, <span class="num">1</span>, <span class="num">100</span>);  <span class="cmt">// 1-100</span>
+<span class="kw">const</span> f = rand.<span class="fn">float</span>(<span class="type">f32</span>);            <span class="cmt">// 0.0 to 1.0</span>
+rand.<span class="fn">shuffle</span>(<span class="type">i32</span>, &items);            <span class="cmt">// shuffle slice</span></pre>
+            </section>
+
+            <!-- Testing -->
+            <section id="testing">
+                <h2>Testing</h2>
+                <p>Zig has built-in testing. Tests are written inline with code and run with <code>zig test</code>.</p>
+
+                <h3>Writing Tests</h3>
+                <pre data-lang="zig"><span class="kw">const</span> std = <span class="builtin">@import</span>(<span class="str">"std"</span>);
+<span class="kw">const</span> expect = std.testing.expect;
+
+<span class="kw">fn</span> <span class="fn">add</span>(a: <span class="type">i32</span>, b: <span class="type">i32</span>) <span class="type">i32</span> {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Test block</span>
+<span class="kw">test</span> <span class="str">"basic add"</span> {
+    <span class="kw">const</span> result = <span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>);
+    <span class="kw">try</span> <span class="fn">expect</span>(result == <span class="num">5</span>);
+}
+
+<span class="cmt">// Test with error handling</span>
+<span class="kw">test</span> <span class="str">"expect equal"</span> {
+    <span class="kw">try</span> std.testing.<span class="fn">expectEqual</span>(<span class="num">5</span>, <span class="fn">add</span>(<span class="num">2</span>, <span class="num">3</span>));
+}
+
+<span class="cmt">// Test that function returns error</span>
+<span class="kw">test</span> <span class="str">"expect error"</span> {
+    <span class="kw">const</span> result = <span class="fn">mayFail</span>(<span class="kw">false</span>);
+    <span class="kw">try</span> std.testing.<span class="fn">expectError</span>(<span class="kw">error</span>.Failed, result);
+}</pre>
+
+                <h3>Test Assertions</h3>
+                <pre data-lang="zig"><span class="cmt">// Basic expectation</span>
+<span class="kw">try</span> std.testing.<span class="fn">expect</span>(x == <span class="num">42</span>);
+
+<span class="cmt">// Equality check (shows both values on failure)</span>
+<span class="kw">try</span> std.testing.<span class="fn">expectEqual</span>(<span class="num">42</span>, x);
+
+<span class="cmt">// Approximate float equality</span>
+<span class="kw">try</span> std.testing.<span class="fn">expectApproxEqAbs</span>(<span class="num">3.14</span>, pi, <span class="num">0.01</span>);
+
+<span class="cmt">// String/slice equality</span>
+<span class="kw">try</span> std.testing.<span class="fn">expectEqualStrings</span>(<span class="str">"hello"</span>, str);
+<span class="kw">try</span> std.testing.<span class="fn">expectEqualSlices</span>(<span class="type">u8</span>, expected, actual);
+
+<span class="cmt">// Check for error</span>
+<span class="kw">try</span> std.testing.<span class="fn">expectError</span>(<span class="kw">error</span>.OutOfMemory, result);
+
+<span class="cmt">// Format failure message</span>
+<span class="kw">try</span> std.testing.<span class="fn">expectFmt</span>(<span class="str">"42"</span>, <span class="str">"{d}"</span>, .{x});</pre>
+
+                <h3>Running Tests</h3>
+                <pre data-lang="shell"><span class="cmt"># Run all tests in file</span>
+zig test src/main.zig
+
+<span class="cmt"># Run specific test by name filter</span>
+zig test src/main.zig --test-filter "basic add"
+
+<span class="cmt"># Run with test allocator (detects leaks)</span>
+zig test src/main.zig  <span class="cmt"># uses testing allocator by default</span>
+
+<span class="cmt"># In build.zig</span>
+<span class="kw">const</span> tests = b.<span class="fn">addTest</span>(.{
+    .root_source_file = b.<span class="fn">path</span>(<span class="str">"src/main.zig"</span>),
+});
+<span class="kw">const</span> test_step = b.<span class="fn">step</span>(<span class="str">"test"</span>, <span class="str">"Run tests"</span>);
+test_step.<span class="fn">dependOn</span>(&b.<span class="fn">addRunArtifact</span>(tests).step);</pre>
+
+                <h3>Test Allocator</h3>
+                <pre data-lang="zig"><span class="kw">test</span> <span class="str">"memory test"</span> {
+    <span class="cmt">// Testing allocator detects leaks and use-after-free</span>
+    <span class="kw">const</span> allocator = std.testing.allocator;
+
+    <span class="kw">const</span> slice = <span class="kw">try</span> allocator.<span class="fn">alloc</span>(<span class="type">u8</span>, <span class="num">100</span>);
+    <span class="kw">defer</span> allocator.<span class="fn">free</span>(slice);  <span class="cmt">// must free or test fails</span>
+
+    <span class="cmt">// ... use slice ...</span>
+}</pre>
+
+                <div class="tip">
+                    The testing allocator automatically fails tests that leak memory. Use it to ensure your code doesn't have memory leaks.
+                </div>
+            </section>
+
+            <!-- C Interop -->
+            <section id="cinterop">
+                <h2>C Interoperability</h2>
+                <p>Zig can seamlessly import and use C code. It can also export Zig functions for use from C.</p>
+
+                <h3>Import C Headers</h3>
+                <pre data-lang="zig"><span class="cmt">// Import C standard library</span>
+<span class="kw">const</span> c = <span class="builtin">@cImport</span>({
+    <span class="builtin">@cInclude</span>(<span class="str">"stdio.h"</span>);
+    <span class="builtin">@cInclude</span>(<span class="str">"stdlib.h"</span>);
+});
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="fn">main</span>() <span class="type">void</span> {
+    _ = c.<span class="fn">printf</span>(<span class="str">"Hello from C!\n"</span>);
+
+    <span class="kw">const</span> ptr = c.<span class="fn">malloc</span>(<span class="num">100</span>);
+    <span class="kw">defer</span> c.<span class="fn">free</span>(ptr);
+}</pre>
+
+                <h3>Link C Libraries</h3>
+                <pre data-lang="zig"><span class="cmt">// build.zig - link system C library</span>
+<span class="kw">const</span> exe = b.<span class="fn">addExecutable</span>(.{
+    .name = <span class="str">"myapp"</span>,
+    .root_source_file = b.<span class="fn">path</span>(<span class="str">"src/main.zig"</span>),
+});
+
+<span class="cmt">// Link libc</span>
+exe.<span class="fn">linkLibC</span>();
+
+<span class="cmt">// Link system library</span>
+exe.<span class="fn">linkSystemLibrary</span>(<span class="str">"curl"</span>);
+exe.<span class="fn">linkSystemLibrary</span>(<span class="str">"sqlite3"</span>);
+
+<span class="cmt">// Add include path</span>
+exe.<span class="fn">addIncludePath</span>(b.<span class="fn">path</span>(<span class="str">"include"</span>));</pre>
+
+                <h3>Export to C</h3>
+                <pre data-lang="zig"><span class="cmt">// Export function callable from C</span>
+<span class="kw">export</span> <span class="kw">fn</span> <span class="fn">zig_add</span>(a: <span class="type">c_int</span>, b: <span class="type">c_int</span>) <span class="type">c_int</span> {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Export with custom name</span>
+<span class="kw">comptime</span> {
+    <span class="builtin">@export</span>(<span class="fn">zigFunction</span>, .{ .name = <span class="str">"c_function_name"</span> });
+}</pre>
+
+                <h3>C Types</h3>
+                <pre data-lang="zig"><span class="cmt">// C-compatible integer types</span>
+<span class="type">c_short</span>       <span class="type">c_ushort</span>
+<span class="type">c_int</span>         <span class="type">c_uint</span>
+<span class="type">c_long</span>        <span class="type">c_ulong</span>
+<span class="type">c_longlong</span>    <span class="type">c_ulonglong</span>
+
+<span class="cmt">// Pointers</span>
+[*c]T         <span class="cmt">// C pointer (nullable, no bounds)</span>
+?[*]T         <span class="cmt">// Optional many-pointer</span>
+
+<span class="cmt">// Convert C string to Zig slice</span>
+<span class="kw">const</span> c_str: [*:<span class="num">0</span>]<span class="kw">const</span> <span class="type">u8</span> = <span class="str">"hello"</span>;
+<span class="kw">const</span> zig_str = std.mem.<span class="fn">span</span>(c_str);  <span class="cmt">// []const u8</span></pre>
+
+                <h3>Calling Conventions</h3>
+                <pre data-lang="zig"><span class="cmt">// Use C calling convention for interop</span>
+<span class="kw">fn</span> <span class="fn">callback</span>(data: ?*<span class="type">anyopaque</span>) <span class="kw">callconv</span>(.C) <span class="type">void</span> {
+    <span class="cmt">// Can be passed to C functions expecting function pointers</span>
+}
+
+<span class="cmt">// Extern function declaration</span>
+<span class="kw">extern</span> <span class="str">"c"</span> <span class="kw">fn</span> <span class="fn">some_c_function</span>(arg: <span class="type">c_int</span>) <span class="type">c_int</span>;</pre>
+
+                <div class="tip">
+                    Zig can compile C code directly. Add <code>.c</code> files to your build with <code>exe.addCSourceFile()</code>.
+                </div>
             </section>
 
             <!-- Build System -->
