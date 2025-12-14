@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* TypeScript theme */
+        :root {
+            --accent: #3178c6;
+            --accent-glow: rgba(49, 120, 198, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 4px;
+        }
+
+        .card h4::before {
+            content: 'TS';
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">TS</div>
+            </div>
+            <h1>TypeScript <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to TypeScript. JavaScript with syntax for types.</p>
+            <div class="version-badge">v5.9 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is TypeScript?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#interfaces">Interfaces & Types</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <li><a href="#generics">Generics</a></li>
+                <li><a href="#utility">Utility Types</a></li>
+                <li><a href="#advanced">Advanced Types</a></li>
+                <li><a href="#config">Configuration</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is TypeScript? -->
+            <section id="what">
+                <h2>What is TypeScript?</h2>
+                <p>TypeScript is a strongly typed superset of JavaScript that compiles to plain JavaScript. It adds optional static typing, classes, and interfaces to help you build robust applications.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Static Typing</h4>
+                        <p>Catch errors at compile time instead of runtime. Type checking helps prevent bugs before they happen.</p>
+                    </div>
+                    <div class="card">
+                        <h4>JavaScript Compatible</h4>
+                        <p>Any valid JavaScript is valid TypeScript. Migrate incrementally at your own pace.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Modern Features</h4>
+                        <p>Use the latest ECMAScript features and compile down to older JavaScript versions.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Great Tooling</h4>
+                        <p>Excellent IDE support with IntelliSense, refactoring, and auto-completion everywhere.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Type Annotations</h3>
+                <pre data-lang="typescript"><span class="cmt">// Variable annotations</span>
+<span class="kw">let</span> name: <span class="type">string</span> = <span class="str">"Alice"</span>;
+<span class="kw">let</span> age: <span class="type">number</span> = <span class="num">30</span>;
+<span class="kw">let</span> isActive: <span class="type">boolean</span> = <span class="kw">true</span>;
+
+<span class="cmt">// Type inference (TypeScript infers the type)</span>
+<span class="kw">let</span> message = <span class="str">"Hello"</span>;  <span class="cmt">// inferred as string</span>
+<span class="kw">let</span> count = <span class="num">42</span>;        <span class="cmt">// inferred as number</span>
+
+<span class="cmt">// Arrays</span>
+<span class="kw">let</span> numbers: <span class="type">number</span>[] = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="kw">let</span> names: <span class="type">Array</span>&lt;<span class="type">string</span>&gt; = [<span class="str">"Alice"</span>, <span class="str">"Bob"</span>];
+
+<span class="cmt">// Const (immutable reference)</span>
+<span class="kw">const</span> PI: <span class="type">number</span> = <span class="num">3.14159</span>;</pre>
+
+                <h3>Type Assertion</h3>
+                <pre data-lang="typescript"><span class="cmt">// as syntax (preferred)</span>
+<span class="kw">let</span> value: <span class="type">unknown</span> = <span class="str">"hello"</span>;
+<span class="kw">let</span> length: <span class="type">number</span> = (value <span class="kw">as</span> <span class="type">string</span>).length;
+
+<span class="cmt">// angle-bracket syntax</span>
+<span class="kw">let</span> length2: <span class="type">number</span> = <span class="op">&lt;</span><span class="type">string</span><span class="op">&gt;</span>value.length;
+
+<span class="cmt">// Non-null assertion (use with caution)</span>
+<span class="kw">let</span> element = <span class="builtin">document</span>.<span class="fn">getElementById</span>(<span class="str">"myId"</span>)!;</pre>
+
+                <h3>Any vs Unknown</h3>
+                <pre data-lang="typescript"><span class="cmt">// any: opt-out of type checking (avoid when possible)</span>
+<span class="kw">let</span> anything: <span class="type">any</span> = <span class="num">42</span>;
+anything = <span class="str">"now a string"</span>;
+anything.<span class="fn">nonExistentMethod</span>();  <span class="cmt">// no error!</span>
+
+<span class="cmt">// unknown: type-safe any (prefer this)</span>
+<span class="kw">let</span> value: <span class="type">unknown</span> = <span class="num">42</span>;
+<span class="cmt">// value.toFixed(); // Error: must check type first</span>
+
+<span class="kw">if</span> (<span class="kw">typeof</span> value === <span class="str">"number"</span>) {
+    value.<span class="fn">toFixed</span>(<span class="num">2</span>);  <span class="cmt">// OK</span>
+}</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><code>string</code></td>
+                            <td>Text values</td>
+                            <td><code>"hello"</code>, <code>'world'</code>, <code>`template`</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>number</code></td>
+                            <td>Integers and floats</td>
+                            <td><code>42</code>, <code>3.14</code>, <code>NaN</code>, <code>Infinity</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>boolean</code></td>
+                            <td>True or false</td>
+                            <td><code>true</code>, <code>false</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>null</code></td>
+                            <td>Intentional absence</td>
+                            <td><code>null</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>undefined</code></td>
+                            <td>Uninitialized value</td>
+                            <td><code>undefined</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>symbol</code></td>
+                            <td>Unique identifier</td>
+                            <td><code>Symbol("id")</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>bigint</code></td>
+                            <td>Large integers</td>
+                            <td><code>100n</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Special Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// void: no return value</span>
+<span class="kw">function</span> <span class="fn">log</span>(message: <span class="type">string</span>): <span class="type">void</span> {
+    <span class="builtin">console</span>.<span class="fn">log</span>(message);
+}
+
+<span class="cmt">// never: function never returns</span>
+<span class="kw">function</span> <span class="fn">throwError</span>(message: <span class="type">string</span>): <span class="type">never</span> {
+    <span class="kw">throw new</span> <span class="type">Error</span>(message);
+}
+
+<span class="cmt">// object: any non-primitive type</span>
+<span class="kw">let</span> obj: <span class="type">object</span> = { name: <span class="str">"Alice"</span> };</pre>
+
+                <h3>Tuples & Enums</h3>
+                <pre data-lang="typescript"><span class="cmt">// Tuple: fixed-length array with known types</span>
+<span class="kw">let</span> tuple: [<span class="type">string</span>, <span class="type">number</span>] = [<span class="str">"Alice"</span>, <span class="num">30</span>];
+<span class="kw">let</span> first = tuple[<span class="num">0</span>];  <span class="cmt">// string</span>
+<span class="kw">let</span> second = tuple[<span class="num">1</span>]; <span class="cmt">// number</span>
+
+<span class="cmt">// Optional tuple elements</span>
+<span class="kw">let</span> optional: [<span class="type">string</span>, <span class="type">number</span>?] = [<span class="str">"Bob"</span>];
+
+<span class="cmt">// Enum: named constants</span>
+<span class="kw">enum</span> <span class="type">Direction</span> {
+    Up,      <span class="cmt">// 0</span>
+    Down,    <span class="cmt">// 1</span>
+    Left,    <span class="cmt">// 2</span>
+    Right    <span class="cmt">// 3</span>
+}
+
+<span class="cmt">// String enum</span>
+<span class="kw">enum</span> <span class="type">Status</span> {
+    Active = <span class="str">"ACTIVE"</span>,
+    Inactive = <span class="str">"INACTIVE"</span>,
+    Pending = <span class="str">"PENDING"</span>
+}
+
+<span class="kw">let</span> dir: <span class="type">Direction</span> = <span class="type">Direction</span>.Up;
+<span class="kw">let</span> status: <span class="type">Status</span> = <span class="type">Status</span>.Active;</pre>
+
+                <h3>Literal Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// String literals</span>
+<span class="kw">let</span> alignment: <span class="str">"left"</span> | <span class="str">"center"</span> | <span class="str">"right"</span> = <span class="str">"center"</span>;
+
+<span class="cmt">// Numeric literals</span>
+<span class="kw">let</span> dice: <span class="num">1</span> | <span class="num">2</span> | <span class="num">3</span> | <span class="num">4</span> | <span class="num">5</span> | <span class="num">6</span> = <span class="num">3</span>;
+
+<span class="cmt">// Boolean literal</span>
+<span class="kw">let</span> isTrue: <span class="kw">true</span> = <span class="kw">true</span>;</pre>
+            </section>
+
+            <!-- Interfaces & Types -->
+            <section id="interfaces">
+                <h2>Interfaces & Types</h2>
+
+                <h3>Interfaces</h3>
+                <pre data-lang="typescript"><span class="cmt">// Basic interface</span>
+<span class="kw">interface</span> <span class="type">User</span> {
+    name: <span class="type">string</span>;
+    age: <span class="type">number</span>;
+    email?: <span class="type">string</span>;        <span class="cmt">// optional property</span>
+    <span class="kw">readonly</span> id: <span class="type">number</span>;  <span class="cmt">// readonly property</span>
+}
+
+<span class="kw">let</span> user: <span class="type">User</span> = {
+    name: <span class="str">"Alice"</span>,
+    age: <span class="num">30</span>,
+    id: <span class="num">1</span>
+};
+
+<span class="cmt">// user.id = 2; // Error: readonly</span>
+
+<span class="cmt">// Index signatures</span>
+<span class="kw">interface</span> <span class="type">StringMap</span> {
+    [key: <span class="type">string</span>]: <span class="type">string</span>;
+}
+
+<span class="kw">let</span> map: <span class="type">StringMap</span> = {
+    firstName: <span class="str">"Alice"</span>,
+    lastName: <span class="str">"Smith"</span>
+};</pre>
+
+                <h3>Extending Interfaces</h3>
+                <pre data-lang="typescript"><span class="kw">interface</span> <span class="type">Person</span> {
+    name: <span class="type">string</span>;
+    age: <span class="type">number</span>;
+}
+
+<span class="kw">interface</span> <span class="type">Employee</span> <span class="kw">extends</span> <span class="type">Person</span> {
+    employeeId: <span class="type">number</span>;
+    department: <span class="type">string</span>;
+}
+
+<span class="kw">let</span> employee: <span class="type">Employee</span> = {
+    name: <span class="str">"Bob"</span>,
+    age: <span class="num">25</span>,
+    employeeId: <span class="num">123</span>,
+    department: <span class="str">"Engineering"</span>
+};</pre>
+
+                <h3>Type Aliases</h3>
+                <pre data-lang="typescript"><span class="cmt">// Basic type alias</span>
+<span class="kw">type</span> <span class="type">ID</span> = <span class="type">string</span> | <span class="type">number</span>;
+
+<span class="cmt">// Object type</span>
+<span class="kw">type</span> <span class="type">Point</span> = {
+    x: <span class="type">number</span>;
+    y: <span class="type">number</span>;
+};
+
+<span class="cmt">// Union types</span>
+<span class="kw">type</span> <span class="type">Status</span> = <span class="str">"success"</span> | <span class="str">"error"</span> | <span class="str">"loading"</span>;
+
+<span class="cmt">// Intersection types</span>
+<span class="kw">type</span> <span class="type">Draggable</span> = {
+    drag: () => <span class="type">void</span>;
+};
+
+<span class="kw">type</span> <span class="type">Resizable</span> = {
+    resize: () => <span class="type">void</span>;
+};
+
+<span class="kw">type</span> <span class="type">UIWidget</span> = <span class="type">Draggable</span> & <span class="type">Resizable</span>;</pre>
+
+                <h3>Interface vs Type</h3>
+                <div class="tip">
+                    Use <strong>interfaces</strong> for object shapes and when you need declaration merging. Use <strong>type aliases</strong> for unions, intersections, primitives, tuples, and advanced type compositions.
+                </div>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Function Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// Function declaration</span>
+<span class="kw">function</span> <span class="fn">add</span>(a: <span class="type">number</span>, b: <span class="type">number</span>): <span class="type">number</span> {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// Arrow function</span>
+<span class="kw">const</span> multiply = (a: <span class="type">number</span>, b: <span class="type">number</span>): <span class="type">number</span> => a * b;
+
+<span class="cmt">// Optional parameters</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name: <span class="type">string</span>, greeting?: <span class="type">string</span>): <span class="type">string</span> {
+    <span class="kw">return</span> <span class="str">`<span class="type">${greeting ?? "Hello"}</span>, <span class="type">${name}</span>`</span>;
+}
+
+<span class="cmt">// Default parameters</span>
+<span class="kw">function</span> <span class="fn">log</span>(message: <span class="type">string</span>, level: <span class="type">string</span> = <span class="str">"info"</span>): <span class="type">void</span> {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">`[<span class="type">${level}</span>] <span class="type">${message}</span>`</span>);
+}</pre>
+
+                <h3>Rest Parameters & Overloads</h3>
+                <pre data-lang="typescript"><span class="cmt">// Rest parameters</span>
+<span class="kw">function</span> <span class="fn">sum</span>(...numbers: <span class="type">number</span>[]): <span class="type">number</span> {
+    <span class="kw">return</span> numbers.<span class="fn">reduce</span>((a, b) => a + b, <span class="num">0</span>);
+}
+
+<span class="cmt">// Function overloads</span>
+<span class="kw">function</span> <span class="fn">format</span>(value: <span class="type">string</span>): <span class="type">string</span>;
+<span class="kw">function</span> <span class="fn">format</span>(value: <span class="type">number</span>): <span class="type">string</span>;
+<span class="kw">function</span> <span class="fn">format</span>(value: <span class="type">string</span> | <span class="type">number</span>): <span class="type">string</span> {
+    <span class="kw">return</span> <span class="type">String</span>(value);
+}</pre>
+
+                <h3>Function Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// Function type annotation</span>
+<span class="kw">let</span> mathOp: (a: <span class="type">number</span>, b: <span class="type">number</span>) => <span class="type">number</span>;
+
+mathOp = (x, y) => x + y;
+
+<span class="cmt">// Callback types</span>
+<span class="kw">function</span> <span class="fn">processArray</span>(
+    arr: <span class="type">number</span>[],
+    callback: (item: <span class="type">number</span>) => <span class="type">number</span>
+): <span class="type">number</span>[] {
+    <span class="kw">return</span> arr.<span class="fn">map</span>(callback);
+}
+
+<span class="cmt">// Type alias for function</span>
+<span class="kw">type</span> <span class="type">Predicate</span>&lt;<span class="type">T</span>&gt; = (value: <span class="type">T</span>) => <span class="type">boolean</span>;</pre>
+            </section>
+
+            <!-- Classes -->
+            <section id="classes">
+                <h2>Classes</h2>
+
+                <h3>Basic Class</h3>
+                <pre data-lang="typescript"><span class="kw">class</span> <span class="type">Person</span> {
+    <span class="cmt">// Properties</span>
+    name: <span class="type">string</span>;
+    age: <span class="type">number</span>;
+    <span class="kw">private</span> ssn: <span class="type">string</span>;           <span class="cmt">// only accessible in class</span>
+    <span class="kw">protected</span> address: <span class="type">string</span>;     <span class="cmt">// accessible in subclasses</span>
+    <span class="kw">readonly</span> id: <span class="type">number</span>;          <span class="cmt">// cannot be changed</span>
+
+    <span class="cmt">// Constructor</span>
+    <span class="kw">constructor</span>(name: <span class="type">string</span>, age: <span class="type">number</span>, id: <span class="type">number</span>) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.age = age;
+        <span class="kw">this</span>.id = id;
+    }
+
+    <span class="cmt">// Method</span>
+    <span class="fn">greet</span>(): <span class="type">string</span> {
+        <span class="kw">return</span> <span class="str">`Hello, I'm <span class="type">${this.name}</span>`</span>;
+    }
+
+    <span class="cmt">// Static method</span>
+    <span class="kw">static</span> <span class="fn">create</span>(name: <span class="type">string</span>): <span class="type">Person</span> {
+        <span class="kw">return new</span> <span class="type">Person</span>(name, <span class="num">0</span>, <span class="num">0</span>);
+    }
+}</pre>
+
+                <h3>Parameter Properties</h3>
+                <pre data-lang="typescript"><span class="cmt">// Shorthand: declares and assigns in one go</span>
+<span class="kw">class</span> <span class="type">User</span> {
+    <span class="kw">constructor</span>(
+        <span class="kw">public</span> name: <span class="type">string</span>,
+        <span class="kw">private</span> age: <span class="type">number</span>,
+        <span class="kw">readonly</span> id: <span class="type">number</span>
+    ) {}
+
+    <span class="fn">getAge</span>(): <span class="type">number</span> {
+        <span class="kw">return</span> <span class="kw">this</span>.age;
+    }
+}</pre>
+
+                <h3>Inheritance & Abstract Classes</h3>
+                <pre data-lang="typescript"><span class="cmt">// Abstract class (cannot be instantiated)</span>
+<span class="kw">abstract class</span> <span class="type">Animal</span> {
+    <span class="kw">constructor</span>(<span class="kw">public</span> name: <span class="type">string</span>) {}
+
+    <span class="cmt">// Abstract method (must be implemented)</span>
+    <span class="kw">abstract</span> <span class="fn">makeSound</span>(): <span class="type">void</span>;
+
+    <span class="cmt">// Concrete method</span>
+    <span class="fn">move</span>(): <span class="type">void</span> {
+        <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">`<span class="type">${this.name}</span> moves`</span>);
+    }
+}
+
+<span class="kw">class</span> <span class="type">Dog</span> <span class="kw">extends</span> <span class="type">Animal</span> {
+    <span class="fn">makeSound</span>(): <span class="type">void</span> {
+        <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">"Woof!"</span>);
+    }
+}
+
+<span class="kw">let</span> dog = <span class="kw">new</span> <span class="type">Dog</span>(<span class="str">"Buddy"</span>);
+dog.<span class="fn">makeSound</span>();
+dog.<span class="fn">move</span>();</pre>
+
+                <h3>Implementing Interfaces</h3>
+                <pre data-lang="typescript"><span class="kw">interface</span> <span class="type">Drawable</span> {
+    draw(): <span class="type">void</span>;
+}
+
+<span class="kw">interface</span> <span class="type">Resizable</span> {
+    resize(scale: <span class="type">number</span>): <span class="type">void</span>;
+}
+
+<span class="kw">class</span> <span class="type">Rectangle</span> <span class="kw">implements</span> <span class="type">Drawable</span>, <span class="type">Resizable</span> {
+    <span class="kw">constructor</span>(
+        <span class="kw">public</span> width: <span class="type">number</span>,
+        <span class="kw">public</span> height: <span class="type">number</span>
+    ) {}
+
+    <span class="fn">draw</span>(): <span class="type">void</span> {
+        <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">"Drawing rectangle"</span>);
+    }
+
+    <span class="fn">resize</span>(scale: <span class="type">number</span>): <span class="type">void</span> {
+        <span class="kw">this</span>.width *= scale;
+        <span class="kw">this</span>.height *= scale;
+    }
+}</pre>
+            </section>
+
+            <!-- Generics -->
+            <section id="generics">
+                <h2>Generics</h2>
+
+                <h3>Generic Functions</h3>
+                <pre data-lang="typescript"><span class="cmt">// Basic generic function</span>
+<span class="kw">function</span> <span class="fn">identity</span>&lt;<span class="type">T</span>&gt;(value: <span class="type">T</span>): <span class="type">T</span> {
+    <span class="kw">return</span> value;
+}
+
+<span class="kw">let</span> result = <span class="fn">identity</span>&lt;<span class="type">string</span>&gt;(<span class="str">"hello"</span>);  <span class="cmt">// explicit</span>
+<span class="kw">let</span> result2 = <span class="fn">identity</span>(<span class="num">42</span>);           <span class="cmt">// inferred</span>
+
+<span class="cmt">// Multiple type parameters</span>
+<span class="kw">function</span> <span class="fn">pair</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(key: <span class="type">K</span>, value: <span class="type">V</span>): [<span class="type">K</span>, <span class="type">V</span>] {
+    <span class="kw">return</span> [key, value];
+}
+
+<span class="kw">let</span> p = <span class="fn">pair</span>(<span class="str">"age"</span>, <span class="num">30</span>);  <span class="cmt">// [string, number]</span></pre>
+
+                <h3>Generic Interfaces & Classes</h3>
+                <pre data-lang="typescript"><span class="cmt">// Generic interface</span>
+<span class="kw">interface</span> <span class="type">Box</span>&lt;<span class="type">T</span>&gt; {
+    value: <span class="type">T</span>;
+}
+
+<span class="kw">let</span> stringBox: <span class="type">Box</span>&lt;<span class="type">string</span>&gt; = { value: <span class="str">"hello"</span> };
+<span class="kw">let</span> numberBox: <span class="type">Box</span>&lt;<span class="type">number</span>&gt; = { value: <span class="num">42</span> };
+
+<span class="cmt">// Generic class</span>
+<span class="kw">class</span> <span class="type">Stack</span>&lt;<span class="type">T</span>&gt; {
+    <span class="kw">private</span> items: <span class="type">T</span>[] = [];
+
+    <span class="fn">push</span>(item: <span class="type">T</span>): <span class="type">void</span> {
+        <span class="kw">this</span>.items.<span class="fn">push</span>(item);
+    }
+
+    <span class="fn">pop</span>(): <span class="type">T</span> | <span class="type">undefined</span> {
+        <span class="kw">return</span> <span class="kw">this</span>.items.<span class="fn">pop</span>();
+    }
+}
+
+<span class="kw">let</span> stack = <span class="kw">new</span> <span class="type">Stack</span>&lt;<span class="type">number</span>&gt;();
+stack.<span class="fn">push</span>(<span class="num">1</span>);
+stack.<span class="fn">push</span>(<span class="num">2</span>);</pre>
+
+                <h3>Generic Constraints</h3>
+                <pre data-lang="typescript"><span class="cmt">// Constrain to types with length property</span>
+<span class="kw">interface</span> <span class="type">HasLength</span> {
+    length: <span class="type">number</span>;
+}
+
+<span class="kw">function</span> <span class="fn">logLength</span>&lt;<span class="type">T</span> <span class="kw">extends</span> <span class="type">HasLength</span>&gt;(value: <span class="type">T</span>): <span class="type">void</span> {
+    <span class="builtin">console</span>.<span class="fn">log</span>(value.length);
+}
+
+<span class="fn">logLength</span>(<span class="str">"hello"</span>);      <span class="cmt">// OK: string has length</span>
+<span class="fn">logLength</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]);   <span class="cmt">// OK: array has length</span>
+<span class="cmt">// logLength(42);      // Error: number doesn't have length</span>
+
+<span class="cmt">// Using keyof</span>
+<span class="kw">function</span> <span class="fn">getProperty</span>&lt;<span class="type">T</span>, <span class="type">K</span> <span class="kw">extends</span> <span class="kw">keyof</span> <span class="type">T</span>&gt;(obj: <span class="type">T</span>, key: <span class="type">K</span>): <span class="type">T</span>[<span class="type">K</span>] {
+    <span class="kw">return</span> obj[key];
+}
+
+<span class="kw">let</span> user = { name: <span class="str">"Alice"</span>, age: <span class="num">30</span> };
+<span class="kw">let</span> name = <span class="fn">getProperty</span>(user, <span class="str">"name"</span>);  <span class="cmt">// OK</span>
+<span class="cmt">// let invalid = getProperty(user, "invalid"); // Error</span></pre>
+            </section>
+
+            <!-- Utility Types -->
+            <section id="utility">
+                <h2>Utility Types</h2>
+
+                <h3>Built-in Utility Types</h3>
+                <pre data-lang="typescript"><span class="kw">interface</span> <span class="type">User</span> {
+    id: <span class="type">number</span>;
+    name: <span class="type">string</span>;
+    email: <span class="type">string</span>;
+    age: <span class="type">number</span>;
+}
+
+<span class="cmt">// Partial&lt;T&gt;: all properties optional</span>
+<span class="kw">type</span> <span class="type">PartialUser</span> = <span class="type">Partial</span>&lt;<span class="type">User</span>&gt;;
+<span class="kw">let</span> updates: <span class="type">PartialUser</span> = { name: <span class="str">"Bob"</span> };
+
+<span class="cmt">// Required&lt;T&gt;: all properties required</span>
+<span class="kw">type</span> <span class="type">RequiredUser</span> = <span class="type">Required</span>&lt;<span class="type">PartialUser</span>&gt;;
+
+<span class="cmt">// Readonly&lt;T&gt;: all properties readonly</span>
+<span class="kw">type</span> <span class="type">ReadonlyUser</span> = <span class="type">Readonly</span>&lt;<span class="type">User</span>&gt;;
+<span class="kw">let</span> user: <span class="type">ReadonlyUser</span> = { id: <span class="num">1</span>, name: <span class="str">"Alice"</span>, email: <span class="str">"a@b.com"</span>, age: <span class="num">30</span> };
+<span class="cmt">// user.name = "Bob"; // Error: readonly</span>
+
+<span class="cmt">// Pick&lt;T, K&gt;: select properties</span>
+<span class="kw">type</span> <span class="type">UserPreview</span> = <span class="type">Pick</span>&lt;<span class="type">User</span>, <span class="str">"id"</span> | <span class="str">"name"</span>&gt;;
+
+<span class="cmt">// Omit&lt;T, K&gt;: exclude properties</span>
+<span class="kw">type</span> <span class="type">UserWithoutEmail</span> = <span class="type">Omit</span>&lt;<span class="type">User</span>, <span class="str">"email"</span>&gt;;</pre>
+
+                <h3>More Utility Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// Record&lt;K, T&gt;: object with keys K and values T</span>
+<span class="kw">type</span> <span class="type">Roles</span> = <span class="type">Record</span>&lt;<span class="str">"admin"</span> | <span class="str">"user"</span> | <span class="str">"guest"</span>, <span class="type">string</span>[]&gt;;
+<span class="kw">let</span> permissions: <span class="type">Roles</span> = {
+    admin: [<span class="str">"read"</span>, <span class="str">"write"</span>, <span class="str">"delete"</span>],
+    user: [<span class="str">"read"</span>, <span class="str">"write"</span>],
+    guest: [<span class="str">"read"</span>]
+};
+
+<span class="cmt">// Exclude&lt;T, U&gt;: exclude types from union</span>
+<span class="kw">type</span> <span class="type">T0</span> = <span class="type">Exclude</span>&lt;<span class="str">"a"</span> | <span class="str">"b"</span> | <span class="str">"c"</span>, <span class="str">"a"</span>&gt;;  <span class="cmt">// "b" | "c"</span>
+
+<span class="cmt">// Extract&lt;T, U&gt;: extract types from union</span>
+<span class="kw">type</span> <span class="type">T1</span> = <span class="type">Extract</span>&lt;<span class="str">"a"</span> | <span class="str">"b"</span> | <span class="str">"c"</span>, <span class="str">"a"</span> | <span class="str">"f"</span>&gt;;  <span class="cmt">// "a"</span>
+
+<span class="cmt">// NonNullable&lt;T&gt;: exclude null and undefined</span>
+<span class="kw">type</span> <span class="type">T2</span> = <span class="type">NonNullable</span>&lt;<span class="type">string</span> | <span class="type">null</span> | <span class="type">undefined</span>&gt;;  <span class="cmt">// string</span>
+
+<span class="cmt">// ReturnType&lt;T&gt;: get function return type</span>
+<span class="kw">function</span> <span class="fn">getUser</span>() {
+    <span class="kw">return</span> { name: <span class="str">"Alice"</span>, age: <span class="num">30</span> };
+}
+<span class="kw">type</span> <span class="type">User2</span> = <span class="type">ReturnType</span>&lt;<span class="kw">typeof</span> <span class="fn">getUser</span>&gt;;</pre>
+            </section>
+
+            <!-- Advanced Types -->
+            <section id="advanced">
+                <h2>Advanced Types</h2>
+
+                <h3>Union & Intersection Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// Union: value can be one of several types</span>
+<span class="kw">type</span> <span class="type">StringOrNumber</span> = <span class="type">string</span> | <span class="type">number</span>;
+
+<span class="kw">function</span> <span class="fn">format</span>(value: <span class="type">StringOrNumber</span>): <span class="type">string</span> {
+    <span class="kw">if</span> (<span class="kw">typeof</span> value === <span class="str">"string"</span>) {
+        <span class="kw">return</span> value.<span class="fn">toUpperCase</span>();
+    }
+    <span class="kw">return</span> value.<span class="fn">toFixed</span>(<span class="num">2</span>);
+}
+
+<span class="cmt">// Intersection: combine multiple types</span>
+<span class="kw">type</span> <span class="type">Named</span> = { name: <span class="type">string</span> };
+<span class="kw">type</span> <span class="type">Aged</span> = { age: <span class="type">number</span> };
+<span class="kw">type</span> <span class="type">Person</span> = <span class="type">Named</span> & <span class="type">Aged</span>;
+
+<span class="kw">let</span> person: <span class="type">Person</span> = { name: <span class="str">"Alice"</span>, age: <span class="num">30</span> };</pre>
+
+                <h3>Type Guards</h3>
+                <pre data-lang="typescript"><span class="cmt">// typeof guard</span>
+<span class="kw">function</span> <span class="fn">print</span>(value: <span class="type">string</span> | <span class="type">number</span>): <span class="type">void</span> {
+    <span class="kw">if</span> (<span class="kw">typeof</span> value === <span class="str">"string"</span>) {
+        <span class="builtin">console</span>.<span class="fn">log</span>(value.<span class="fn">toUpperCase</span>());
+    } <span class="kw">else</span> {
+        <span class="builtin">console</span>.<span class="fn">log</span>(value.<span class="fn">toFixed</span>(<span class="num">2</span>));
+    }
+}
+
+<span class="cmt">// instanceof guard</span>
+<span class="kw">class</span> <span class="type">Dog</span> {
+    <span class="fn">bark</span>() { <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">"Woof!"</span>); }
+}
+<span class="kw">class</span> <span class="type">Cat</span> {
+    <span class="fn">meow</span>() { <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">"Meow!"</span>); }
+}
+
+<span class="kw">function</span> <span class="fn">makeSound</span>(animal: <span class="type">Dog</span> | <span class="type">Cat</span>): <span class="type">void</span> {
+    <span class="kw">if</span> (animal <span class="kw">instanceof</span> <span class="type">Dog</span>) {
+        animal.<span class="fn">bark</span>();
+    } <span class="kw">else</span> {
+        animal.<span class="fn">meow</span>();
+    }
+}
+
+<span class="cmt">// Custom type guard</span>
+<span class="kw">interface</span> <span class="type">Fish</span> {
+    swim(): <span class="type">void</span>;
+}
+<span class="kw">interface</span> <span class="type">Bird</span> {
+    fly(): <span class="type">void</span>;
+}
+
+<span class="kw">function</span> <span class="fn">isFish</span>(animal: <span class="type">Fish</span> | <span class="type">Bird</span>): animal <span class="kw">is</span> <span class="type">Fish</span> {
+    <span class="kw">return</span> (animal <span class="kw">as</span> <span class="type">Fish</span>).swim !== <span class="type">undefined</span>;
+}</pre>
+
+                <h3>Conditional Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// T extends U ? X : Y</span>
+<span class="kw">type</span> <span class="type">IsString</span>&lt;<span class="type">T</span>&gt; = <span class="type">T</span> <span class="kw">extends</span> <span class="type">string</span> ? <span class="str">"yes"</span> : <span class="str">"no"</span>;
+
+<span class="kw">type</span> <span class="type">A</span> = <span class="type">IsString</span>&lt;<span class="type">string</span>&gt;;  <span class="cmt">// "yes"</span>
+<span class="kw">type</span> <span class="type">B</span> = <span class="type">IsString</span>&lt;<span class="type">number</span>&gt;;  <span class="cmt">// "no"</span>
+
+<span class="cmt">// Distributive conditional types</span>
+<span class="kw">type</span> <span class="type">ToArray</span>&lt;<span class="type">T</span>&gt; = <span class="type">T</span> <span class="kw">extends</span> <span class="type">any</span> ? <span class="type">T</span>[] : <span class="type">never</span>;
+
+<span class="kw">type</span> <span class="type">StrOrNum</span> = <span class="type">ToArray</span>&lt;<span class="type">string</span> | <span class="type">number</span>&gt;;  <span class="cmt">// string[] | number[]</span></pre>
+
+                <h3>Mapped Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// Make all properties optional</span>
+<span class="kw">type</span> <span class="type">MyPartial</span>&lt;<span class="type">T</span>&gt; = {
+    [<span class="type">P</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="type">T</span>]?: <span class="type">T</span>[<span class="type">P</span>];
+};
+
+<span class="cmt">// Make all properties readonly</span>
+<span class="kw">type</span> <span class="type">MyReadonly</span>&lt;<span class="type">T</span>&gt; = {
+    <span class="kw">readonly</span> [<span class="type">P</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="type">T</span>]: <span class="type">T</span>[<span class="type">P</span>];
+};
+
+<span class="cmt">// Map to different type</span>
+<span class="kw">type</span> <span class="type">Stringify</span>&lt;<span class="type">T</span>&gt; = {
+    [<span class="type">P</span> <span class="kw">in</span> <span class="kw">keyof</span> <span class="type">T</span>]: <span class="type">string</span>;
+};</pre>
+
+                <h3>Template Literal Types</h3>
+                <pre data-lang="typescript"><span class="cmt">// String manipulation in types</span>
+<span class="kw">type</span> <span class="type">Greeting</span> = <span class="str">`hello <span class="type">${"world" | "TypeScript"}</span>`</span>;
+<span class="cmt">// "hello world" | "hello TypeScript"</span>
+
+<span class="cmt">// Uppercase/Lowercase utility types</span>
+<span class="kw">type</span> <span class="type">Upper</span> = <span class="type">Uppercase</span>&lt;<span class="str">"hello"</span>&gt;;  <span class="cmt">// "HELLO"</span>
+<span class="kw">type</span> <span class="type">Lower</span> = <span class="type">Lowercase</span>&lt;<span class="str">"HELLO"</span>&gt;;  <span class="cmt">// "hello"</span>
+<span class="kw">type</span> <span class="type">Cap</span> = <span class="type">Capitalize</span>&lt;<span class="str">"hello"</span>&gt;;    <span class="cmt">// "Hello"</span>
+<span class="kw">type</span> <span class="type">Uncap</span> = <span class="type">Uncapitalize</span>&lt;<span class="str">"Hello"</span>&gt;;  <span class="cmt">// "hello"</span></pre>
+            </section>
+
+            <!-- Configuration -->
+            <section id="config">
+                <h2>Configuration & Tooling</h2>
+
+                <h3>tsconfig.json</h3>
+                <pre data-lang="json">{
+  <span class="str">"compilerOptions"</span>: {
+    <span class="cmt">// Target JavaScript version</span>
+    <span class="str">"target"</span>: <span class="str">"ES2022"</span>,
+    <span class="str">"module"</span>: <span class="str">"ESNext"</span>,
+    <span class="str">"lib"</span>: [<span class="str">"ES2022"</span>, <span class="str">"DOM"</span>],
+
+    <span class="cmt">// Module resolution</span>
+    <span class="str">"moduleResolution"</span>: <span class="str">"bundler"</span>,
+    <span class="str">"resolveJsonModule"</span>: <span class="kw">true</span>,
+    <span class="str">"esModuleInterop"</span>: <span class="kw">true</span>,
+
+    <span class="cmt">// Output</span>
+    <span class="str">"outDir"</span>: <span class="str">"./dist"</span>,
+    <span class="str">"rootDir"</span>: <span class="str">"./src"</span>,
+    <span class="str">"declaration"</span>: <span class="kw">true</span>,
+    <span class="str">"sourceMap"</span>: <span class="kw">true</span>,
+
+    <span class="cmt">// Strictness</span>
+    <span class="str">"strict"</span>: <span class="kw">true</span>,
+    <span class="str">"noImplicitAny"</span>: <span class="kw">true</span>,
+    <span class="str">"strictNullChecks"</span>: <span class="kw">true</span>,
+    <span class="str">"strictFunctionTypes"</span>: <span class="kw">true</span>,
+    <span class="str">"noUncheckedIndexedAccess"</span>: <span class="kw">true</span>,
+
+    <span class="cmt">// Additional checks</span>
+    <span class="str">"noUnusedLocals"</span>: <span class="kw">true</span>,
+    <span class="str">"noUnusedParameters"</span>: <span class="kw">true</span>,
+    <span class="str">"noImplicitReturns"</span>: <span class="kw">true</span>,
+    <span class="str">"noFallthroughCasesInSwitch"</span>: <span class="kw">true</span>
+  },
+  <span class="str">"include"</span>: [<span class="str">"src/**/*"</span>],
+  <span class="str">"exclude"</span>: [<span class="str">"node_modules"</span>, <span class="str">"dist"</span>]
+}</pre>
+
+                <h3>Common CLI Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Install TypeScript</span>
+npm install -g typescript
+
+<span class="cmt"># Initialize tsconfig.json</span>
+tsc --init
+
+<span class="cmt"># Compile TypeScript files</span>
+tsc
+tsc file.ts
+tsc --watch
+
+<span class="cmt"># Type checking only (no output)</span>
+tsc --noEmit
+
+<span class="cmt"># Show version</span>
+tsc --version</pre>
+
+                <h3>Type Declarations</h3>
+                <pre data-lang="typescript"><span class="cmt">// .d.ts declaration files</span>
+<span class="cmt">// Install types for libraries</span>
+<span class="cmt">// npm install --save-dev @types/node</span>
+<span class="cmt">// npm install --save-dev @types/react</span>
+
+<span class="cmt">// Declare global variables</span>
+<span class="kw">declare</span> <span class="kw">const</span> API_URL: <span class="type">string</span>;
+
+<span class="cmt">// Declare modules without types</span>
+<span class="kw">declare</span> <span class="kw">module</span> <span class="str">"*.css"</span> {
+    <span class="kw">const</span> content: { [className: <span class="type">string</span>]: <span class="type">string</span> };
+    <span class="kw">export default</span> content;
+}
+
+<span class="cmt">// Ambient declarations</span>
+<span class="kw">declare</span> <span class="kw">namespace</span> <span class="type">MyLib</span> {
+    <span class="kw">function</span> <span class="fn">greet</span>(name: <span class="type">string</span>): <span class="type">void</span>;
+}</pre>
+
+                <div class="tip">
+                    Enable <code>strict: true</code> in tsconfig.json for maximum type safety. Start strict from day one for new projects.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                TypeScript TLDR — Last updated December 2025 for TypeScript 5.9<br>
+                <a href="https://www.typescriptlang.org" target="_blank">Official Site</a> ·
+                <a href="https://www.typescriptlang.org/docs/" target="_blank">Documentation</a> ·
+                <a href="https://www.typescriptlang.org/play" target="_blank">Playground</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
