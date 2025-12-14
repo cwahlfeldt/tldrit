@@ -178,6 +178,19 @@
         border-radius: 8px;
       }
 
+      .guide-card.typescript {
+        --card-accent: #3178c6;
+      }
+
+      .guide-card.typescript:hover {
+        border-color: #3178c6;
+        box-shadow: 0 12px 40px rgba(49, 120, 198, 0.15);
+      }
+
+      .guide-card.typescript .guide-icon {
+        border-radius: 4px;
+      }
+
       .guide-header {
         display: flex;
         align-items: center;
@@ -473,6 +486,23 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">v5.2</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="typescript.html" class="guide-card typescript">
+            <div class="guide-header">
+              <div class="guide-icon">TS</div>
+              <span class="guide-title">TypeScript</span>
+            </div>
+            <p class="guide-desc">
+              JavaScript with syntax for types. Static type checking catches
+              errors before runtime. Excellent IDE support, modern ECMAScript
+              features, and seamless JavaScript interoperability. Build
+              scalable applications with confidence.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v5.9</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>
