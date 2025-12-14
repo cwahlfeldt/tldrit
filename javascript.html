@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* JavaScript theme */
+        :root {
+            --accent: #f7df1e;
+            --accent-glow: rgba(247, 223, 30, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 4px;
+        }
+
+        .card h4::before {
+            content: '⚡';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">JS</div>
+            </div>
+            <h1>JavaScript <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the JavaScript programming language. The language of the web, everywhere.</p>
+            <div class="version-badge">ES2024 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is JavaScript?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#objects">Objects & Arrays</a></li>
+                <li><a href="#classes">Classes</a></li>
+                <li><a href="#async">Async</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#dom">DOM</a></li>
+                <li><a href="#modern">Modern Features</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is JavaScript? -->
+            <section id="what">
+                <h2>What is JavaScript?</h2>
+                <p>JavaScript is a high-level, dynamic, interpreted language that powers the modern web. Originally designed for browsers, it now runs everywhere: servers, mobile apps, desktop, IoT, and more.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Universal</h4>
+                        <p>Runs in every browser, on servers (Node.js), mobile (React Native), desktop (Electron), and more.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Dynamic & Flexible</h4>
+                        <p>Weakly typed, prototype-based, first-class functions. Adapts to many programming styles.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Event-Driven</h4>
+                        <p>Built for asynchronous operations. Perfect for handling user interactions and I/O.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Massive Ecosystem</h4>
+                        <p>npm has millions of packages. Frameworks like React, Vue, Angular, Express, Next.js, and more.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Variables</h3>
+                <pre data-lang="javascript"><span class="cmt">// const: cannot reassign (preferred)</span>
+<span class="kw">const</span> x = <span class="num">42</span>;
+<span class="kw">const</span> name = <span class="str">'Alice'</span>;
+
+<span class="cmt">// let: can reassign, block-scoped</span>
+<span class="kw">let</span> count = <span class="num">0</span>;
+count = <span class="num">1</span>;
+
+<span class="cmt">// var: old style, function-scoped (avoid)</span>
+<span class="kw">var</span> legacy = <span class="str">'use const or let instead'</span>;</pre>
+
+                <h3>Console & Comments</h3>
+                <pre data-lang="javascript"><span class="cmt">// Single-line comment</span>
+<span class="cmt">/* Multi-line
+   comment */</span>
+
+<span class="cmt">// Console output</span>
+<span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Hello, World!'</span>);
+<span class="builtin">console</span>.<span class="fn">warn</span>(<span class="str">'Warning message'</span>);
+<span class="builtin">console</span>.<span class="fn">error</span>(<span class="str">'Error message'</span>);
+<span class="builtin">console</span>.<span class="fn">table</span>([{ <span class="property">name</span>: <span class="str">'Alice'</span> }, { <span class="property">name</span>: <span class="str">'Bob'</span> }]);</pre>
+
+                <h3>Operators</h3>
+                <pre data-lang="javascript"><span class="cmt">// Arithmetic</span>
+<span class="num">1</span> + <span class="num">2</span>    <span class="cmt">// 3</span>
+<span class="num">5</span> - <span class="num">2</span>    <span class="cmt">// 3</span>
+<span class="num">3</span> * <span class="num">4</span>    <span class="cmt">// 12</span>
+<span class="num">10</span> / <span class="num">2</span>   <span class="cmt">// 5</span>
+<span class="num">10</span> % <span class="num">3</span>   <span class="cmt">// 1 (modulo)</span>
+<span class="num">2</span> ** <span class="num">3</span>   <span class="cmt">// 8 (exponentiation)</span>
+
+<span class="cmt">// Comparison (use === and !==)</span>
+<span class="num">5</span> === <span class="num">5</span>      <span class="cmt">// true (strict equality)</span>
+<span class="num">5</span> !== <span class="str">'5'</span>    <span class="cmt">// true (strict inequality)</span>
+<span class="num">5</span> == <span class="str">'5'</span>     <span class="cmt">// true (loose, avoid!)</span>
+<span class="num">5</span> &gt; <span class="num">3</span>       <span class="cmt">// true</span>
+
+<span class="cmt">// Logical</span>
+<span class="kw">true</span> &amp;&amp; <span class="kw">false</span>   <span class="cmt">// false (AND)</span>
+<span class="kw">true</span> || <span class="kw">false</span>   <span class="cmt">// true (OR)</span>
+!<span class="kw">true</span>           <span class="cmt">// false (NOT)</span>
+x ?? <span class="num">0</span>          <span class="cmt">// nullish coalescing (0 if x is null/undefined)</span></pre>
+
+                <h3>Control Flow</h3>
+                <pre data-lang="javascript"><span class="cmt">// if/else</span>
+<span class="kw">if</span> (x &gt; <span class="num">0</span>) {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'positive'</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (x &lt; <span class="num">0</span>) {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'negative'</span>);
+} <span class="kw">else</span> {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'zero'</span>);
+}
+
+<span class="cmt">// Ternary</span>
+<span class="kw">const</span> result = x &gt; <span class="num">0</span> ? <span class="str">'positive'</span> : <span class="str">'non-positive'</span>;
+
+<span class="cmt">// for loop</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="builtin">console</span>.<span class="fn">log</span>(i);
+}
+
+<span class="cmt">// while</span>
+<span class="kw">while</span> (x &lt; <span class="num">10</span>) {
+    x++;
+}
+
+<span class="cmt">// for...of (iterate values)</span>
+<span class="kw">for</span> (<span class="kw">const</span> item <span class="kw">of</span> array) {
+    <span class="builtin">console</span>.<span class="fn">log</span>(item);
+}
+
+<span class="cmt">// for...in (iterate keys - avoid for arrays)</span>
+<span class="kw">for</span> (<span class="kw">const</span> key <span class="kw">in</span> object) {
+    <span class="builtin">console</span>.<span class="fn">log</span>(key);
+}</pre>
+
+                <h3>Switch Statement</h3>
+                <pre data-lang="javascript"><span class="kw">switch</span> (value) {
+    <span class="kw">case</span> <span class="str">'a'</span>:
+        <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'A'</span>);
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'b'</span>:
+    <span class="kw">case</span> <span class="str">'c'</span>:
+        <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'B or C'</span>);
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Other'</span>);
+}</pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Example</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>Number</td>
+                            <td><code>42</code>, <code>3.14</code>, <code>Infinity</code>, <code>NaN</code></td>
+                            <td>All numbers are 64-bit floats</td>
+                        </tr>
+                        <tr>
+                            <td>BigInt</td>
+                            <td><code>9007199254740991n</code></td>
+                            <td>Arbitrary precision integers</td>
+                        </tr>
+                        <tr>
+                            <td>String</td>
+                            <td><code>'hello'</code>, <code>"world"</code>, <code>`template`</code></td>
+                            <td>UTF-16 encoded text</td>
+                        </tr>
+                        <tr>
+                            <td>Boolean</td>
+                            <td><code>true</code>, <code>false</code></td>
+                            <td>Logical values</td>
+                        </tr>
+                        <tr>
+                            <td>undefined</td>
+                            <td><code>undefined</code></td>
+                            <td>Uninitialized or missing</td>
+                        </tr>
+                        <tr>
+                            <td>null</td>
+                            <td><code>null</code></td>
+                            <td>Intentional absence of value</td>
+                        </tr>
+                        <tr>
+                            <td>Symbol</td>
+                            <td><code>Symbol('desc')</code></td>
+                            <td>Unique identifier</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Strings</h3>
+                <pre data-lang="javascript"><span class="cmt">// Creation</span>
+<span class="kw">const</span> single = <span class="str">'single quotes'</span>;
+<span class="kw">const</span> double = <span class="str">"double quotes"</span>;
+<span class="kw">const</span> name = <span class="str">'Alice'</span>;
+
+<span class="cmt">// Template literals (backticks)</span>
+<span class="kw">const</span> greeting = <span class="str">`Hello, <span class="template">${name}</span>!`</span>;
+<span class="kw">const</span> multiline = <span class="str">`Line 1
+Line 2`</span>;
+
+<span class="cmt">// String methods</span>
+<span class="str">'hello'</span>.<span class="property">length</span>                    <span class="cmt">// 5</span>
+<span class="str">'hello'</span>.<span class="fn">toUpperCase</span>()              <span class="cmt">// 'HELLO'</span>
+<span class="str">'HELLO'</span>.<span class="fn">toLowerCase</span>()              <span class="cmt">// 'hello'</span>
+<span class="str">'hello world'</span>.<span class="fn">split</span>(<span class="str">' '</span>)          <span class="cmt">// ['hello', 'world']</span>
+<span class="str">'hello'</span>.<span class="fn">includes</span>(<span class="str">'ell'</span>)            <span class="cmt">// true</span>
+<span class="str">'hello'</span>.<span class="fn">startsWith</span>(<span class="str">'he'</span>)          <span class="cmt">// true</span>
+<span class="str">'hello'</span>.<span class="fn">endsWith</span>(<span class="str">'lo'</span>)            <span class="cmt">// true</span>
+<span class="str">'hello'</span>.<span class="fn">slice</span>(<span class="num">1</span>, <span class="num">4</span>)               <span class="cmt">// 'ell'</span>
+<span class="str">'hello'</span>.<span class="fn">replace</span>(<span class="str">'l'</span>, <span class="str">'L'</span>)         <span class="cmt">// 'heLlo' (first only)</span>
+<span class="str">'hello'</span>.<span class="fn">replaceAll</span>(<span class="str">'l'</span>, <span class="str">'L'</span>)      <span class="cmt">// 'heLLo'</span>
+<span class="str">'  trim  '</span>.<span class="fn">trim</span>()               <span class="cmt">// 'trim'</span></pre>
+
+                <h3>Type Checking & Conversion</h3>
+                <pre data-lang="javascript"><span class="cmt">// typeof operator</span>
+<span class="kw">typeof</span> <span class="num">42</span>              <span class="cmt">// 'number'</span>
+<span class="kw">typeof</span> <span class="str">'hello'</span>         <span class="cmt">// 'string'</span>
+<span class="kw">typeof</span> <span class="kw">true</span>            <span class="cmt">// 'boolean'</span>
+<span class="kw">typeof</span> <span class="kw">undefined</span>       <span class="cmt">// 'undefined'</span>
+<span class="kw">typeof</span> <span class="kw">null</span>            <span class="cmt">// 'object' (quirk!)</span>
+<span class="kw">typeof</span> {}              <span class="cmt">// 'object'</span>
+<span class="kw">typeof</span> []              <span class="cmt">// 'object' (arrays are objects)</span>
+<span class="kw">typeof</span> <span class="kw">function</span>() {}   <span class="cmt">// 'function'</span>
+
+<span class="cmt">// Type conversion</span>
+<span class="builtin">String</span>(<span class="num">42</span>)                   <span class="cmt">// '42'</span>
+<span class="builtin">Number</span>(<span class="str">'42'</span>)                 <span class="cmt">// 42</span>
+<span class="builtin">Number</span>(<span class="str">'42px'</span>)               <span class="cmt">// NaN</span>
+<span class="builtin">parseInt</span>(<span class="str">'42px'</span>)             <span class="cmt">// 42</span>
+<span class="builtin">parseFloat</span>(<span class="str">'3.14'</span>)           <span class="cmt">// 3.14</span>
+<span class="builtin">Boolean</span>(<span class="num">0</span>)                   <span class="cmt">// false</span>
+<span class="builtin">Boolean</span>(<span class="num">1</span>)                   <span class="cmt">// true</span>
+
+<span class="cmt">// Falsy values (everything else is truthy)</span>
+<span class="kw">false</span>, <span class="num">0</span>, <span class="num">0n</span>, <span class="str">''</span>, <span class="kw">null</span>, <span class="kw">undefined</span>, <span class="builtin">NaN</span></pre>
+
+                <h3>Math</h3>
+                <pre data-lang="javascript"><span class="builtin">Math</span>.<span class="fn">round</span>(<span class="num">4.7</span>)         <span class="cmt">// 5</span>
+<span class="builtin">Math</span>.<span class="fn">ceil</span>(<span class="num">4.1</span>)          <span class="cmt">// 5</span>
+<span class="builtin">Math</span>.<span class="fn">floor</span>(<span class="num">4.9</span>)         <span class="cmt">// 4</span>
+<span class="builtin">Math</span>.<span class="fn">abs</span>(-<span class="num">5</span>)            <span class="cmt">// 5</span>
+<span class="builtin">Math</span>.<span class="fn">max</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)       <span class="cmt">// 3</span>
+<span class="builtin">Math</span>.<span class="fn">min</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)       <span class="cmt">// 1</span>
+<span class="builtin">Math</span>.<span class="fn">random</span>()           <span class="cmt">// 0-1 (exclusive)</span>
+<span class="builtin">Math</span>.<span class="fn">sqrt</span>(<span class="num">16</span>)           <span class="cmt">// 4</span>
+<span class="builtin">Math</span>.<span class="fn">pow</span>(<span class="num">2</span>, <span class="num">3</span>)          <span class="cmt">// 8</span>
+<span class="builtin">Math</span>.<span class="property">PI</span>                <span class="cmt">// 3.14159...</span></pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Function Declaration</h3>
+                <pre data-lang="javascript"><span class="cmt">// Basic function</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name) {
+    <span class="kw">return</span> <span class="str">`Hello, <span class="template">${name}</span>!`</span>;
+}
+
+<span class="cmt">// With default parameters</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name = <span class="str">'World'</span>) {
+    <span class="kw">return</span> <span class="str">`Hello, <span class="template">${name}</span>!`</span>;
+}
+
+<span class="cmt">// Multiple parameters</span>
+<span class="kw">function</span> <span class="fn">add</span>(a, b) {
+    <span class="kw">return</span> a + b;
+}</pre>
+
+                <h3>Arrow Functions</h3>
+                <pre data-lang="javascript"><span class="cmt">// Concise syntax</span>
+<span class="kw">const</span> <span class="fn">add</span> = (a, b) =&gt; a + b;
+
+<span class="cmt">// With block body</span>
+<span class="kw">const</span> <span class="fn">greet</span> = (name) =&gt; {
+    <span class="kw">const</span> message = <span class="str">`Hello, <span class="template">${name}</span>!`</span>;
+    <span class="kw">return</span> message;
+};
+
+<span class="cmt">// Single parameter (parentheses optional)</span>
+<span class="kw">const</span> <span class="fn">double</span> = x =&gt; x * <span class="num">2</span>;
+
+<span class="cmt">// No parameters</span>
+<span class="kw">const</span> <span class="fn">getRandom</span> = () =&gt; <span class="builtin">Math</span>.<span class="fn">random</span>();
+
+<span class="cmt">// Returning object literal (wrap in parentheses)</span>
+<span class="kw">const</span> <span class="fn">makePerson</span> = (name, age) =&gt; ({ name, age });</pre>
+
+                <h3>Rest Parameters & Spread</h3>
+                <pre data-lang="javascript"><span class="cmt">// Rest parameters (collect arguments)</span>
+<span class="kw">function</span> <span class="fn">sum</span>(...numbers) {
+    <span class="kw">return</span> numbers.<span class="fn">reduce</span>((a, b) =&gt; a + b, <span class="num">0</span>);
+}
+<span class="fn">sum</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>);  <span class="cmt">// 10</span>
+
+<span class="cmt">// Spread operator (expand array)</span>
+<span class="kw">const</span> arr1 = [<span class="num">1</span>, <span class="num">2</span>];
+<span class="kw">const</span> arr2 = [<span class="num">3</span>, <span class="num">4</span>];
+<span class="kw">const</span> combined = [...arr1, ...arr2];  <span class="cmt">// [1, 2, 3, 4]</span>
+
+<span class="cmt">// Spread with objects</span>
+<span class="kw">const</span> obj1 = { <span class="property">a</span>: <span class="num">1</span>, <span class="property">b</span>: <span class="num">2</span> };
+<span class="kw">const</span> obj2 = { <span class="property">c</span>: <span class="num">3</span> };
+<span class="kw">const</span> merged = { ...obj1, ...obj2 };  <span class="cmt">// { a: 1, b: 2, c: 3 }</span></pre>
+
+                <h3>Higher-Order Functions</h3>
+                <pre data-lang="javascript"><span class="cmt">// Function that returns a function</span>
+<span class="kw">function</span> <span class="fn">makeMultiplier</span>(factor) {
+    <span class="kw">return</span> (x) =&gt; x * factor;
+}
+<span class="kw">const</span> <span class="fn">double</span> = <span class="fn">makeMultiplier</span>(<span class="num">2</span>);
+<span class="fn">double</span>(<span class="num">5</span>);  <span class="cmt">// 10</span>
+
+<span class="cmt">// Function that takes a function</span>
+<span class="kw">function</span> <span class="fn">applyTwice</span>(fn, x) {
+    <span class="kw">return</span> <span class="fn">fn</span>(<span class="fn">fn</span>(x));
+}
+<span class="fn">applyTwice</span>(x =&gt; x * <span class="num">2</span>, <span class="num">3</span>);  <span class="cmt">// 12</span></pre>
+
+                <h3>Immediately Invoked Function Expression (IIFE)</h3>
+                <pre data-lang="javascript">(<span class="kw">function</span>() {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Runs immediately'</span>);
+})();
+
+<span class="cmt">// Arrow IIFE</span>
+(() =&gt; {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Also runs immediately'</span>);
+})();</pre>
+            </section>
+
+            <!-- Objects & Arrays -->
+            <section id="objects">
+                <h2>Objects & Arrays</h2>
+
+                <h3>Objects</h3>
+                <pre data-lang="javascript"><span class="cmt">// Object literal</span>
+<span class="kw">const</span> person = {
+    <span class="property">name</span>: <span class="str">'Alice'</span>,
+    <span class="property">age</span>: <span class="num">30</span>,
+    <span class="fn">greet</span>() {
+        <span class="kw">return</span> <span class="str">`Hi, I'm <span class="template">${<span class="kw">this</span>.name}</span>`</span>;
+    }
+};
+
+<span class="cmt">// Access properties</span>
+person.<span class="property">name</span>           <span class="cmt">// 'Alice'</span>
+person[<span class="str">'age'</span>]        <span class="cmt">// 30</span>
+
+<span class="cmt">// Add/modify properties</span>
+person.<span class="property">email</span> = <span class="str">'alice@example.com'</span>;
+
+<span class="cmt">// Delete property</span>
+<span class="kw">delete</span> person.<span class="property">age</span>;
+
+<span class="cmt">// Check property exists</span>
+<span class="str">'name'</span> <span class="kw">in</span> person             <span class="cmt">// true</span>
+person.<span class="fn">hasOwnProperty</span>(<span class="str">'name'</span>)  <span class="cmt">// true</span>
+
+<span class="cmt">// Object methods</span>
+<span class="builtin">Object</span>.<span class="fn">keys</span>(person)        <span class="cmt">// ['name', 'email', 'greet']</span>
+<span class="builtin">Object</span>.<span class="fn">values</span>(person)      <span class="cmt">// ['Alice', 'alice@example.com', [Function]]</span>
+<span class="builtin">Object</span>.<span class="fn">entries</span>(person)     <span class="cmt">// [['name', 'Alice'], ...]</span></pre>
+
+                <h3>Destructuring Objects</h3>
+                <pre data-lang="javascript"><span class="kw">const</span> person = { <span class="property">name</span>: <span class="str">'Alice'</span>, <span class="property">age</span>: <span class="num">30</span>, <span class="property">city</span>: <span class="str">'NYC'</span> };
+
+<span class="cmt">// Basic destructuring</span>
+<span class="kw">const</span> { name, age } = person;
+
+<span class="cmt">// Rename variables</span>
+<span class="kw">const</span> { name: userName, age: userAge } = person;
+
+<span class="cmt">// Default values</span>
+<span class="kw">const</span> { name, country = <span class="str">'USA'</span> } = person;
+
+<span class="cmt">// Nested destructuring</span>
+<span class="kw">const</span> user = { <span class="property">profile</span>: { <span class="property">name</span>: <span class="str">'Bob'</span> } };
+<span class="kw">const</span> { profile: { name } } = user;</pre>
+
+                <h3>Arrays</h3>
+                <pre data-lang="javascript"><span class="cmt">// Create array</span>
+<span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+<span class="kw">const</span> empty = [];
+
+<span class="cmt">// Access elements</span>
+arr[<span class="num">0</span>]                <span class="cmt">// 1 (first)</span>
+arr[arr.<span class="property">length</span> - <span class="num">1</span>]  <span class="cmt">// 3 (last)</span>
+arr.<span class="fn">at</span>(-<span class="num">1</span>)             <span class="cmt">// 3 (last, modern)</span>
+
+<span class="cmt">// Modify</span>
+arr.<span class="fn">push</span>(<span class="num">4</span>)           <span class="cmt">// Add to end: [1, 2, 3, 4]</span>
+arr.<span class="fn">pop</span>()             <span class="cmt">// Remove from end: returns 4</span>
+arr.<span class="fn">unshift</span>(<span class="num">0</span>)        <span class="cmt">// Add to start: [0, 1, 2, 3]</span>
+arr.<span class="fn">shift</span>()           <span class="cmt">// Remove from start: returns 0</span>
+
+<span class="cmt">// Slice (returns new array)</span>
+arr.<span class="fn">slice</span>(<span class="num">1</span>, <span class="num">3</span>)       <span class="cmt">// [2, 3] (index 1 to 2)</span>
+
+<span class="cmt">// Splice (mutates array)</span>
+arr.<span class="fn">splice</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="str">'a'</span>, <span class="str">'b'</span>)  <span class="cmt">// Remove 2 items at index 1, add 'a', 'b'</span>
+
+<span class="cmt">// Join/Split</span>
+[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>].<span class="fn">join</span>(<span class="str">'-'</span>)        <span class="cmt">// '1-2-3'</span>
+<span class="str">'a,b,c'</span>.<span class="fn">split</span>(<span class="str">','</span>)        <span class="cmt">// ['a', 'b', 'c']</span></pre>
+
+                <h3>Array Methods (Functional)</h3>
+                <pre data-lang="javascript"><span class="kw">const</span> numbers = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+
+<span class="cmt">// map: transform each element</span>
+numbers.<span class="fn">map</span>(x =&gt; x * <span class="num">2</span>)        <span class="cmt">// [2, 4, 6, 8, 10]</span>
+
+<span class="cmt">// filter: keep matching elements</span>
+numbers.<span class="fn">filter</span>(x =&gt; x % <span class="num">2</span> === <span class="num">0</span>)  <span class="cmt">// [2, 4]</span>
+
+<span class="cmt">// reduce: combine to single value</span>
+numbers.<span class="fn">reduce</span>((sum, x) =&gt; sum + x, <span class="num">0</span>)  <span class="cmt">// 15</span>
+
+<span class="cmt">// find: first matching element</span>
+numbers.<span class="fn">find</span>(x =&gt; x &gt; <span class="num">3</span>)        <span class="cmt">// 4</span>
+
+<span class="cmt">// findIndex: index of first match</span>
+numbers.<span class="fn">findIndex</span>(x =&gt; x &gt; <span class="num">3</span>)   <span class="cmt">// 3</span>
+
+<span class="cmt">// some: at least one matches</span>
+numbers.<span class="fn">some</span>(x =&gt; x &gt; <span class="num">3</span>)         <span class="cmt">// true</span>
+
+<span class="cmt">// every: all match</span>
+numbers.<span class="fn">every</span>(x =&gt; x &gt; <span class="num">0</span>)        <span class="cmt">// true</span>
+
+<span class="cmt">// forEach: iterate (no return value)</span>
+numbers.<span class="fn">forEach</span>(x =&gt; <span class="builtin">console</span>.<span class="fn">log</span>(x));
+
+<span class="cmt">// includes: check if contains value</span>
+numbers.<span class="fn">includes</span>(<span class="num">3</span>)            <span class="cmt">// true</span>
+
+<span class="cmt">// sort: sorts in place (mutates!)</span>
+[<span class="num">3</span>, <span class="num">1</span>, <span class="num">2</span>].<span class="fn">sort</span>()               <span class="cmt">// [1, 2, 3]</span>
+[<span class="num">3</span>, <span class="num">1</span>, <span class="num">2</span>].<span class="fn">sort</span>((a, b) =&gt; b - a)  <span class="cmt">// [3, 2, 1] (descending)</span>
+
+<span class="cmt">// reverse: reverses in place</span>
+[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>].<span class="fn">reverse</span>()          <span class="cmt">// [3, 2, 1]</span></pre>
+
+                <h3>Destructuring Arrays</h3>
+                <pre data-lang="javascript"><span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+
+<span class="cmt">// Basic destructuring</span>
+<span class="kw">const</span> [first, second] = arr;     <span class="cmt">// first=1, second=2</span>
+
+<span class="cmt">// Skip elements</span>
+<span class="kw">const</span> [first, , third] = arr;    <span class="cmt">// first=1, third=3</span>
+
+<span class="cmt">// Rest pattern</span>
+<span class="kw">const</span> [first, ...rest] = arr;    <span class="cmt">// first=1, rest=[2,3,4,5]</span>
+
+<span class="cmt">// Swap variables</span>
+[a, b] = [b, a];</pre>
+            </section>
+
+            <!-- Classes -->
+            <section id="classes">
+                <h2>Classes</h2>
+
+                <h3>Basic Class</h3>
+                <pre data-lang="javascript"><span class="kw">class</span> <span class="type">Person</span> {
+    <span class="fn">constructor</span>(name, age) {
+        <span class="kw">this</span>.<span class="property">name</span> = name;
+        <span class="kw">this</span>.<span class="property">age</span> = age;
+    }
+
+    <span class="fn">greet</span>() {
+        <span class="kw">return</span> <span class="str">`Hi, I'm <span class="template">${<span class="kw">this</span>.name}</span>`</span>;
+    }
+
+    <span class="fn">haveBirthday</span>() {
+        <span class="kw">this</span>.<span class="property">age</span>++;
+    }
+}
+
+<span class="kw">const</span> alice = <span class="kw">new</span> <span class="type">Person</span>(<span class="str">'Alice'</span>, <span class="num">30</span>);
+alice.<span class="fn">greet</span>();  <span class="cmt">// "Hi, I'm Alice"</span></pre>
+
+                <h3>Inheritance</h3>
+                <pre data-lang="javascript"><span class="kw">class</span> <span class="type">Student</span> <span class="kw">extends</span> <span class="type">Person</span> {
+    <span class="fn">constructor</span>(name, age, grade) {
+        <span class="kw">super</span>(name, age);  <span class="cmt">// Call parent constructor</span>
+        <span class="kw">this</span>.<span class="property">grade</span> = grade;
+    }
+
+    <span class="fn">study</span>() {
+        <span class="kw">return</span> <span class="str">`<span class="template">${<span class="kw">this</span>.name}</span> is studying`</span>;
+    }
+
+    <span class="cmt">// Override parent method</span>
+    <span class="fn">greet</span>() {
+        <span class="kw">return</span> <span class="str">`<span class="template">${<span class="kw">super</span>.<span class="fn">greet</span>()}</span>, I'm in grade <span class="template">${<span class="kw">this</span>.grade}</span>`</span>;
+    }
+}
+
+<span class="kw">const</span> bob = <span class="kw">new</span> <span class="type">Student</span>(<span class="str">'Bob'</span>, <span class="num">16</span>, <span class="num">10</span>);
+bob.<span class="fn">greet</span>();   <span class="cmt">// "Hi, I'm Bob, I'm in grade 10"</span>
+bob.<span class="fn">study</span>();   <span class="cmt">// "Bob is studying"</span></pre>
+
+                <h3>Static Methods & Private Fields</h3>
+                <pre data-lang="javascript"><span class="kw">class</span> <span class="type">MathUtils</span> {
+    <span class="cmt">// Static method (called on class, not instance)</span>
+    <span class="kw">static</span> <span class="fn">square</span>(x) {
+        <span class="kw">return</span> x * x;
+    }
+}
+<span class="type">MathUtils</span>.<span class="fn">square</span>(<span class="num">5</span>);  <span class="cmt">// 25</span>
+
+<span class="kw">class</span> <span class="type">BankAccount</span> {
+    <span class="cmt">// Private field (# prefix)</span>
+    #balance = <span class="num">0</span>;
+
+    <span class="fn">deposit</span>(amount) {
+        <span class="kw">this</span>.#balance += amount;
+    }
+
+    <span class="fn">getBalance</span>() {
+        <span class="kw">return</span> <span class="kw">this</span>.#balance;
+    }
+}</pre>
+
+                <h3>Getters & Setters</h3>
+                <pre data-lang="javascript"><span class="kw">class</span> <span class="type">Rectangle</span> {
+    <span class="fn">constructor</span>(width, height) {
+        <span class="kw">this</span>.<span class="property">width</span> = width;
+        <span class="kw">this</span>.<span class="property">height</span> = height;
+    }
+
+    <span class="kw">get</span> <span class="fn">area</span>() {
+        <span class="kw">return</span> <span class="kw">this</span>.<span class="property">width</span> * <span class="kw">this</span>.<span class="property">height</span>;
+    }
+
+    <span class="kw">set</span> <span class="fn">area</span>(value) {
+        <span class="kw">this</span>.<span class="property">width</span> = <span class="builtin">Math</span>.<span class="fn">sqrt</span>(value);
+        <span class="kw">this</span>.<span class="property">height</span> = <span class="builtin">Math</span>.<span class="fn">sqrt</span>(value);
+    }
+}
+
+<span class="kw">const</span> rect = <span class="kw">new</span> <span class="type">Rectangle</span>(<span class="num">10</span>, <span class="num">5</span>);
+<span class="builtin">console</span>.<span class="fn">log</span>(rect.<span class="property">area</span>);  <span class="cmt">// 50 (getter)</span>
+rect.<span class="property">area</span> = <span class="num">100</span>;       <span class="cmt">// setter</span></pre>
+            </section>
+
+            <!-- Async -->
+            <section id="async">
+                <h2>Asynchronous JavaScript</h2>
+
+                <h3>Promises</h3>
+                <pre data-lang="javascript"><span class="cmt">// Creating a promise</span>
+<span class="kw">const</span> promise = <span class="kw">new</span> <span class="builtin">Promise</span>((resolve, reject) =&gt; {
+    <span class="kw">const</span> success = <span class="kw">true</span>;
+    <span class="kw">if</span> (success) {
+        <span class="fn">resolve</span>(<span class="str">'Done!'</span>);
+    } <span class="kw">else</span> {
+        <span class="fn">reject</span>(<span class="str">'Failed!'</span>);
+    }
+});
+
+<span class="cmt">// Using promises</span>
+promise
+    .<span class="fn">then</span>(result =&gt; <span class="builtin">console</span>.<span class="fn">log</span>(result))
+    .<span class="fn">catch</span>(error =&gt; <span class="builtin">console</span>.<span class="fn">error</span>(error))
+    .<span class="fn">finally</span>(() =&gt; <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Cleanup'</span>));
+
+<span class="cmt">// Chaining promises</span>
+<span class="fn">fetch</span>(<span class="str">'https://api.example.com/data'</span>)
+    .<span class="fn">then</span>(response =&gt; response.<span class="fn">json</span>())
+    .<span class="fn">then</span>(data =&gt; <span class="builtin">console</span>.<span class="fn">log</span>(data))
+    .<span class="fn">catch</span>(error =&gt; <span class="builtin">console</span>.<span class="fn">error</span>(error));</pre>
+
+                <h3>Async/Await</h3>
+                <pre data-lang="javascript"><span class="cmt">// Async function (always returns a promise)</span>
+<span class="kw">async</span> <span class="kw">function</span> <span class="fn">fetchData</span>() {
+    <span class="kw">try</span> {
+        <span class="kw">const</span> response = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">'https://api.example.com/data'</span>);
+        <span class="kw">const</span> data = <span class="kw">await</span> response.<span class="fn">json</span>();
+        <span class="kw">return</span> data;
+    } <span class="kw">catch</span> (error) {
+        <span class="builtin">console</span>.<span class="fn">error</span>(<span class="str">'Error:'</span>, error);
+    }
+}
+
+<span class="cmt">// Arrow async function</span>
+<span class="kw">const</span> <span class="fn">getData</span> = <span class="kw">async</span> () =&gt; {
+    <span class="kw">const</span> data = <span class="kw">await</span> <span class="fn">fetchData</span>();
+    <span class="kw">return</span> data;
+};
+
+<span class="cmt">// Use async function</span>
+<span class="fn">fetchData</span>().<span class="fn">then</span>(data =&gt; <span class="builtin">console</span>.<span class="fn">log</span>(data));</pre>
+
+                <h3>Promise Combinators</h3>
+                <pre data-lang="javascript"><span class="cmt">// Promise.all: wait for all (fails if any fails)</span>
+<span class="kw">const</span> [users, posts] = <span class="kw">await</span> <span class="builtin">Promise</span>.<span class="fn">all</span>([
+    <span class="fn">fetch</span>(<span class="str">'/api/users'</span>).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>()),
+    <span class="fn">fetch</span>(<span class="str">'/api/posts'</span>).<span class="fn">then</span>(r =&gt; r.<span class="fn">json</span>())
+]);
+
+<span class="cmt">// Promise.allSettled: wait for all (never fails)</span>
+<span class="kw">const</span> results = <span class="kw">await</span> <span class="builtin">Promise</span>.<span class="fn">allSettled</span>([promise1, promise2]);
+
+<span class="cmt">// Promise.race: first to finish (resolve or reject)</span>
+<span class="kw">const</span> fastest = <span class="kw">await</span> <span class="builtin">Promise</span>.<span class="fn">race</span>([promise1, promise2]);
+
+<span class="cmt">// Promise.any: first to resolve (ignores rejections)</span>
+<span class="kw">const</span> first = <span class="kw">await</span> <span class="builtin">Promise</span>.<span class="fn">any</span>([promise1, promise2]);</pre>
+
+                <h3>setTimeout & setInterval</h3>
+                <pre data-lang="javascript"><span class="cmt">// Delay execution</span>
+<span class="fn">setTimeout</span>(() =&gt; {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Runs after 1 second'</span>);
+}, <span class="num">1000</span>);
+
+<span class="cmt">// Repeat execution</span>
+<span class="kw">const</span> intervalId = <span class="fn">setInterval</span>(() =&gt; {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Runs every 2 seconds'</span>);
+}, <span class="num">2000</span>);
+
+<span class="cmt">// Cancel interval</span>
+<span class="fn">clearInterval</span>(intervalId);
+
+<span class="cmt">// Promise-based delay</span>
+<span class="kw">const</span> <span class="fn">delay</span> = (ms) =&gt; <span class="kw">new</span> <span class="builtin">Promise</span>(resolve =&gt; <span class="fn">setTimeout</span>(resolve, ms));
+<span class="kw">await</span> <span class="fn">delay</span>(<span class="num">1000</span>);</pre>
+            </section>
+
+            <!-- Modules -->
+            <section id="modules">
+                <h2>Modules (ES6)</h2>
+
+                <h3>Exporting</h3>
+                <pre data-lang="javascript"><span class="cmt">// Named exports</span>
+<span class="kw">export</span> <span class="kw">const</span> <span class="fn">add</span> = (a, b) =&gt; a + b;
+<span class="kw">export</span> <span class="kw">const</span> <span class="fn">subtract</span> = (a, b) =&gt; a - b;
+
+<span class="cmt">// Export list</span>
+<span class="kw">const</span> <span class="fn">multiply</span> = (a, b) =&gt; a * b;
+<span class="kw">const</span> <span class="fn">divide</span> = (a, b) =&gt; a / b;
+<span class="kw">export</span> { multiply, divide };
+
+<span class="cmt">// Default export (one per file)</span>
+<span class="kw">export</span> <span class="kw">default</span> <span class="kw">function</span> <span class="fn">greet</span>(name) {
+    <span class="kw">return</span> <span class="str">`Hello, <span class="template">${name}</span>!`</span>;
+}
+
+<span class="cmt">// Named + default export</span>
+<span class="kw">export</span> <span class="kw">default</span> <span class="kw">class</span> <span class="type">User</span> { }
+<span class="kw">export</span> <span class="kw">const</span> VERSION = <span class="str">'1.0.0'</span>;</pre>
+
+                <h3>Importing</h3>
+                <pre data-lang="javascript"><span class="cmt">// Import named exports</span>
+<span class="kw">import</span> { add, subtract } <span class="kw">from</span> <span class="str">'./math.js'</span>;
+
+<span class="cmt">// Import all as namespace</span>
+<span class="kw">import</span> * <span class="kw">as</span> math <span class="kw">from</span> <span class="str">'./math.js'</span>;
+math.<span class="fn">add</span>(<span class="num">1</span>, <span class="num">2</span>);
+
+<span class="cmt">// Import default export</span>
+<span class="kw">import</span> greet <span class="kw">from</span> <span class="str">'./greet.js'</span>;
+
+<span class="cmt">// Import default + named</span>
+<span class="kw">import</span> User, { VERSION } <span class="kw">from</span> <span class="str">'./user.js'</span>;
+
+<span class="cmt">// Rename imports</span>
+<span class="kw">import</span> { add <span class="kw">as</span> sum } <span class="kw">from</span> <span class="str">'./math.js'</span>;
+
+<span class="cmt">// Dynamic import (returns promise)</span>
+<span class="kw">const</span> module = <span class="kw">await</span> <span class="kw">import</span>(<span class="str">'./module.js'</span>);</pre>
+            </section>
+
+            <!-- DOM -->
+            <section id="dom">
+                <h2>DOM Manipulation</h2>
+
+                <h3>Selecting Elements</h3>
+                <pre data-lang="javascript"><span class="cmt">// Select single element</span>
+<span class="kw">const</span> el = <span class="builtin">document</span>.<span class="fn">getElementById</span>(<span class="str">'myId'</span>);
+<span class="kw">const</span> el = <span class="builtin">document</span>.<span class="fn">querySelector</span>(<span class="str">'.myClass'</span>);      <span class="cmt">// CSS selector</span>
+<span class="kw">const</span> el = <span class="builtin">document</span>.<span class="fn">querySelector</span>(<span class="str">'div &gt; p:first-child'</span>);
+
+<span class="cmt">// Select multiple elements</span>
+<span class="kw">const</span> els = <span class="builtin">document</span>.<span class="fn">getElementsByClassName</span>(<span class="str">'myClass'</span>);
+<span class="kw">const</span> els = <span class="builtin">document</span>.<span class="fn">getElementsByTagName</span>(<span class="str">'p'</span>);
+<span class="kw">const</span> els = <span class="builtin">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">'.myClass'</span>);    <span class="cmt">// NodeList</span></pre>
+
+                <h3>Modifying Elements</h3>
+                <pre data-lang="javascript"><span class="cmt">// Content</span>
+el.<span class="property">textContent</span> = <span class="str">'New text'</span>;         <span class="cmt">// text only</span>
+el.<span class="property">innerHTML</span> = <span class="str">'&lt;b&gt;Bold&lt;/b&gt;'</span>;       <span class="cmt">// HTML content</span>
+
+<span class="cmt">// Attributes</span>
+el.<span class="fn">getAttribute</span>(<span class="str">'href'</span>);
+el.<span class="fn">setAttribute</span>(<span class="str">'href'</span>, <span class="str">'https://...'</span>);
+el.<span class="fn">removeAttribute</span>(<span class="str">'disabled'</span>);
+el.<span class="fn">hasAttribute</span>(<span class="str">'disabled'</span>);
+
+<span class="cmt">// Direct property access (preferred)</span>
+el.<span class="property">href</span> = <span class="str">'https://...'</span>;
+el.<span class="property">disabled</span> = <span class="kw">true</span>;
+
+<span class="cmt">// Classes</span>
+el.<span class="property">classList</span>.<span class="fn">add</span>(<span class="str">'active'</span>);
+el.<span class="property">classList</span>.<span class="fn">remove</span>(<span class="str">'hidden'</span>);
+el.<span class="property">classList</span>.<span class="fn">toggle</span>(<span class="str">'visible'</span>);
+el.<span class="property">classList</span>.<span class="fn">contains</span>(<span class="str">'active'</span>);      <span class="cmt">// true/false</span>
+
+<span class="cmt">// Styles</span>
+el.<span class="property">style</span>.<span class="property">color</span> = <span class="str">'red'</span>;
+el.<span class="property">style</span>.<span class="property">backgroundColor</span> = <span class="str">'blue'</span>;  <span class="cmt">// camelCase!</span></pre>
+
+                <h3>Creating & Removing Elements</h3>
+                <pre data-lang="javascript"><span class="cmt">// Create element</span>
+<span class="kw">const</span> div = <span class="builtin">document</span>.<span class="fn">createElement</span>(<span class="str">'div'</span>);
+div.<span class="property">textContent</span> = <span class="str">'Hello'</span>;
+div.<span class="property">classList</span>.<span class="fn">add</span>(<span class="str">'box'</span>);
+
+<span class="cmt">// Add to DOM</span>
+parent.<span class="fn">appendChild</span>(div);              <span class="cmt">// Add to end</span>
+parent.<span class="fn">insertBefore</span>(div, sibling);   <span class="cmt">// Insert before sibling</span>
+parent.<span class="fn">prepend</span>(div);                 <span class="cmt">// Add to start</span>
+parent.<span class="fn">append</span>(div);                  <span class="cmt">// Add to end (modern)</span>
+
+<span class="cmt">// Remove from DOM</span>
+el.<span class="fn">remove</span>();                       <span class="cmt">// Remove element</span>
+parent.<span class="fn">removeChild</span>(el);             <span class="cmt">// Old way</span></pre>
+
+                <h3>Event Listeners</h3>
+                <pre data-lang="javascript"><span class="cmt">// Add event listener</span>
+button.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, (event) =&gt; {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Clicked!'</span>, event);
+});
+
+<span class="cmt">// Common events</span>
+el.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'dblclick'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'mouseenter'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'mouseleave'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'keyup'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'submit'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'input'</span>, handler);
+el.<span class="fn">addEventListener</span>(<span class="str">'change'</span>, handler);
+
+<span class="cmt">// Event object</span>
+<span class="kw">function</span> <span class="fn">handleClick</span>(event) {
+    event.<span class="fn">preventDefault</span>();   <span class="cmt">// Stop default action</span>
+    event.<span class="fn">stopPropagation</span>();  <span class="cmt">// Stop bubbling</span>
+    event.<span class="property">target</span>;              <span class="cmt">// Element that triggered event</span>
+    event.<span class="property">currentTarget</span>;       <span class="cmt">// Element with listener</span>
+}
+
+<span class="cmt">// Remove event listener (needs same function reference)</span>
+el.<span class="fn">removeEventListener</span>(<span class="str">'click'</span>, handler);</pre>
+
+                <h3>Forms</h3>
+                <pre data-lang="javascript"><span class="cmt">// Get form values</span>
+<span class="kw">const</span> input = <span class="builtin">document</span>.<span class="fn">querySelector</span>(<span class="str">'input[name="email"]'</span>);
+<span class="kw">const</span> value = input.<span class="property">value</span>;
+
+<span class="cmt">// Handle form submit</span>
+form.<span class="fn">addEventListener</span>(<span class="str">'submit'</span>, (e) =&gt; {
+    e.<span class="fn">preventDefault</span>();
+    <span class="kw">const</span> formData = <span class="kw">new</span> <span class="builtin">FormData</span>(form);
+    <span class="kw">const</span> email = formData.<span class="fn">get</span>(<span class="str">'email'</span>);
+    <span class="cmt">// Send to server...</span>
+});</pre>
+            </section>
+
+            <!-- Modern Features -->
+            <section id="modern">
+                <h2>Modern JavaScript Features</h2>
+
+                <h3>Optional Chaining (?.)</h3>
+                <pre data-lang="javascript"><span class="cmt">// Safe property access (returns undefined if null/undefined)</span>
+<span class="kw">const</span> city = user?.address?.city;
+
+<span class="cmt">// Safe function call</span>
+<span class="kw">const</span> result = obj.<span class="fn">method</span>?.();
+
+<span class="cmt">// Safe array access</span>
+<span class="kw">const</span> first = arr?.[<span class="num">0</span>];</pre>
+
+                <h3>Nullish Coalescing (??)</h3>
+                <pre data-lang="javascript"><span class="cmt">// Use default only if null or undefined (not 0, '', false)</span>
+<span class="kw">const</span> value = userInput ?? <span class="str">'default'</span>;
+
+<span class="cmt">// vs OR operator (treats 0, '', false as falsy)</span>
+<span class="kw">const</span> value = userInput || <span class="str">'default'</span>;</pre>
+
+                <h3>Logical Assignment</h3>
+                <pre data-lang="javascript"><span class="cmt">// Assign only if falsy</span>
+x ||= <span class="num">10</span>;   <span class="cmt">// x = x || 10</span>
+
+<span class="cmt">// Assign only if truthy</span>
+x &amp;&amp;= <span class="num">10</span>;  <span class="cmt">// x = x &amp;&amp; 10</span>
+
+<span class="cmt">// Assign only if nullish</span>
+x ??= <span class="num">10</span>;  <span class="cmt">// x = x ?? 10</span></pre>
+
+                <h3>Array Methods (Modern)</h3>
+                <pre data-lang="javascript"><span class="cmt">// at: negative indexing</span>
+arr.<span class="fn">at</span>(-<span class="num">1</span>)              <span class="cmt">// Last element</span>
+
+<span class="cmt">// flat: flatten nested arrays</span>
+[[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]].<span class="fn">flat</span>()           <span class="cmt">// [1, 2, 3, 4]</span>
+
+<span class="cmt">// flatMap: map + flat</span>
+[<span class="num">1</span>, <span class="num">2</span>].<span class="fn">flatMap</span>(x =&gt; [x, x * <span class="num">2</span>])  <span class="cmt">// [1, 2, 2, 4]</span>
+
+<span class="cmt">// findLast: find from end</span>
+arr.<span class="fn">findLast</span>(x =&gt; x &gt; <span class="num">3</span>)
+
+<span class="cmt">// toSorted: non-mutating sort (returns new array)</span>
+<span class="kw">const</span> sorted = arr.<span class="fn">toSorted</span>()
+
+<span class="cmt">// toReversed: non-mutating reverse</span>
+<span class="kw">const</span> reversed = arr.<span class="fn">toReversed</span>()</pre>
+
+                <h3>Object Methods (Modern)</h3>
+                <pre data-lang="javascript"><span class="cmt">// Object.fromEntries: array to object</span>
+<span class="kw">const</span> obj = <span class="builtin">Object</span>.<span class="fn">fromEntries</span>([[<span class="str">'a'</span>, <span class="num">1</span>], [<span class="str">'b'</span>, <span class="num">2</span>]]);
+
+<span class="cmt">// structuredClone: deep clone</span>
+<span class="kw">const</span> clone = <span class="fn">structuredClone</span>(obj);
+
+<span class="cmt">// Object.hasOwn: safer hasOwnProperty</span>
+<span class="builtin">Object</span>.<span class="fn">hasOwn</span>(obj, <span class="str">'key'</span>)</pre>
+
+                <h3>String Methods (Modern)</h3>
+                <pre data-lang="javascript"><span class="cmt">// replaceAll: replace all occurrences</span>
+<span class="str">'hello'</span>.<span class="fn">replaceAll</span>(<span class="str">'l'</span>, <span class="str">'L'</span>)  <span class="cmt">// 'heLLo'</span>
+
+<span class="cmt">// trimStart/trimEnd: trim specific sides</span>
+<span class="str">'  hello  '</span>.<span class="fn">trimStart</span>()        <span class="cmt">// 'hello  '</span>
+<span class="str">'  hello  '</span>.<span class="fn">trimEnd</span>()          <span class="cmt">// '  hello'</span>
+
+<span class="cmt">// padStart/padEnd: add padding</span>
+<span class="str">'5'</span>.<span class="fn">padStart</span>(<span class="num">3</span>, <span class="str">'0'</span>)             <span class="cmt">// '005'</span>
+<span class="str">'5'</span>.<span class="fn">padEnd</span>(<span class="num">3</span>, <span class="str">'0'</span>)               <span class="cmt">// '500'</span></pre>
+
+                <h3>Try/Catch & Error Handling</h3>
+                <pre data-lang="javascript"><span class="cmt">// Basic try/catch</span>
+<span class="kw">try</span> {
+    <span class="kw">throw</span> <span class="kw">new</span> <span class="builtin">Error</span>(<span class="str">'Something went wrong'</span>);
+} <span class="kw">catch</span> (error) {
+    <span class="builtin">console</span>.<span class="fn">error</span>(error.<span class="property">message</span>);
+} <span class="kw">finally</span> {
+    <span class="builtin">console</span>.<span class="fn">log</span>(<span class="str">'Always runs'</span>);
+}
+
+<span class="cmt">// Custom error</span>
+<span class="kw">class</span> <span class="type">ValidationError</span> <span class="kw">extends</span> <span class="builtin">Error</span> {
+    <span class="fn">constructor</span>(message) {
+        <span class="kw">super</span>(message);
+        <span class="kw">this</span>.<span class="property">name</span> = <span class="str">'ValidationError'</span>;
+    }
+}</pre>
+
+                <h3>JSON</h3>
+                <pre data-lang="javascript"><span class="cmt">// Parse JSON string</span>
+<span class="kw">const</span> obj = <span class="builtin">JSON</span>.<span class="fn">parse</span>(<span class="str">'{"name":"Alice","age":30}'</span>);
+
+<span class="cmt">// Stringify object</span>
+<span class="kw">const</span> json = <span class="builtin">JSON</span>.<span class="fn">stringify</span>({ <span class="property">name</span>: <span class="str">'Alice'</span>, <span class="property">age</span>: <span class="num">30</span> });
+
+<span class="cmt">// Pretty print (indent with 2 spaces)</span>
+<span class="kw">const</span> pretty = <span class="builtin">JSON</span>.<span class="fn">stringify</span>(obj, <span class="kw">null</span>, <span class="num">2</span>);</pre>
+
+                <div class="tip">
+                    Use strict mode (<code>'use strict';</code>) at the top of files for better error checking. Modern modules use strict mode by default.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                JavaScript TLDR — Last updated December 2025 for ES2024<br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">MDN Web Docs</a> ·
+                <a href="https://javascript.info" target="_blank">javascript.info</a> ·
+                <a href="https://nodejs.org" target="_blank">Node.js</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
