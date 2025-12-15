@@ -204,6 +204,19 @@
         border-radius: 4px;
       }
 
+      .guide-card.cpp {
+        --card-accent: #00599c;
+      }
+
+      .guide-card.cpp:hover {
+        border-color: #00599c;
+        box-shadow: 0 12px 40px rgba(0, 89, 156, 0.15);
+      }
+
+      .guide-card.cpp .guide-icon {
+        border-radius: 8px;
+      }
+      
       .guide-card.lua {
         --card-accent: #000080;
       }
@@ -438,6 +451,23 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">C23</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="cpp.html" class="guide-card cpp">
+            <div class="guide-header">
+              <div class="guide-icon">C++</div>
+              <span class="guide-title">C++</span>
+            </div>
+            <p class="guide-desc">
+              A general-purpose programming language with object-oriented,
+              generic, and functional features. RAII for resource management,
+              powerful template system, and the STL. Modern C++ offers
+              smart pointers, lambdas, and move semantics.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">C++23</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>
