@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Lua theme */
+        :root {
+            --accent: #000080;
+            --accent-glow: rgba(0, 0, 128, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 50%;
+        }
+
+        .card h4::before {
+            content: '🌙';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">Lua</div>
+            </div>
+            <h1>Lua <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Lua programming language. Lightweight, embeddable, and powerful.</p>
+            <div class="version-badge">v5.4.8 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is Lua?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#tables">Tables</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#metatables">Metatables</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#coroutines">Coroutines</a></li>
+                <li><a href="#strings">Strings</a></li>
+                <li><a href="#errors">Error Handling</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Lua? -->
+            <section id="what">
+                <h2>What is Lua?</h2>
+                <p>Lua is a lightweight, high-level scripting language designed for embedded use in applications. Known for its simplicity, speed, and powerful data description capabilities through tables.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Lightweight</h4>
+                        <p>Small footprint (~280KB compiled). Fast execution. Minimal dependencies. Perfect for embedding.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Simple Syntax</h4>
+                        <p>Clean, readable syntax. Few core concepts. Easy to learn and teach. Dynamically typed.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Powerful Tables</h4>
+                        <p>Tables are the only data structure. Implement arrays, dictionaries, objects, and more.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Embeddable</h4>
+                        <p>Designed to extend applications. C API for integration. Used in games, web servers, and more.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="lua"><span class="cmt">-- Comments start with --</span>
+<span class="builtin">print</span>(<span class="str">"Hello, world!"</span>)
+
+<span class="cmt">--[[ Multi-line
+     comment ]]</span></pre>
+
+                <h3>Variables</h3>
+                <pre data-lang="lua"><span class="cmt">-- Global by default</span>
+x = <span class="num">10</span>
+name = <span class="str">"Alice"</span>
+
+<span class="cmt">-- Local variables (prefer these!)</span>
+<span class="kw">local</span> y = <span class="num">20</span>
+<span class="kw">local</span> greeting = <span class="str">"Hello"</span>
+
+<span class="cmt">-- Multiple assignment</span>
+<span class="kw">local</span> a, b, c = <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>
+<span class="kw">local</span> x, y = <span class="num">10</span>  <span class="cmt">-- y is nil</span>
+
+<span class="cmt">-- Swap values</span>
+a, b = b, a</pre>
+
+                <h3>Control Flow</h3>
+                <pre data-lang="lua"><span class="cmt">-- if statement</span>
+<span class="kw">if</span> x > <span class="num">10</span> <span class="kw">then</span>
+    <span class="builtin">print</span>(<span class="str">"big"</span>)
+<span class="kw">elseif</span> x > <span class="num">5</span> <span class="kw">then</span>
+    <span class="builtin">print</span>(<span class="str">"medium"</span>)
+<span class="kw">else</span>
+    <span class="builtin">print</span>(<span class="str">"small"</span>)
+<span class="kw">end</span>
+
+<span class="cmt">-- while loop</span>
+<span class="kw">local</span> i = <span class="num">1</span>
+<span class="kw">while</span> i <= <span class="num">5</span> <span class="kw">do</span>
+    <span class="builtin">print</span>(i)
+    i = i + <span class="num">1</span>
+<span class="kw">end</span>
+
+<span class="cmt">-- repeat-until (do-while)</span>
+<span class="kw">local</span> i = <span class="num">1</span>
+<span class="kw">repeat</span>
+    <span class="builtin">print</span>(i)
+    i = i + <span class="num">1</span>
+<span class="kw">until</span> i > <span class="num">5</span>
+
+<span class="cmt">-- for loop (numeric)</span>
+<span class="kw">for</span> i = <span class="num">1</span>, <span class="num">10</span> <span class="kw">do</span>
+    <span class="builtin">print</span>(i)
+<span class="kw">end</span>
+
+<span class="cmt">-- with step</span>
+<span class="kw">for</span> i = <span class="num">10</span>, <span class="num">1</span>, <span class="num">-1</span> <span class="kw">do</span>
+    <span class="builtin">print</span>(i)
+<span class="kw">end</span>
+
+<span class="cmt">-- for loop (iterator)</span>
+<span class="kw">for</span> k, v <span class="kw">in</span> <span class="builtin">pairs</span>(table) <span class="kw">do</span>
+    <span class="builtin">print</span>(k, v)
+<span class="kw">end</span></pre>
+
+                <h3>Operators</h3>
+                <pre data-lang="lua"><span class="cmt">-- Arithmetic</span>
++ - * / % ^  <span class="cmt">-- addition, subtraction, multiplication, division, modulo, power</span>
+//           <span class="cmt">-- floor division (Lua 5.3+)</span>
+
+<span class="cmt">-- Relational</span>
+== ~= < > <= >=  <span class="cmt">-- equals, not equals, less, greater, etc.</span>
+
+<span class="cmt">-- Logical</span>
+<span class="kw">and</span> <span class="kw">or</span> <span class="kw">not</span>
+
+<span class="cmt">-- String concatenation</span>
+<span class="str">"Hello"</span> .. <span class="str">" world"</span>  <span class="cmt">-- "Hello world"</span>
+
+<span class="cmt">-- Length operator</span>
+#<span class="str">"hello"</span>     <span class="cmt">-- 5</span>
+#{<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>}  <span class="cmt">-- 3</span></pre>
+            </section>
+
+            <!-- Types -->
+            <section id="types">
+                <h2>Types</h2>
+                <p>Lua is dynamically typed. There are 8 basic types.</p>
+
+                <h3>Basic Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Example</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>nil</td>
+                            <td><code>nil</code></td>
+                            <td>Represents absence of value</td>
+                        </tr>
+                        <tr>
+                            <td>boolean</td>
+                            <td><code>true, false</code></td>
+                            <td>Only <code>false</code> and <code>nil</code> are falsy</td>
+                        </tr>
+                        <tr>
+                            <td>number</td>
+                            <td><code>42, 3.14, 1e10</code></td>
+                            <td>Double-precision floats (or integers in 5.3+)</td>
+                        </tr>
+                        <tr>
+                            <td>string</td>
+                            <td><code>"hello", 'world'</code></td>
+                            <td>Immutable sequences of bytes</td>
+                        </tr>
+                        <tr>
+                            <td>function</td>
+                            <td><code>function() end</code></td>
+                            <td>First-class values</td>
+                        </tr>
+                        <tr>
+                            <td>table</td>
+                            <td><code>{1, 2, 3}</code></td>
+                            <td>The only data structure</td>
+                        </tr>
+                        <tr>
+                            <td>userdata</td>
+                            <td>-</td>
+                            <td>C data (for embedding)</td>
+                        </tr>
+                        <tr>
+                            <td>thread</td>
+                            <td>-</td>
+                            <td>Coroutines</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Type Checking</h3>
+                <pre data-lang="lua"><span class="cmt">-- type() returns a string</span>
+<span class="builtin">type</span>(<span class="num">5</span>)         <span class="cmt">-- "number"</span>
+<span class="builtin">type</span>(<span class="str">"hello"</span>)   <span class="cmt">-- "string"</span>
+<span class="builtin">type</span>({})        <span class="cmt">-- "table"</span>
+<span class="builtin">type</span>(<span class="kw">nil</span>)       <span class="cmt">-- "nil"</span>
+<span class="builtin">type</span>(<span class="builtin">print</span>)     <span class="cmt">-- "function"</span>
+
+<span class="cmt">-- Type coercion</span>
+<span class="builtin">tonumber</span>(<span class="str">"123"</span>)   <span class="cmt">-- 123</span>
+<span class="builtin">tostring</span>(<span class="num">123</span>)     <span class="cmt">-- "123"</span></pre>
+
+                <h3>Numbers</h3>
+                <pre data-lang="lua"><span class="cmt">-- Integers (Lua 5.3+)</span>
+<span class="kw">local</span> x = <span class="num">42</span>
+
+<span class="cmt">-- Floats</span>
+<span class="kw">local</span> y = <span class="num">3.14</span>
+
+<span class="cmt">-- Scientific notation</span>
+<span class="kw">local</span> z = <span class="num">1.23e-4</span>
+
+<span class="cmt">-- Hexadecimal</span>
+<span class="kw">local</span> hex = <span class="num">0xFF</span>
+
+<span class="cmt">-- Math operations</span>
+<span class="builtin">math</span>.floor(<span class="num">3.7</span>)    <span class="cmt">-- 3</span>
+<span class="builtin">math</span>.ceil(<span class="num">3.2</span>)     <span class="cmt">-- 4</span>
+<span class="builtin">math</span>.abs(<span class="num">-5</span>)       <span class="cmt">-- 5</span>
+<span class="builtin">math</span>.max(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)  <span class="cmt">-- 3</span>
+<span class="builtin">math</span>.min(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)  <span class="cmt">-- 1</span>
+<span class="builtin">math</span>.random()      <span class="cmt">-- random float [0,1)</span>
+<span class="builtin">math</span>.random(<span class="num">10</span>)   <span class="cmt">-- random int [1,10]</span></pre>
+            </section>
+
+            <!-- Tables -->
+            <section id="tables">
+                <h2>Tables</h2>
+                <p>Tables are Lua's only data structure. They implement associative arrays and can represent arrays, sets, records, graphs, and more.</p>
+
+                <h3>Creating Tables</h3>
+                <pre data-lang="lua"><span class="cmt">-- Empty table</span>
+<span class="kw">local</span> t = {}
+
+<span class="cmt">-- Array-like (1-indexed!)</span>
+<span class="kw">local</span> arr = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>}
+<span class="builtin">print</span>(arr[<span class="num">1</span>])  <span class="cmt">-- 10 (not 0!)</span>
+
+<span class="cmt">-- Dictionary-like</span>
+<span class="kw">local</span> person = {
+    name = <span class="str">"Alice"</span>,
+    age = <span class="num">30</span>,
+    city = <span class="str">"NYC"</span>
+}
+
+<span class="cmt">-- Mixed</span>
+<span class="kw">local</span> mixed = {
+    <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>,           <span class="cmt">-- indices 1, 2, 3</span>
+    x = <span class="num">100</span>,
+    y = <span class="num">200</span>,
+    [<span class="str">"key with spaces"</span>] = <span class="str">"value"</span>
+}</pre>
+
+                <h3>Accessing Tables</h3>
+                <pre data-lang="lua"><span class="cmt">-- Dot notation</span>
+person.name        <span class="cmt">-- "Alice"</span>
+person.age = <span class="num">31</span>
+
+<span class="cmt">-- Bracket notation</span>
+person[<span class="str">"name"</span>]    <span class="cmt">-- "Alice"</span>
+person[<span class="str">"age"</span>] = <span class="num">31</span>
+
+<span class="cmt">-- Dynamic keys</span>
+<span class="kw">local</span> key = <span class="str">"name"</span>
+person[key]       <span class="cmt">-- "Alice"</span>
+
+<span class="cmt">-- Length (array part only)</span>
+#arr              <span class="cmt">-- 3</span></pre>
+
+                <h3>Table Operations</h3>
+                <pre data-lang="lua"><span class="cmt">-- Insert</span>
+<span class="builtin">table</span>.insert(arr, <span class="num">40</span>)        <span class="cmt">-- append to end</span>
+<span class="builtin">table</span>.insert(arr, <span class="num">2</span>, <span class="num">15</span>)     <span class="cmt">-- insert at position 2</span>
+
+<span class="cmt">-- Remove</span>
+<span class="builtin">table</span>.remove(arr)            <span class="cmt">-- remove last element</span>
+<span class="builtin">table</span>.remove(arr, <span class="num">2</span>)         <span class="cmt">-- remove at position 2</span>
+
+<span class="cmt">-- Concatenate</span>
+<span class="kw">local</span> str = <span class="builtin">table</span>.concat(arr, <span class="str">", "</span>)  <span class="cmt">-- join with separator</span>
+
+<span class="cmt">-- Sort</span>
+<span class="builtin">table</span>.sort(arr)              <span class="cmt">-- sort in place</span>
+<span class="builtin">table</span>.sort(arr, <span class="kw">function</span>(a, b) <span class="kw">return</span> a > b <span class="kw">end</span>)  <span class="cmt">-- descending</span></pre>
+
+                <h3>Iterating Tables</h3>
+                <pre data-lang="lua"><span class="cmt">-- ipairs (array part only, in order)</span>
+<span class="kw">for</span> i, v <span class="kw">in</span> <span class="builtin">ipairs</span>(arr) <span class="kw">do</span>
+    <span class="builtin">print</span>(i, v)
+<span class="kw">end</span>
+
+<span class="cmt">-- pairs (all key-value pairs, no order guarantee)</span>
+<span class="kw">for</span> k, v <span class="kw">in</span> <span class="builtin">pairs</span>(person) <span class="kw">do</span>
+    <span class="builtin">print</span>(k, v)
+<span class="kw">end</span>
+
+<span class="cmt">-- Manual iteration</span>
+<span class="kw">for</span> i = <span class="num">1</span>, #arr <span class="kw">do</span>
+    <span class="builtin">print</span>(arr[i])
+<span class="kw">end</span></pre>
+
+                <div class="tip">
+                    Arrays in Lua are 1-indexed, not 0-indexed! This is different from most other languages.
+                </div>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+                <p>Functions are first-class values in Lua. They can be stored in variables, passed as arguments, and returned from other functions.</p>
+
+                <h3>Defining Functions</h3>
+                <pre data-lang="lua"><span class="cmt">-- Basic function</span>
+<span class="kw">function</span> <span class="fn">greet</span>(name)
+    <span class="builtin">print</span>(<span class="str">"Hello, "</span> .. name)
+<span class="kw">end</span>
+
+<span class="cmt">-- With return value</span>
+<span class="kw">function</span> <span class="fn">add</span>(a, b)
+    <span class="kw">return</span> a + b
+<span class="kw">end</span>
+
+<span class="cmt">-- Multiple return values</span>
+<span class="kw">function</span> <span class="fn">minmax</span>(a, b)
+    <span class="kw">if</span> a < b <span class="kw">then</span>
+        <span class="kw">return</span> a, b
+    <span class="kw">else</span>
+        <span class="kw">return</span> b, a
+    <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">local</span> min, max = <span class="fn">minmax</span>(<span class="num">5</span>, <span class="num">3</span>)  <span class="cmt">-- min=3, max=5</span></pre>
+
+                <h3>Anonymous Functions</h3>
+                <pre data-lang="lua"><span class="cmt">-- Function as value</span>
+<span class="kw">local</span> square = <span class="kw">function</span>(x)
+    <span class="kw">return</span> x * x
+<span class="kw">end</span>
+
+<span class="cmt">-- Pass function as argument</span>
+<span class="builtin">table</span>.sort(arr, <span class="kw">function</span>(a, b)
+    <span class="kw">return</span> a > b
+<span class="kw">end</span>)</pre>
+
+                <h3>Variable Arguments</h3>
+                <pre data-lang="lua"><span class="cmt">-- ... captures all arguments</span>
+<span class="kw">function</span> <span class="fn">sum</span>(...)
+    <span class="kw">local</span> result = <span class="num">0</span>
+    <span class="kw">for</span> i, v <span class="kw">in</span> <span class="builtin">ipairs</span>({...}) <span class="kw">do</span>
+        result = result + v
+    <span class="kw">end</span>
+    <span class="kw">return</span> result
+<span class="kw">end</span>
+
+<span class="fn">sum</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)  <span class="cmt">-- 10</span>
+
+<span class="cmt">-- select() for varargs</span>
+<span class="kw">function</span> <span class="fn">foo</span>(...)
+    <span class="kw">local</span> n = <span class="builtin">select</span>(<span class="str">"#"</span>, ...)  <span class="cmt">-- count args</span>
+    <span class="kw">local</span> first = <span class="builtin">select</span>(<span class="num">1</span>, ...)  <span class="cmt">-- first arg</span>
+<span class="kw">end</span></pre>
+
+                <h3>Closures</h3>
+                <pre data-lang="lua"><span class="cmt">-- Function that returns function</span>
+<span class="kw">function</span> <span class="fn">makeCounter</span>()
+    <span class="kw">local</span> count = <span class="num">0</span>
+    <span class="kw">return</span> <span class="kw">function</span>()
+        count = count + <span class="num">1</span>
+        <span class="kw">return</span> count
+    <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">local</span> counter = <span class="fn">makeCounter</span>()
+<span class="builtin">print</span>(<span class="fn">counter</span>())  <span class="cmt">-- 1</span>
+<span class="builtin">print</span>(<span class="fn">counter</span>())  <span class="cmt">-- 2</span></pre>
+
+                <h3>Tail Calls</h3>
+                <pre data-lang="lua"><span class="cmt">-- Tail call optimization</span>
+<span class="kw">function</span> <span class="fn">factorial</span>(n, acc)
+    acc = acc <span class="kw">or</span> <span class="num">1</span>
+    <span class="kw">if</span> n <= <span class="num">1</span> <span class="kw">then</span>
+        <span class="kw">return</span> acc
+    <span class="kw">end</span>
+    <span class="kw">return</span> <span class="fn">factorial</span>(n - <span class="num">1</span>, n * acc)  <span class="cmt">-- tail call</span>
+<span class="kw">end</span></pre>
+            </section>
+
+            <!-- Metatables -->
+            <section id="metatables">
+                <h2>Metatables & Metamethods</h2>
+                <p>Metatables allow you to change the behavior of tables. They enable operator overloading, custom indexing, and more.</p>
+
+                <h3>Basic Metatables</h3>
+                <pre data-lang="lua"><span class="cmt">-- Create metatable</span>
+<span class="kw">local</span> mt = {
+    __add = <span class="kw">function</span>(a, b)
+        <span class="kw">return</span> {x = a.x + b.x, y = a.y + b.y}
+    <span class="kw">end</span>
+}
+
+<span class="cmt">-- Attach metatable</span>
+<span class="kw">local</span> v1 = {x = <span class="num">1</span>, y = <span class="num">2</span>}
+<span class="kw">local</span> v2 = {x = <span class="num">3</span>, y = <span class="num">4</span>}
+<span class="builtin">setmetatable</span>(v1, mt)
+<span class="builtin">setmetatable</span>(v2, mt)
+
+<span class="kw">local</span> v3 = v1 + v2  <span class="cmt">-- {x=4, y=6}</span>
+
+<span class="cmt">-- Get metatable</span>
+<span class="kw">local</span> mt = <span class="builtin">getmetatable</span>(v1)</pre>
+
+                <h3>Common Metamethods</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Metamethod</th>
+                            <th>Operator/Event</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>__add</code></td>
+                            <td><code>+</code></td>
+                            <td>Addition</td>
+                        </tr>
+                        <tr>
+                            <td><code>__sub</code></td>
+                            <td><code>-</code></td>
+                            <td>Subtraction</td>
+                        </tr>
+                        <tr>
+                            <td><code>__mul</code></td>
+                            <td><code>*</code></td>
+                            <td>Multiplication</td>
+                        </tr>
+                        <tr>
+                            <td><code>__div</code></td>
+                            <td><code>/</code></td>
+                            <td>Division</td>
+                        </tr>
+                        <tr>
+                            <td><code>__eq</code></td>
+                            <td><code>==</code></td>
+                            <td>Equality</td>
+                        </tr>
+                        <tr>
+                            <td><code>__lt</code></td>
+                            <td><code>&lt;</code></td>
+                            <td>Less than</td>
+                        </tr>
+                        <tr>
+                            <td><code>__le</code></td>
+                            <td><code>&lt;=</code></td>
+                            <td>Less or equal</td>
+                        </tr>
+                        <tr>
+                            <td><code>__concat</code></td>
+                            <td><code>..</code></td>
+                            <td>Concatenation</td>
+                        </tr>
+                        <tr>
+                            <td><code>__tostring</code></td>
+                            <td><code>tostring()</code></td>
+                            <td>String conversion</td>
+                        </tr>
+                        <tr>
+                            <td><code>__index</code></td>
+                            <td><code>t[k]</code></td>
+                            <td>Reading missing keys</td>
+                        </tr>
+                        <tr>
+                            <td><code>__newindex</code></td>
+                            <td><code>t[k]=v</code></td>
+                            <td>Writing to missing keys</td>
+                        </tr>
+                        <tr>
+                            <td><code>__call</code></td>
+                            <td><code>t()</code></td>
+                            <td>Calling table as function</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>__index for Inheritance</h3>
+                <pre data-lang="lua"><span class="cmt">-- Prototype-based inheritance</span>
+<span class="kw">local</span> Animal = {
+    sound = <span class="str">"..."</span>
+}
+
+<span class="kw">function</span> Animal:<span class="fn">new</span>(sound)
+    <span class="kw">local</span> obj = {sound = sound <span class="kw">or</span> <span class="kw">self</span>.sound}
+    <span class="builtin">setmetatable</span>(obj, <span class="kw">self</span>)
+    <span class="kw">self</span>.__index = <span class="kw">self</span>
+    <span class="kw">return</span> obj
+<span class="kw">end</span>
+
+<span class="kw">function</span> Animal:<span class="fn">speak</span>()
+    <span class="builtin">print</span>(<span class="kw">self</span>.sound)
+<span class="kw">end</span>
+
+<span class="kw">local</span> dog = Animal:<span class="fn">new</span>(<span class="str">"woof"</span>)
+dog:<span class="fn">speak</span>()  <span class="cmt">-- "woof"</span></pre>
+
+                <h3>__call Metamethod</h3>
+                <pre data-lang="lua"><span class="cmt">-- Make table callable</span>
+<span class="kw">local</span> mt = {
+    __call = <span class="kw">function</span>(t, ...)
+        <span class="builtin">print</span>(<span class="str">"Called with"</span>, ...)
+    <span class="kw">end</span>
+}
+
+<span class="kw">local</span> t = {}
+<span class="builtin">setmetatable</span>(t, mt)
+t(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)  <span class="cmt">-- "Called with 1 2 3"</span></pre>
+            </section>
+
+            <!-- Modules -->
+            <section id="modules">
+                <h2>Modules & Packages</h2>
+
+                <h3>Creating a Module</h3>
+                <pre data-lang="lua"><span class="cmt">-- mymodule.lua</span>
+<span class="kw">local</span> M = {}
+
+<span class="kw">function</span> M.<span class="fn">greet</span>(name)
+    <span class="builtin">print</span>(<span class="str">"Hello, "</span> .. name)
+<span class="kw">end</span>
+
+<span class="kw">function</span> M.<span class="fn">add</span>(a, b)
+    <span class="kw">return</span> a + b
+<span class="kw">end</span>
+
+<span class="cmt">-- Private function</span>
+<span class="kw">local</span> <span class="kw">function</span> <span class="fn">helper</span>()
+    <span class="kw">return</span> <span class="str">"private"</span>
+<span class="kw">end</span>
+
+<span class="kw">return</span> M</pre>
+
+                <h3>Using Modules</h3>
+                <pre data-lang="lua"><span class="cmt">-- Load module</span>
+<span class="kw">local</span> mymodule = <span class="builtin">require</span>(<span class="str">"mymodule"</span>)
+
+<span class="cmt">-- Use module</span>
+mymodule.<span class="fn">greet</span>(<span class="str">"Alice"</span>)
+<span class="kw">local</span> sum = mymodule.<span class="fn">add</span>(<span class="num">1</span>, <span class="num">2</span>)
+
+<span class="cmt">-- Import specific functions</span>
+<span class="kw">local</span> greet = <span class="builtin">require</span>(<span class="str">"mymodule"</span>).greet
+<span class="fn">greet</span>(<span class="str">"Bob"</span>)</pre>
+
+                <h3>Module Patterns</h3>
+                <pre data-lang="lua"><span class="cmt">-- Pattern 1: Table of functions (shown above)</span>
+
+<span class="cmt">-- Pattern 2: Single function</span>
+<span class="kw">local</span> <span class="kw">function</span> <span class="fn">myfunction</span>()
+    <span class="kw">return</span> <span class="str">"result"</span>
+<span class="kw">end</span>
+<span class="kw">return</span> myfunction
+
+<span class="cmt">-- Pattern 3: Class-like module</span>
+<span class="kw">local</span> Class = {}
+Class.__index = Class
+
+<span class="kw">function</span> Class:<span class="fn">new</span>(value)
+    <span class="kw">local</span> obj = <span class="builtin">setmetatable</span>({}, Class)
+    obj.value = value
+    <span class="kw">return</span> obj
+<span class="kw">end</span>
+
+<span class="kw">function</span> Class:<span class="fn">method</span>()
+    <span class="builtin">print</span>(<span class="kw">self</span>.value)
+<span class="kw">end</span>
+
+<span class="kw">return</span> Class</pre>
+
+                <h3>Package Path</h3>
+                <pre data-lang="lua"><span class="cmt">-- Check package search path</span>
+<span class="builtin">print</span>(<span class="builtin">package</span>.path)
+
+<span class="cmt">-- Add custom path</span>
+<span class="builtin">package</span>.path = <span class="builtin">package</span>.path .. <span class="str">";./mylibs/?.lua"</span>
+
+<span class="cmt">-- Loaded modules cache</span>
+<span class="builtin">print</span>(<span class="builtin">package</span>.loaded[<span class="str">"mymodule"</span>])</pre>
+            </section>
+
+            <!-- Coroutines -->
+            <section id="coroutines">
+                <h2>Coroutines</h2>
+                <p>Coroutines allow you to pause and resume execution. They enable cooperative multitasking.</p>
+
+                <h3>Creating Coroutines</h3>
+                <pre data-lang="lua"><span class="cmt">-- Create coroutine</span>
+<span class="kw">local</span> co = <span class="builtin">coroutine</span>.create(<span class="kw">function</span>()
+    <span class="kw">for</span> i = <span class="num">1</span>, <span class="num">3</span> <span class="kw">do</span>
+        <span class="builtin">print</span>(<span class="str">"co"</span>, i)
+        <span class="builtin">coroutine</span>.yield()
+    <span class="kw">end</span>
+<span class="kw">end</span>)
+
+<span class="cmt">-- Check status</span>
+<span class="builtin">print</span>(<span class="builtin">coroutine</span>.status(co))  <span class="cmt">-- "suspended"</span>
+
+<span class="cmt">-- Resume coroutine</span>
+<span class="builtin">coroutine</span>.resume(co)  <span class="cmt">-- prints "co 1"</span>
+<span class="builtin">coroutine</span>.resume(co)  <span class="cmt">-- prints "co 2"</span>
+<span class="builtin">coroutine</span>.resume(co)  <span class="cmt">-- prints "co 3"</span>
+<span class="builtin">coroutine</span>.resume(co)  <span class="cmt">-- dead, returns false</span></pre>
+
+                <h3>Coroutine Communication</h3>
+                <pre data-lang="lua"><span class="cmt">-- Pass values with yield/resume</span>
+<span class="kw">local</span> co = <span class="builtin">coroutine</span>.create(<span class="kw">function</span>(a, b)
+    <span class="builtin">print</span>(<span class="str">"Started with"</span>, a, b)
+    <span class="kw">local</span> x = <span class="builtin">coroutine</span>.yield(a + b)
+    <span class="builtin">print</span>(<span class="str">"Received"</span>, x)
+    <span class="kw">return</span> x * <span class="num">2</span>
+<span class="kw">end</span>)
+
+<span class="kw">local</span> ok, sum = <span class="builtin">coroutine</span>.resume(co, <span class="num">10</span>, <span class="num">20</span>)  <span class="cmt">-- sum = 30</span>
+<span class="kw">local</span> ok, result = <span class="builtin">coroutine</span>.resume(co, <span class="num">5</span>)     <span class="cmt">-- result = 10</span></pre>
+
+                <h3>Coroutine Wrap</h3>
+                <pre data-lang="lua"><span class="cmt">-- wrap() creates function instead of coroutine</span>
+<span class="kw">local</span> co = <span class="builtin">coroutine</span>.wrap(<span class="kw">function</span>()
+    <span class="kw">for</span> i = <span class="num">1</span>, <span class="num">3</span> <span class="kw">do</span>
+        <span class="builtin">coroutine</span>.yield(i)
+    <span class="kw">end</span>
+<span class="kw">end</span>)
+
+<span class="builtin">print</span>(co())  <span class="cmt">-- 1</span>
+<span class="builtin">print</span>(co())  <span class="cmt">-- 2</span>
+<span class="builtin">print</span>(co())  <span class="cmt">-- 3</span></pre>
+
+                <h3>Producer-Consumer Pattern</h3>
+                <pre data-lang="lua"><span class="kw">local</span> <span class="kw">function</span> <span class="fn">producer</span>()
+    <span class="kw">return</span> <span class="builtin">coroutine</span>.create(<span class="kw">function</span>()
+        <span class="kw">while</span> <span class="kw">true</span> <span class="kw">do</span>
+            <span class="kw">local</span> x = <span class="builtin">io</span>.read()
+            <span class="builtin">coroutine</span>.yield(x)
+        <span class="kw">end</span>
+    <span class="kw">end</span>)
+<span class="kw">end</span>
+
+<span class="kw">local</span> <span class="kw">function</span> <span class="fn">consumer</span>(prod)
+    <span class="kw">while</span> <span class="kw">true</span> <span class="kw">do</span>
+        <span class="kw">local</span> ok, value = <span class="builtin">coroutine</span>.resume(prod)
+        <span class="kw">if</span> <span class="kw">not</span> ok <span class="kw">then</span> <span class="kw">break</span> <span class="kw">end</span>
+        <span class="builtin">print</span>(value)
+    <span class="kw">end</span>
+<span class="kw">end</span></pre>
+            </section>
+
+            <!-- Strings -->
+            <section id="strings">
+                <h2>String Manipulation</h2>
+
+                <h3>String Basics</h3>
+                <pre data-lang="lua"><span class="cmt">-- String literals</span>
+<span class="kw">local</span> s1 = <span class="str">"hello"</span>
+<span class="kw">local</span> s2 = <span class="str">'world'</span>
+
+<span class="cmt">-- Multi-line strings</span>
+<span class="kw">local</span> s3 = [[
+    Multi-line
+    string
+]]
+
+<span class="cmt">-- Escape sequences</span>
+<span class="kw">local</span> s4 = <span class="str">"line1\nline2\ttab"</span>
+
+<span class="cmt">-- Concatenation</span>
+<span class="kw">local</span> s = <span class="str">"Hello"</span> .. <span class="str">" "</span> .. <span class="str">"world"</span>
+
+<span class="cmt">-- Length</span>
+#<span class="str">"hello"</span>  <span class="cmt">-- 5</span></pre>
+
+                <h3>String Functions</h3>
+                <pre data-lang="lua"><span class="cmt">-- Length</span>
+<span class="builtin">string</span>.len(<span class="str">"hello"</span>)      <span class="cmt">-- 5</span>
+
+<span class="cmt">-- Upper/lower case</span>
+<span class="builtin">string</span>.upper(<span class="str">"hello"</span>)    <span class="cmt">-- "HELLO"</span>
+<span class="builtin">string</span>.lower(<span class="str">"HELLO"</span>)    <span class="cmt">-- "hello"</span>
+
+<span class="cmt">-- Substring</span>
+<span class="builtin">string</span>.sub(<span class="str">"hello"</span>, <span class="num">2</span>, <span class="num">4</span>) <span class="cmt">-- "ell" (1-indexed!)</span>
+<span class="builtin">string</span>.sub(<span class="str">"hello"</span>, <span class="num">-3</span>)   <span class="cmt">-- "llo" (negative = from end)</span>
+
+<span class="cmt">-- Find</span>
+<span class="builtin">string</span>.find(<span class="str">"hello world"</span>, <span class="str">"world"</span>)  <span class="cmt">-- 7, 11 (start, end)</span>
+
+<span class="cmt">-- Replace (first occurrence)</span>
+<span class="builtin">string</span>.gsub(<span class="str">"hello world"</span>, <span class="str">"world"</span>, <span class="str">"Lua"</span>)  <span class="cmt">-- "hello Lua"</span>
+
+<span class="cmt">-- Replace all</span>
+<span class="builtin">string</span>.gsub(<span class="str">"aaa"</span>, <span class="str">"a"</span>, <span class="str">"b"</span>)  <span class="cmt">-- "bbb"</span>
+
+<span class="cmt">-- Reverse</span>
+<span class="builtin">string</span>.reverse(<span class="str">"hello"</span>)  <span class="cmt">-- "olleh"</span>
+
+<span class="cmt">-- Repeat</span>
+<span class="builtin">string</span>.rep(<span class="str">"ab"</span>, <span class="num">3</span>)      <span class="cmt">-- "ababab"</span></pre>
+
+                <h3>Pattern Matching</h3>
+                <pre data-lang="lua"><span class="cmt">-- Pattern classes</span>
+<span class="cmt">-- %a = letters, %d = digits, %s = space</span>
+<span class="cmt">-- %w = alphanumeric, %p = punctuation</span>
+<span class="cmt">-- . = any character, %x = hex digit</span>
+
+<span class="cmt">-- Match</span>
+<span class="builtin">string</span>.match(<span class="str">"hello123"</span>, <span class="str">"%d+"</span>)     <span class="cmt">-- "123"</span>
+<span class="builtin">string</span>.match(<span class="str">"foo@bar.com"</span>, <span class="str">"@(.+)"</span>)  <span class="cmt">-- "bar.com"</span>
+
+<span class="cmt">-- Global match (iterator)</span>
+<span class="kw">for</span> word <span class="kw">in</span> <span class="builtin">string</span>.gmatch(<span class="str">"hello world lua"</span>, <span class="str">"%w+"</span>) <span class="kw">do</span>
+    <span class="builtin">print</span>(word)
+<span class="kw">end</span>
+
+<span class="cmt">-- Substitution with pattern</span>
+<span class="builtin">string</span>.gsub(<span class="str">"hello 123"</span>, <span class="str">"%d+"</span>, <span class="str">"456"</span>)  <span class="cmt">-- "hello 456"</span></pre>
+
+                <h3>String Formatting</h3>
+                <pre data-lang="lua"><span class="cmt">-- C-style formatting</span>
+<span class="builtin">string</span>.format(<span class="str">"%.2f"</span>, <span class="num">3.14159</span>)              <span class="cmt">-- "3.14"</span>
+<span class="builtin">string</span>.format(<span class="str">"%d"</span>, <span class="num">42</span>)                     <span class="cmt">-- "42"</span>
+<span class="builtin">string</span>.format(<span class="str">"%s %s"</span>, <span class="str">"Hello"</span>, <span class="str">"world"</span>)  <span class="cmt">-- "Hello world"</span>
+<span class="builtin">string</span>.format(<span class="str">"%x"</span>, <span class="num">255</span>)                   <span class="cmt">-- "ff" (hex)</span></pre>
+            </section>
+
+            <!-- Error Handling -->
+            <section id="errors">
+                <h2>Error Handling</h2>
+
+                <h3>Raising Errors</h3>
+                <pre data-lang="lua"><span class="cmt">-- error() raises an error</span>
+<span class="kw">function</span> <span class="fn">divide</span>(a, b)
+    <span class="kw">if</span> b == <span class="num">0</span> <span class="kw">then</span>
+        <span class="builtin">error</span>(<span class="str">"division by zero"</span>)
+    <span class="kw">end</span>
+    <span class="kw">return</span> a / b
+<span class="kw">end</span>
+
+<span class="cmt">-- assert() checks condition</span>
+<span class="kw">function</span> <span class="fn">divide</span>(a, b)
+    <span class="builtin">assert</span>(b ~= <span class="num">0</span>, <span class="str">"division by zero"</span>)
+    <span class="kw">return</span> a / b
+<span class="kw">end</span></pre>
+
+                <h3>Catching Errors</h3>
+                <pre data-lang="lua"><span class="cmt">-- pcall (protected call)</span>
+<span class="kw">local</span> ok, result = <span class="builtin">pcall</span>(<span class="fn">divide</span>, <span class="num">10</span>, <span class="num">0</span>)
+<span class="kw">if</span> ok <span class="kw">then</span>
+    <span class="builtin">print</span>(<span class="str">"Result:"</span>, result)
+<span class="kw">else</span>
+    <span class="builtin">print</span>(<span class="str">"Error:"</span>, result)  <span class="cmt">-- result is error message</span>
+<span class="kw">end</span>
+
+<span class="cmt">-- xpcall (with error handler)</span>
+<span class="kw">local</span> <span class="kw">function</span> <span class="fn">errorHandler</span>(err)
+    <span class="kw">return</span> <span class="str">"ERROR: "</span> .. err
+<span class="kw">end</span>
+
+<span class="kw">local</span> ok, result = <span class="builtin">xpcall</span>(<span class="fn">divide</span>, errorHandler, <span class="num">10</span>, <span class="num">0</span>)</pre>
+
+                <h3>File I/O</h3>
+                <pre data-lang="lua"><span class="cmt">-- Read entire file</span>
+<span class="kw">local</span> file = <span class="builtin">io</span>.open(<span class="str">"file.txt"</span>, <span class="str">"r"</span>)
+<span class="kw">if</span> file <span class="kw">then</span>
+    <span class="kw">local</span> content = file:read(<span class="str">"*all"</span>)
+    file:close()
+<span class="kw">end</span>
+
+<span class="cmt">-- Write to file</span>
+<span class="kw">local</span> file = <span class="builtin">io</span>.open(<span class="str">"file.txt"</span>, <span class="str">"w"</span>)
+<span class="kw">if</span> file <span class="kw">then</span>
+    file:write(<span class="str">"Hello, world!\n"</span>)
+    file:close()
+<span class="kw">end</span>
+
+<span class="cmt">-- Read line by line</span>
+<span class="kw">for</span> line <span class="kw">in</span> <span class="builtin">io</span>.lines(<span class="str">"file.txt"</span>) <span class="kw">do</span>
+    <span class="builtin">print</span>(line)
+<span class="kw">end</span>
+
+<span class="cmt">-- Modes: "r" (read), "w" (write), "a" (append)</span>
+<span class="cmt">-- "r+" (read/write), "w+" (read/write, truncate)</span></pre>
+
+                <div class="tip">
+                    Always use <code>pcall</code> for operations that might fail (file I/O, network calls, etc).
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Lua TLDR — Last updated December 2025 for Lua 5.4.8<br>
+                <a href="https://www.lua.org" target="_blank">Official Site</a> ·
+                <a href="https://www.lua.org/manual/5.4/" target="_blank">Reference Manual</a> ·
+                <a href="https://www.lua.org/pil/" target="_blank">Programming in Lua</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
