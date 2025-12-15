@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Shell TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Fish theme */
+        :root {
+            --accent: #00afaf;
+            --accent-glow: rgba(0, 175, 175, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 50%;
+        }
+
+        .card h4::before {
+            content: '🐟';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">><span style="opacity: 0.7">></span><span style="opacity: 0.4">></span></div>
+            </div>
+            <h1>Fish Shell <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Fish shell. The friendly interactive shell with auto-suggestions and syntax highlighting out of the box.</p>
+            <div class="version-badge">v4.2.1 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is Fish?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#variables">Variables</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#control">Control Flow</a></li>
+                <li><a href="#strings">Strings & Lists</a></li>
+                <li><a href="#io">I/O & Redirection</a></li>
+                <li><a href="#abbreviations">Abbreviations</a></li>
+                <li><a href="#completions">Completions</a></li>
+                <li><a href="#config">Configuration</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Fish? -->
+            <section id="what">
+                <h2>What is Fish?</h2>
+                <p>Fish (Friendly Interactive SHell) is a smart and user-friendly command line shell. Works great out of the box with features like autosuggestions, syntax highlighting, and web-based configuration.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Autosuggestions</h4>
+                        <p>Fish suggests commands as you type based on history and completions. Press → to accept.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Syntax Highlighting</h4>
+                        <p>Commands are colored as you type. Invalid commands are shown in red, valid ones in color.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Tab Completions</h4>
+                        <p>Rich tab completions with descriptions. Works for commands, paths, and command-specific options.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Sane Scripting</h4>
+                        <p>No word splitting, clean syntax with functions over aliases. Easier to write correct scripts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Running Commands</h3>
+                <pre data-lang="fish"><span class="cmt"># Simple command</span>
+echo Hello, World!
+
+<span class="cmt"># Command with arguments</span>
+ls -la /home
+
+<span class="cmt"># Chain commands with semicolon</span>
+cd /tmp; ls
+
+<span class="cmt"># Command substitution</span>
+echo (date)
+echo (ls | head -n 1)
+
+<span class="cmt"># Logical operators</span>
+test -f file.txt; and echo <span class="str">"File exists"</span>
+test -f file.txt; or echo <span class="str">"File not found"</span>
+
+<span class="cmt"># Compound commands with braces (Fish 4.1+)</span>
+{ echo <span class="num">1</span>; echo <span class="num">2</span> }
+
+<span class="cmt"># Exit status (not $?)</span>
+echo $status</pre>
+
+                <h3>Comments</h3>
+                <pre data-lang="fish"><span class="cmt"># This is a comment</span>
+echo foo <span class="cmt"># Inline comment</span></pre>
+
+                <h3>Help System</h3>
+                <pre data-lang="fish"><span class="cmt"># Get help for any command</span>
+man ls
+help set
+help for</pre>
+            </section>
+
+            <!-- Variables -->
+            <section id="variables">
+                <h2>Variables</h2>
+                <p>Fish uses the <code>set</code> command for all variable operations. No export command - use <code>-x</code> flag instead.</p>
+
+                <h3>Setting Variables</h3>
+                <pre data-lang="fish"><span class="cmt"># Local variable (function scope)</span>
+set name <span class="str">"Alice"</span>
+
+<span class="cmt"># Global variable (session-wide)</span>
+set -g name <span class="str">"Alice"</span>
+
+<span class="cmt"># Universal variable (all sessions, persists)</span>
+set -U name <span class="str">"Alice"</span>
+
+<span class="cmt"># Exported variable (available to child processes)</span>
+set -x PATH /usr/local/bin $PATH
+
+<span class="cmt"># Combine flags</span>
+set -gx EDITOR vim</pre>
+
+                <h3>Using Variables</h3>
+                <pre data-lang="fish"><span class="cmt"># Access with $</span>
+echo $name
+echo <span class="str">"Hello, </span>$name<span class="str">!"</span>
+
+<span class="cmt"># Default value if unset</span>
+echo $name; or echo <span class="str">"No name set"</span>
+
+<span class="cmt"># Check if variable exists</span>
+set -q name; and echo <span class="str">"Name is set"</span></pre>
+
+                <h3>Lists (Arrays)</h3>
+                <pre data-lang="fish"><span class="cmt"># All variables are lists in Fish</span>
+set colors red green blue
+
+<span class="cmt"># Access elements (1-indexed!)</span>
+echo $colors[<span class="num">1</span>]      <span class="cmt"># red</span>
+echo $colors[<span class="num">2</span>..<span class="num">3</span>]  <span class="cmt"># green blue</span>
+echo $colors[-<span class="num">1</span>]     <span class="cmt"># blue (last item)</span>
+
+<span class="cmt"># List length</span>
+echo (count $colors)
+
+<span class="cmt"># Append to list</span>
+set -a colors yellow
+
+<span class="cmt"># Prepend to list</span>
+set -p colors orange
+
+<span class="cmt"># Remove from list</span>
+set -e colors[<span class="num">1</span>]</pre>
+
+                <h3>Special Variables</h3>
+                <pre data-lang="fish"><span class="cmt"># Exit status of last command</span>
+echo $status
+
+<span class="cmt"># Exit status of all commands in pipeline</span>
+echo $pipestatus
+
+<span class="cmt"># Function/script arguments</span>
+echo $argv
+echo $argv[<span class="num">1</span>]
+
+<span class="cmt"># Process ID</span>
+echo $fish_pid
+
+<span class="cmt"># Current working directory</span>
+echo $PWD
+
+<span class="cmt"># User's home directory</span>
+echo $HOME</pre>
+
+                <h3>Variable Scopes</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Scope</th>
+                            <th>Flag</th>
+                            <th>Lifetime</th>
+                        </tr>
+                        <tr>
+                            <td>Local</td>
+                            <td><code>-l</code> or default</td>
+                            <td>Current function/block</td>
+                        </tr>
+                        <tr>
+                            <td>Global</td>
+                            <td><code>-g</code></td>
+                            <td>Current shell session</td>
+                        </tr>
+                        <tr>
+                            <td>Universal</td>
+                            <td><code>-U</code></td>
+                            <td>All sessions, persists across reboots</td>
+                        </tr>
+                        <tr>
+                            <td>Exported</td>
+                            <td><code>-x</code></td>
+                            <td>Available to child processes</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Defining Functions</h3>
+                <pre data-lang="fish"><span class="cmt"># Simple function</span>
+<span class="kw">function</span> <span class="fn">greet</span>
+    echo <span class="str">"Hello!"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Function with arguments</span>
+<span class="kw">function</span> <span class="fn">greet</span>
+    echo <span class="str">"Hello, </span>$argv[<span class="num">1</span>]<span class="str">!"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Function with description</span>
+<span class="kw">function</span> <span class="fn">greet</span> -d <span class="str">"Greet a user"</span>
+    echo <span class="str">"Hello, </span>$argv[<span class="num">1</span>]<span class="str">!"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Function with argument names</span>
+<span class="kw">function</span> <span class="fn">greet</span> -a name
+    echo <span class="str">"Hello, </span>$name<span class="str">!"</span>
+<span class="kw">end</span></pre>
+
+                <h3>Function Arguments</h3>
+                <pre data-lang="fish"><span class="kw">function</span> <span class="fn">example</span>
+    <span class="cmt"># $argv contains all arguments as a list</span>
+    echo <span class="str">"All args: "</span>$argv
+
+    <span class="cmt"># Access individual arguments</span>
+    echo <span class="str">"First: "</span>$argv[<span class="num">1</span>]
+    echo <span class="str">"Second: "</span>$argv[<span class="num">2</span>]
+
+    <span class="cmt"># Number of arguments</span>
+    echo <span class="str">"Count: "</span>(count $argv)
+<span class="kw">end</span>
+
+<span class="cmt"># Call it</span>
+example foo bar baz</pre>
+
+                <h3>Saving Functions</h3>
+                <pre data-lang="fish"><span class="cmt"># Save function to ~/.config/fish/functions/greet.fish</span>
+<span class="kw">funcsave</span> greet
+
+<span class="cmt"># List all functions</span>
+<span class="kw">functions</span>
+
+<span class="cmt"># Show function definition</span>
+<span class="kw">functions</span> greet
+
+<span class="cmt"># Delete function</span>
+<span class="kw">functions</span> -e greet</pre>
+
+                <h3>Return Values</h3>
+                <pre data-lang="fish"><span class="kw">function</span> <span class="fn">is_root</span>
+    test (id -u) -eq <span class="num">0</span>
+    <span class="cmt"># Last command's exit status becomes return value</span>
+<span class="kw">end</span>
+
+<span class="kw">function</span> <span class="fn">check</span>
+    <span class="kw">return</span> <span class="num">1</span>  <span class="cmt"># Explicit return with status code</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Use the return value</span>
+if is_root
+    echo <span class="str">"Running as root"</span>
+end</pre>
+            </section>
+
+            <!-- Control Flow -->
+            <section id="control">
+                <h2>Control Flow</h2>
+
+                <h3>If Statements</h3>
+                <pre data-lang="fish"><span class="cmt"># Basic if</span>
+<span class="kw">if</span> test -f file.txt
+    echo <span class="str">"File exists"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># If-else</span>
+<span class="kw">if</span> test -f file.txt
+    echo <span class="str">"File exists"</span>
+<span class="kw">else</span>
+    echo <span class="str">"File not found"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># If-else if-else</span>
+<span class="kw">if</span> test $count -gt <span class="num">10</span>
+    echo <span class="str">"Many"</span>
+<span class="kw">else if</span> test $count -gt <span class="num">5</span>
+    echo <span class="str">"Some"</span>
+<span class="kw">else</span>
+    echo <span class="str">"Few"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Using command success as condition</span>
+<span class="kw">if</span> grep -q <span class="str">"pattern"</span> file.txt
+    echo <span class="str">"Pattern found"</span>
+<span class="kw">end</span></pre>
+
+                <h3>Test Operators</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Test</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><code>-f</code></td>
+                            <td>File exists</td>
+                            <td><code>test -f file.txt</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-d</code></td>
+                            <td>Directory exists</td>
+                            <td><code>test -d /tmp</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-e</code></td>
+                            <td>Path exists</td>
+                            <td><code>test -e path</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-z</code></td>
+                            <td>String is empty</td>
+                            <td><code>test -z $var</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-n</code></td>
+                            <td>String is not empty</td>
+                            <td><code>test -n $var</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>=</code></td>
+                            <td>String equality</td>
+                            <td><code>test $a = $b</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-eq</code></td>
+                            <td>Numeric equality</td>
+                            <td><code>test $a -eq $b</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-gt</code></td>
+                            <td>Greater than</td>
+                            <td><code>test $a -gt $b</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>-lt</code></td>
+                            <td>Less than</td>
+                            <td><code>test $a -lt $b</code></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Switch Statements</h3>
+                <pre data-lang="fish"><span class="kw">switch</span> $animal
+    <span class="kw">case</span> cat
+        echo <span class="str">"Meow"</span>
+    <span class="kw">case</span> dog
+        echo <span class="str">"Woof"</span>
+    <span class="kw">case</span> fish
+        echo <span class="str">"Blub"</span>
+    <span class="kw">case</span> <span class="str">'*'</span>
+        echo <span class="str">"Unknown animal"</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Pattern matching with wildcards</span>
+<span class="kw">switch</span> $filename
+    <span class="kw">case</span> <span class="str">'*.txt'</span>
+        echo <span class="str">"Text file"</span>
+    <span class="kw">case</span> <span class="str">'*.md'</span>
+        echo <span class="str">"Markdown file"</span>
+<span class="kw">end</span></pre>
+
+                <h3>For Loops</h3>
+                <pre data-lang="fish"><span class="cmt"># Iterate over list</span>
+<span class="kw">for</span> i <span class="kw">in</span> foo bar baz
+    echo $i
+<span class="kw">end</span>
+
+<span class="cmt"># Iterate over range</span>
+<span class="kw">for</span> i <span class="kw">in</span> (seq <span class="num">1</span> <span class="num">10</span>)
+    echo $i
+<span class="kw">end</span>
+
+<span class="cmt"># Iterate over files</span>
+<span class="kw">for</span> file <span class="kw">in</span> *.txt
+    echo $file
+<span class="kw">end</span>
+
+<span class="cmt"># Iterate over command output</span>
+<span class="kw">for</span> line <span class="kw">in</span> (cat file.txt)
+    echo $line
+<span class="kw">end</span></pre>
+
+                <h3>While Loops</h3>
+                <pre data-lang="fish"><span class="cmt"># Basic while loop</span>
+set i <span class="num">0</span>
+<span class="kw">while</span> test $i -lt <span class="num">10</span>
+    echo $i
+    set i (math $i + <span class="num">1</span>)
+<span class="kw">end</span>
+
+<span class="cmt"># While with command</span>
+<span class="kw">while</span> read -l line
+    echo <span class="str">"Line: </span>$line<span class="str">"</span>
+<span class="kw">end</span> < input.txt</pre>
+
+                <h3>Break and Continue</h3>
+                <pre data-lang="fish"><span class="kw">for</span> i <span class="kw">in</span> (seq <span class="num">1</span> <span class="num">10</span>)
+    <span class="kw">if</span> test $i -eq <span class="num">5</span>
+        <span class="kw">continue</span>  <span class="cmt"># Skip to next iteration</span>
+    <span class="kw">end</span>
+
+    <span class="kw">if</span> test $i -eq <span class="num">8</span>
+        <span class="kw">break</span>  <span class="cmt"># Exit loop</span>
+    <span class="kw">end</span>
+
+    echo $i
+<span class="kw">end</span></pre>
+            </section>
+
+            <!-- Strings & Lists -->
+            <section id="strings">
+                <h2>Strings & Lists</h2>
+
+                <h3>String Operations</h3>
+                <pre data-lang="fish"><span class="cmt"># Concatenation (just place them next to each other)</span>
+set greeting <span class="str">"Hello, "</span>$name<span class="str">"!"</span>
+
+<span class="cmt"># String length</span>
+string length <span class="str">"hello"</span>  <span class="cmt"># 5</span>
+
+<span class="cmt"># Substring</span>
+string sub -s <span class="num">1</span> -l <span class="num">3</span> <span class="str">"hello"</span>  <span class="cmt"># hel</span>
+
+<span class="cmt"># Replace</span>
+string replace <span class="str">"world"</span> <span class="str">"Fish"</span> <span class="str">"Hello world"</span>  <span class="cmt"># Hello Fish</span>
+
+<span class="cmt"># Replace all</span>
+string replace -a <span class="str">"o"</span> <span class="str">"0"</span> <span class="str">"Hello world"</span>  <span class="cmt"># Hell0 w0rld</span>
+
+<span class="cmt"># Match pattern</span>
+string match <span class="str">"*.txt"</span> file.txt  <span class="cmt"># Returns file.txt if matches</span>
+
+<span class="cmt"># Case conversion</span>
+string upper <span class="str">"hello"</span>  <span class="cmt"># HELLO</span>
+string lower <span class="str">"WORLD"</span>  <span class="cmt"># world</span>
+
+<span class="cmt"># Trim whitespace</span>
+string trim <span class="str">"  hello  "</span>  <span class="cmt"># hello</span>
+
+<span class="cmt"># Split string</span>
+string split <span class="str">":"</span> <span class="str">"a:b:c"</span>  <span class="cmt"># Returns: a b c</span>
+
+<span class="cmt"># Join list into string</span>
+string join <span class="str">", "</span> a b c  <span class="cmt"># a, b, c</span></pre>
+
+                <h3>List Operations</h3>
+                <pre data-lang="fish"><span class="cmt"># Create list</span>
+set fruits apple banana orange
+
+<span class="cmt"># Count items</span>
+count $fruits
+
+<span class="cmt"># Check if item in list</span>
+contains banana $fruits; and echo <span class="str">"Found!"</span>
+
+<span class="cmt"># Reverse list</span>
+<span class="kw">for</span> item <span class="kw">in</span> $fruits[-<span class="num">1</span>..<span class="num">1</span>]
+    echo $item
+<span class="kw">end</span></pre>
+
+                <h3>Path Operations</h3>
+                <pre data-lang="fish"><span class="cmt"># Get basename</span>
+path basename /home/user/file.txt  <span class="cmt"># file.txt</span>
+
+<span class="cmt"># Get dirname</span>
+path dirname /home/user/file.txt  <span class="cmt"># /home/user</span>
+
+<span class="cmt"># Get extension</span>
+path extension file.txt  <span class="cmt"># .txt</span>
+
+<span class="cmt"># Check if path exists</span>
+path exists /tmp; and echo <span class="str">"Exists"</span></pre>
+            </section>
+
+            <!-- I/O & Redirection -->
+            <section id="io">
+                <h2>I/O & Redirection</h2>
+
+                <h3>Output Redirection</h3>
+                <pre data-lang="fish"><span class="cmt"># Redirect stdout to file (overwrite)</span>
+echo <span class="str">"hello"</span> > file.txt
+
+<span class="cmt"># Append to file</span>
+echo <span class="str">"world"</span> >> file.txt
+
+<span class="cmt"># Redirect stderr</span>
+command <span class="num">2</span>> error.log
+
+<span class="cmt"># Redirect both stdout and stderr</span>
+command &> output.log
+
+<span class="cmt"># Redirect stderr to stdout</span>
+command <span class="num">2</span>>&<span class="num">1</span></pre>
+
+                <h3>Pipes</h3>
+                <pre data-lang="fish"><span class="cmt"># Basic pipe</span>
+ls | grep <span class="str">".txt"</span>
+
+<span class="cmt"># Chain multiple pipes</span>
+cat file.txt | grep <span class="str">"pattern"</span> | sort | uniq
+
+<span class="cmt"># Pipe status (all exit codes in pipeline)</span>
+false | true
+echo $pipestatus  <span class="cmt"># 1 0</span></pre>
+
+                <h3>Reading Input</h3>
+                <pre data-lang="fish"><span class="cmt"># Read a line</span>
+read -l name
+echo <span class="str">"Hello, </span>$name<span class="str">!"</span>
+
+<span class="cmt"># Read with prompt</span>
+read -P <span class="str">"Enter your name: "</span> -l name
+
+<span class="cmt"># Read from file</span>
+<span class="kw">while</span> read -l line
+    echo $line
+<span class="kw">end</span> < file.txt</pre>
+
+                <h3>Command Substitution</h3>
+                <pre data-lang="fish"><span class="cmt"># Capture command output</span>
+set current_date (date)
+set files (ls)
+
+<span class="cmt"># Use in strings</span>
+echo <span class="str">"Today is </span>(date)<span class="str">"</span>
+
+<span class="cmt"># Nested substitution</span>
+set count (count (ls))</pre>
+            </section>
+
+            <!-- Abbreviations -->
+            <section id="abbreviations">
+                <h2>Abbreviations & Aliases</h2>
+
+                <h3>Abbreviations</h3>
+                <p>Abbreviations expand when you press space or enter. Unlike aliases, you see the full command before executing.</p>
+
+                <pre data-lang="fish"><span class="cmt"># Create abbreviation</span>
+abbr -a gs <span class="str">"git status"</span>
+abbr -a gc <span class="str">"git commit"</span>
+abbr -a gp <span class="str">"git push"</span>
+
+<span class="cmt"># List all abbreviations</span>
+abbr -l
+
+<span class="cmt"># Remove abbreviation</span>
+abbr -e gs
+
+<span class="cmt"># Position-specific (only expands if it's first word)</span>
+abbr -a <span class="op">--</span>position command ls <span class="str">"ls -la"</span></pre>
+
+                <h3>Aliases (via Functions)</h3>
+                <p>Fish doesn't have aliases. Use functions instead, which are more powerful.</p>
+
+                <pre data-lang="fish"><span class="cmt"># Simple alias-style function</span>
+<span class="kw">function</span> <span class="fn">ll</span>
+    ls -la $argv
+<span class="kw">end</span>
+<span class="kw">funcsave</span> ll
+
+<span class="cmt"># Alias with default arguments</span>
+<span class="kw">function</span> <span class="fn">grep</span>
+    command grep --color=auto $argv
+<span class="kw">end</span>
+<span class="kw">funcsave</span> grep</pre>
+
+                <div class="tip">
+                    Abbreviations are saved automatically to <code>~/.config/fish/fish_variables</code>. Functions need <code>funcsave</code> or manual saving.
+                </div>
+            </section>
+
+            <!-- Completions -->
+            <section id="completions">
+                <h2>Completions</h2>
+
+                <h3>Custom Completions</h3>
+                <pre data-lang="fish"><span class="cmt"># Complete command with options</span>
+complete -c mycommand -s h -l help -d <span class="str">"Show help"</span>
+complete -c mycommand -s v -l version -d <span class="str">"Show version"</span>
+
+<span class="cmt"># Complete with file paths</span>
+complete -c mycommand -s f -l file -r -F
+
+<span class="cmt"># Complete with directory paths</span>
+complete -c mycommand -s d -l dir -r -a <span class="str">"(__fish_complete_directories)"</span>
+
+<span class="cmt"># Complete with custom options</span>
+complete -c mycommand -s m -l mode -r -a <span class="str">"dev prod test"</span></pre>
+
+                <h3>Completion Flags</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Flag</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>-c CMD</code></td>
+                            <td>Command to complete</td>
+                        </tr>
+                        <tr>
+                            <td><code>-s</code></td>
+                            <td>Short option (single letter)</td>
+                        </tr>
+                        <tr>
+                            <td><code>-l</code></td>
+                            <td>Long option</td>
+                        </tr>
+                        <tr>
+                            <td><code>-d</code></td>
+                            <td>Description</td>
+                        </tr>
+                        <tr>
+                            <td><code>-r</code></td>
+                            <td>Requires argument</td>
+                        </tr>
+                        <tr>
+                            <td><code>-a</code></td>
+                            <td>Possible argument values</td>
+                        </tr>
+                        <tr>
+                            <td><code>-F</code></td>
+                            <td>Complete with filenames</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Configuration -->
+            <section id="config">
+                <h2>Configuration</h2>
+
+                <h3>Config Files</h3>
+                <pre data-lang="fish"><span class="cmt"># Main config: ~/.config/fish/config.fish</span>
+<span class="cmt"># Add to config.fish:</span>
+
+<span class="cmt"># Set environment variables</span>
+set -gx EDITOR vim
+set -gx PATH /usr/local/bin $PATH
+
+<span class="cmt"># Aliases (via functions)</span>
+<span class="kw">function</span> <span class="fn">ll</span>
+    ls -la $argv
+<span class="kw">end</span>
+
+<span class="cmt"># Abbreviations</span>
+abbr -a gs <span class="str">"git status"</span>
+abbr -a gc <span class="str">"git commit"</span></pre>
+
+                <h3>File Locations</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>File</th>
+                            <th>Purpose</th>
+                        </tr>
+                        <tr>
+                            <td><code>~/.config/fish/config.fish</code></td>
+                            <td>Main configuration file</td>
+                        </tr>
+                        <tr>
+                            <td><code>~/.config/fish/functions/</code></td>
+                            <td>Custom function definitions</td>
+                        </tr>
+                        <tr>
+                            <td><code>~/.config/fish/completions/</code></td>
+                            <td>Custom completions</td>
+                        </tr>
+                        <tr>
+                            <td><code>~/.config/fish/conf.d/</code></td>
+                            <td>Additional config snippets (auto-loaded)</td>
+                        </tr>
+                        <tr>
+                            <td><code>~/.local/share/fish/fish_history</code></td>
+                            <td>Command history</td>
+                        </tr>
+                        <tr>
+                            <td><code>~/.config/fish/fish_variables</code></td>
+                            <td>Universal variables</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Prompt Customization</h3>
+                <pre data-lang="fish"><span class="cmt"># Simple custom prompt</span>
+<span class="kw">function</span> <span class="fn">fish_prompt</span>
+    echo (whoami)@(hostname) (pwd) <span class="str">'> '</span>
+<span class="kw">end</span>
+
+<span class="cmt"># With colors</span>
+<span class="kw">function</span> <span class="fn">fish_prompt</span>
+    set_color blue
+    echo -n (whoami)
+    set_color normal
+    echo -n <span class="str">' at '</span>
+    set_color yellow
+    echo -n (prompt_pwd)
+    set_color normal
+    echo -n <span class="str">' > '</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Use a prompt theme (via fisher or similar)</span>
+<span class="cmt"># Popular: tide, pure, bobthefish</span></pre>
+
+                <h3>Key Bindings</h3>
+                <pre data-lang="fish"><span class="cmt"># Vi mode</span>
+fish_vi_key_bindings
+
+<span class="cmt"># Emacs mode (default)</span>
+fish_default_key_bindings
+
+<span class="cmt"># Custom key binding</span>
+<span class="kw">function</span> <span class="fn">fish_user_key_bindings</span>
+    bind \cf forward-char  <span class="cmt"># Ctrl+F</span>
+    bind \cl clear-screen  <span class="cmt"># Ctrl+L</span>
+<span class="kw">end</span>
+
+<span class="cmt"># Find key name</span>
+fish_key_reader</pre>
+
+                <h3>Web Configuration</h3>
+                <pre data-lang="fish"><span class="cmt"># Open web-based configuration UI</span>
+fish_config
+
+<span class="cmt"># Configure specific aspects</span>
+fish_config prompt
+fish_config colors</pre>
+
+                <h3>Package Management</h3>
+                <pre data-lang="fish"><span class="cmt"># Fisher - popular Fish plugin manager</span>
+<span class="cmt"># Install Fisher first:</span>
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+
+<span class="cmt"># Install plugins</span>
+fisher install jorgebucaran/nvm.fish
+fisher install PatrickF1/fzf.fish
+
+<span class="cmt"># List installed plugins</span>
+fisher list
+
+<span class="cmt"># Update all plugins</span>
+fisher update</pre>
+
+                <div class="tip">
+                    Fish automatically loads all <code>.fish</code> files from <code>~/.config/fish/conf.d/</code> on startup. Use this for modular configuration.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Fish Shell TLDR — Last updated December 2025 for Fish 4.2.1<br>
+                <a href="https://fishshell.com" target="_blank">Official Site</a> ·
+                <a href="https://fishshell.com/docs/current/" target="_blank">Documentation</a> ·
+                <a href="https://fishshell.com/docs/current/tutorial.html" target="_blank">Tutorial</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

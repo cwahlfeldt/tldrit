@@ -130,6 +130,19 @@
         box-shadow: 0 12px 40px rgba(55, 118, 171, 0.15);
       }
 
+      .guide-card.php {
+        --card-accent: #777BB4;
+      }
+
+      .guide-card.php:hover {
+        border-color: #777BB4;
+        box-shadow: 0 12px 40px rgba(119, 123, 180, 0.15);
+      }
+
+      .guide-card.php .guide-icon {
+        border-radius: 8px;
+      }
+
       .guide-card.gleam {
         --card-accent: #ffaff3;
       }
@@ -200,7 +213,16 @@
         box-shadow: 0 12px 40px rgba(0, 0, 128, 0.15);
       }
 
-      .guide-card.lua .guide-icon {
+      .guide-card.fish {
+        --card-accent: #00afaf;
+      }
+
+      .guide-card.fish:hover {
+        border-color: #00afaf;
+        box-shadow: 0 12px 40px rgba(0, 175, 175, 0.15);
+      }
+
+      .guide-card.fish .guide-icon {
         border-radius: 50%;
       }
 
@@ -437,6 +459,23 @@
             </div>
           </a>
 
+          <a href="php.html" class="guide-card php">
+            <div class="guide-header">
+              <div class="guide-icon">PHP</div>
+              <span class="guide-title">PHP</span>
+            </div>
+            <p class="guide-desc">
+              A popular server-side scripting language for web development.
+              Modern PHP 8+ brings JIT compilation, enums, attributes, and
+              performance improvements. Powers WordPress, Laravel, Symfony, and
+              millions of websites worldwide.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v8.4</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
           <a href="gleam.html" class="guide-card gleam">
             <div class="guide-header">
               <div class="guide-icon">G</div>
@@ -533,6 +572,19 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">v5.4.8</span>
+          <a href="fish.html" class="guide-card fish">
+            <div class="guide-header">
+              <div class="guide-icon">🐟</div>
+              <span class="guide-title">Fish Shell</span>
+            </div>
+            <p class="guide-desc">
+              The friendly interactive shell with autosuggestions and syntax
+              highlighting out of the box. Smart completions, no configuration
+              needed, and a clean scripting syntax. Designed to be discoverable
+              and user-friendly while remaining powerful for advanced use.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v4.2.1</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>
