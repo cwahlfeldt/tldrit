@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clojure TLDR — A Rapid Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Clojure theme */
+        :root {
+            --accent: #63b132;
+            --accent-glow: rgba(99, 177, 50, 0.15);
+        }
+
+        .logo-icon {
+            border-radius: 50%;
+        }
+
+        .card h4::before {
+            content: '(λ)';
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="back-link">← Back to all guides</a>
+            <div class="logo">
+                <div class="logo-icon">λ</div>
+            </div>
+            <h1>Clojure <span>TLDR</span></h1>
+            <p class="tagline">A rapid reference guide to the Clojure programming language. A functional Lisp for the JVM with immutable data structures.</p>
+            <div class="version-badge">v1.12.4 — December 2025</div>
+        </div>
+    </header>
+
+    <nav class="nav-container">
+        <div>
+            <ul>
+                <li><a href="#what">What is Clojure?</a></li>
+                <li><a href="#basics">Basics</a></li>
+                <li><a href="#data">Data Types</a></li>
+                <li><a href="#collections">Collections</a></li>
+                <li><a href="#functions">Functions</a></li>
+                <li><a href="#destructuring">Destructuring</a></li>
+                <li><a href="#sequences">Sequences</a></li>
+                <li><a href="#macros">Macros</a></li>
+                <li><a href="#java">Java Interop</a></li>
+                <li><a href="#concurrency">Concurrency</a></li>
+                <li><a href="#namespaces">Namespaces</a></li>
+                <li><a href="#tooling">Tooling</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- What is Clojure? -->
+            <section id="what">
+                <h2>What is Clojure?</h2>
+                <p>Clojure is a modern, dynamic, functional Lisp dialect for the JVM. It emphasizes immutability, functional programming, and seamless Java interoperability.</p>
+
+                <div class="cards">
+                    <div class="card">
+                        <h4>Functional</h4>
+                        <p>First-class functions, immutable data structures, and emphasis on pure functions. Data transformation pipelines.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Lisp Dialect</h4>
+                        <p>Code as data (homoiconicity). Powerful macro system for language extension and DSL creation.</p>
+                    </div>
+                    <div class="card">
+                        <h4>JVM-Powered</h4>
+                        <p>Access to Java libraries, excellent performance, and deployment anywhere the JVM runs.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Concurrent</h4>
+                        <p>Built-in concurrency primitives: atoms, refs (STM), agents. Immutability makes concurrency safer.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Basics -->
+            <section id="basics">
+                <h2>Basics</h2>
+
+                <h3>Hello World</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Print to console</span>
+(<span class="fn">println</span> <span class="str">"Hello, world!"</span>)
+
+<span class="cmt">;; Return a value</span>
+(<span class="kw">defn</span> <span class="fn">greet</span> [name]
+  (<span class="fn">str</span> <span class="str">"Hello, "</span> name <span class="str">"!"</span>))</pre>
+
+                <h3>REPL</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Start REPL</span>
+<span class="cmt">;; $ clj or lein repl</span>
+
+<span class="cmt">;; Evaluate expressions</span>
+user=> (<span class="op">+</span> <span class="num">1</span> <span class="num">2</span> <span class="num">3</span>)
+<span class="num">6</span>
+
+user=> (<span class="fn">map</span> <span class="builtin">inc</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])
+(<span class="num">2</span> <span class="num">3</span> <span class="num">4</span>)</pre>
+
+                <h3>Comments</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Single-line comment</span>
+
+(<span class="kw">comment</span>
+  <span class="cmt">;; This block is ignored but valid code</span>
+  (<span class="fn">println</span> <span class="str">"Not executed"</span>))
+
+<span class="cmt">;; Discard next form (reader macro)</span>
+<span class="builtin">#_</span>(<span class="fn">println</span> <span class="str">"This is ignored"</span>)</pre>
+
+                <h3>Vars & Bindings</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Define a var (global, dynamic)</span>
+(<span class="kw">def</span> x <span class="num">42</span>)
+
+<span class="cmt">;; Define a function</span>
+(<span class="kw">defn</span> <span class="fn">square</span> [n]
+  (<span class="op">*</span> n n))
+
+<span class="cmt">;; Local bindings</span>
+(<span class="kw">let</span> [a <span class="num">10</span>
+      b <span class="num">20</span>
+      c (<span class="op">+</span> a b)]
+  c)  <span class="cmt">;; 30</span>
+
+<span class="cmt">;; Private var</span>
+(<span class="kw">def</span> <span class="kw">^:private</span> secret <span class="str">"hidden"</span>)</pre>
+            </section>
+
+            <!-- Data Types -->
+            <section id="data">
+                <h2>Data Types</h2>
+
+                <h3>Primitive Types</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Examples</th>
+                            <th>Notes</th>
+                        </tr>
+                        <tr>
+                            <td>Numbers</td>
+                            <td><code>42, 3.14, 22/7, 1N, 1M</code></td>
+                            <td>Long, Double, Ratio, BigInt, BigDecimal</td>
+                        </tr>
+                        <tr>
+                            <td>Strings</td>
+                            <td><code>"hello", "multi\nline"</code></td>
+                            <td>Java strings, UTF-16</td>
+                        </tr>
+                        <tr>
+                            <td>Characters</td>
+                            <td><code>\a, \newline, \u0041</code></td>
+                            <td>Java char type</td>
+                        </tr>
+                        <tr>
+                            <td>Booleans</td>
+                            <td><code>true, false</code></td>
+                            <td>nil and false are falsy</td>
+                        </tr>
+                        <tr>
+                            <td>Nil</td>
+                            <td><code>nil</code></td>
+                            <td>Represents null/nothing</td>
+                        </tr>
+                        <tr>
+                            <td>Keywords</td>
+                            <td><code>:name, :user/id, ::local</code></td>
+                            <td>Interned, efficient for keys</td>
+                        </tr>
+                        <tr>
+                            <td>Symbols</td>
+                            <td><code>'foo, 'my-var</code></td>
+                            <td>Identifiers, quoted</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Keywords & Symbols</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Keywords (evaluate to themselves)</span>
+<span class="type">:name</span>
+<span class="type">:user/email</span>  <span class="cmt">;; namespaced keyword</span>
+<span class="type">::local</span>       <span class="cmt">;; auto-resolved to current ns</span>
+
+<span class="cmt">;; Keywords as functions (map lookup)</span>
+(<span class="type">:name</span> {<span class="type">:name</span> <span class="str">"Alice"</span>})  <span class="cmt">;; "Alice"</span>
+
+<span class="cmt">;; Symbols (identifiers)</span>
+'foo
+'my-namespace/my-var</pre>
+
+                <h3>Regular Expressions</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Regex literal</span>
+<span class="builtin">#"</span><span class="str">\d+</span><span class="builtin">"</span>
+
+<span class="cmt">;; Pattern matching</span>
+(<span class="fn">re-find</span> <span class="builtin">#"\d+"</span> <span class="str">"abc123"</span>)     <span class="cmt">;; "123"</span>
+(<span class="fn">re-seq</span> <span class="builtin">#"\w+"</span> <span class="str">"hello world"</span>)  <span class="cmt">;; ("hello" "world")</span>
+(<span class="fn">re-matches</span> <span class="builtin">#"\d+"</span> <span class="str">"123"</span>)      <span class="cmt">;; "123"</span></pre>
+            </section>
+
+            <!-- Collections -->
+            <section id="collections">
+                <h2>Collections</h2>
+                <p>All core collections are immutable and persistent. Updates return new versions efficiently.</p>
+
+                <h3>Lists (Linked List)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create (sequential access)</span>
+'(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>)
+(<span class="fn">list</span> <span class="num">1</span> <span class="num">2</span> <span class="num">3</span>)
+
+<span class="cmt">;; Add to front (O(1))</span>
+(<span class="fn">cons</span> <span class="num">0</span> '(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>))  <span class="cmt">;; (0 1 2 3)</span>
+
+<span class="cmt">;; Access</span>
+(<span class="fn">first</span> '(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>))   <span class="cmt">;; 1</span>
+(<span class="fn">rest</span> '(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>))    <span class="cmt">;; (2 3)</span>
+(<span class="fn">next</span> '(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>))    <span class="cmt">;; (2 3) or nil</span></pre>
+
+                <h3>Vectors (Indexed)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create (random access O(log32 n) ≈ O(1))</span>
+[<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]
+(<span class="fn">vector</span> <span class="num">1</span> <span class="num">2</span> <span class="num">3</span>)
+(<span class="fn">vec</span> '(<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>))
+
+<span class="cmt">;; Add to end</span>
+(<span class="fn">conj</span> [<span class="num">1</span> <span class="num">2</span>] <span class="num">3</span>)    <span class="cmt">;; [1 2 3]</span>
+
+<span class="cmt">;; Access by index</span>
+(<span class="fn">nth</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>] <span class="num">0</span>)   <span class="cmt">;; 1</span>
+(<span class="fn">get</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>] <span class="num">1</span>)   <span class="cmt">;; 2</span>
+([<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>] <span class="num">2</span>)        <span class="cmt">;; 3 (vectors are functions)</span>
+
+<span class="cmt">;; Update</span>
+(<span class="fn">assoc</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>] <span class="num">1</span> <span class="num">42</span>)   <span class="cmt">;; [1 42 3]</span>
+
+<span class="cmt">;; Subvector</span>
+(<span class="fn">subvec</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>] <span class="num">1</span> <span class="num">3</span>)  <span class="cmt">;; [2 3]</span></pre>
+
+                <h3>Maps (Hash Map)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create</span>
+{<span class="type">:name</span> <span class="str">"Alice"</span> <span class="type">:age</span> <span class="num">30</span>}
+(<span class="fn">hash-map</span> <span class="type">:name</span> <span class="str">"Alice"</span> <span class="type">:age</span> <span class="num">30</span>)
+
+<span class="cmt">;; Access</span>
+(<span class="fn">get</span> {<span class="type">:a</span> <span class="num">1</span>} <span class="type">:a</span>)        <span class="cmt">;; 1</span>
+(<span class="fn">get</span> {<span class="type">:a</span> <span class="num">1</span>} <span class="type">:b</span> <span class="num">99</span>)    <span class="cmt">;; 99 (default)</span>
+({<span class="type">:a</span> <span class="num">1</span>} <span class="type">:a</span>)            <span class="cmt">;; 1 (maps are functions)</span>
+(<span class="type">:a</span> {<span class="type">:a</span> <span class="num">1</span>})            <span class="cmt">;; 1 (keywords are functions)</span>
+
+<span class="cmt">;; Add/update</span>
+(<span class="fn">assoc</span> {<span class="type">:a</span> <span class="num">1</span>} <span class="type">:b</span> <span class="num">2</span>)  <span class="cmt">;; {:a 1, :b 2}</span>
+(<span class="fn">dissoc</span> {<span class="type">:a</span> <span class="num">1</span> <span class="type">:b</span> <span class="num">2</span>} <span class="type">:a</span>)  <span class="cmt">;; {:b 2}</span>
+
+<span class="cmt">;; Merge</span>
+(<span class="fn">merge</span> {<span class="type">:a</span> <span class="num">1</span>} {<span class="type">:b</span> <span class="num">2</span>})  <span class="cmt">;; {:a 1, :b 2}</span>
+
+<span class="cmt">;; Nested update</span>
+(<span class="fn">assoc-in</span> {<span class="type">:user</span> {<span class="type">:name</span> <span class="str">"Alice"</span>}} [<span class="type">:user</span> <span class="type">:age</span>] <span class="num">30</span>)
+(<span class="fn">update-in</span> {<span class="type">:user</span> {<span class="type">:age</span> <span class="num">30</span>}} [<span class="type">:user</span> <span class="type">:age</span>] <span class="builtin">inc</span>)
+
+<span class="cmt">;; Keys and values</span>
+(<span class="fn">keys</span> {<span class="type">:a</span> <span class="num">1</span> <span class="type">:b</span> <span class="num">2</span>})    <span class="cmt">;; (:a :b)</span>
+(<span class="fn">vals</span> {<span class="type">:a</span> <span class="num">1</span> <span class="type">:b</span> <span class="num">2</span>})    <span class="cmt">;; (1 2)</span></pre>
+
+                <h3>Sets</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create</span>
+#{<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>}
+(<span class="fn">hash-set</span> <span class="num">1</span> <span class="num">2</span> <span class="num">3</span>)
+(<span class="fn">set</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">2</span> <span class="num">1</span>])  <span class="cmt">;; #{1 2 3}</span>
+
+<span class="cmt">;; Add/remove</span>
+(<span class="fn">conj</span> #{<span class="num">1</span> <span class="num">2</span>} <span class="num">3</span>)     <span class="cmt">;; #{1 2 3}</span>
+(<span class="fn">disj</span> #{<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>} <span class="num">2</span>)  <span class="cmt">;; #{1 3}</span>
+
+<span class="cmt">;; Test membership (sets are functions)</span>
+(#{<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>} <span class="num">2</span>)         <span class="cmt">;; 2</span>
+(<span class="fn">contains?</span> #{<span class="num">1</span> <span class="num">2</span>} <span class="num">1</span>)  <span class="cmt">;; true</span>
+
+<span class="cmt">;; Set operations</span>
+(<span class="kw">require</span> '[clojure.set <span class="kw">:as</span> set])
+(<span class="fn">set/union</span> #{<span class="num">1</span> <span class="num">2</span>} #{<span class="num">2</span> <span class="num">3</span>})        <span class="cmt">;; #{1 2 3}</span>
+(<span class="fn">set/intersection</span> #{<span class="num">1</span> <span class="num">2</span>} #{<span class="num">2</span> <span class="num">3</span>})  <span class="cmt">;; #{2}</span>
+(<span class="fn">set/difference</span> #{<span class="num">1</span> <span class="num">2</span>} #{<span class="num">2</span> <span class="num">3</span>})    <span class="cmt">;; #{1}</span></pre>
+            </section>
+
+            <!-- Functions -->
+            <section id="functions">
+                <h2>Functions</h2>
+
+                <h3>Defining Functions</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Named function</span>
+(<span class="kw">defn</span> <span class="fn">greet</span> [name]
+  (<span class="fn">str</span> <span class="str">"Hello, "</span> name))
+
+<span class="cmt">;; Multiple arity</span>
+(<span class="kw">defn</span> <span class="fn">greet</span>
+  ([] (<span class="fn">greet</span> <span class="str">"World"</span>))
+  ([name] (<span class="fn">str</span> <span class="str">"Hello, "</span> name))
+  ([greeting name] (<span class="fn">str</span> greeting <span class="str">", "</span> name)))
+
+<span class="cmt">;; Variadic (rest args)</span>
+(<span class="kw">defn</span> <span class="fn">sum</span> [& nums]
+  (<span class="fn">apply</span> <span class="op">+</span> nums))
+
+(<span class="fn">sum</span> <span class="num">1</span> <span class="num">2</span> <span class="num">3</span>)  <span class="cmt">;; 6</span>
+
+<span class="cmt">;; With docstring</span>
+(<span class="kw">defn</span> <span class="fn">square</span>
+  <span class="str">"Returns the square of n"</span>
+  [n]
+  (<span class="op">*</span> n n))</pre>
+
+                <h3>Anonymous Functions</h3>
+                <pre data-lang="clojure"><span class="cmt">;; fn form</span>
+(<span class="kw">fn</span> [x] (<span class="op">*</span> x x))
+
+<span class="cmt">;; Short form (reader macro)</span>
+<span class="builtin">#(</span><span class="op">*</span> <span class="builtin">%</span> <span class="builtin">%</span><span class="builtin">)</span>
+<span class="builtin">#(</span><span class="op">+</span> <span class="builtin">%1</span> <span class="builtin">%2</span><span class="builtin">)</span>  <span class="cmt">;; % = %1</span>
+
+<span class="cmt">;; Usage</span>
+(<span class="fn">map</span> <span class="builtin">#(</span><span class="op">*</span> <span class="builtin">%</span> <span class="builtin">2</span><span class="builtin">)</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])  <span class="cmt">;; (2 4 6)</span>
+
+<span class="cmt">;; Partial application</span>
+(<span class="kw">def</span> add5 (<span class="fn">partial</span> <span class="op">+</span> <span class="num">5</span>))
+(<span class="fn">add5</span> <span class="num">10</span>)  <span class="cmt">;; 15</span>
+
+<span class="cmt">;; Composition</span>
+(<span class="kw">def</span> f (<span class="fn">comp</span> <span class="builtin">str</span> <span class="builtin">inc</span>))
+(<span class="fn">f</span> <span class="num">5</span>)  <span class="cmt">;; "6"</span></pre>
+
+                <h3>Higher-Order Functions</h3>
+                <pre data-lang="clojure"><span class="cmt">;; map - transform each element</span>
+(<span class="fn">map</span> <span class="builtin">inc</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])  <span class="cmt">;; (2 3 4)</span>
+
+<span class="cmt">;; filter - keep matching elements</span>
+(<span class="fn">filter</span> <span class="builtin">even?</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>])  <span class="cmt">;; (2 4)</span>
+
+<span class="cmt">;; remove - remove matching elements</span>
+(<span class="fn">remove</span> <span class="builtin">even?</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>])  <span class="cmt">;; (1 3)</span>
+
+<span class="cmt">;; reduce - accumulate</span>
+(<span class="fn">reduce</span> <span class="op">+</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>])          <span class="cmt">;; 10</span>
+(<span class="fn">reduce</span> <span class="op">+</span> <span class="num">10</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])          <span class="cmt">;; 16 (with init)</span>
+
+<span class="cmt">;; apply - spread collection as args</span>
+(<span class="fn">apply</span> <span class="op">+</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])  <span class="cmt">;; 6</span>
+
+<span class="cmt">;; Threading macros</span>
+(<span class="kw">-></span> <span class="num">5</span> (<span class="op">+</span> <span class="num">3</span>) (<span class="op">*</span> <span class="num">2</span>))       <span class="cmt">;; (-> thread-first) 16</span>
+(<span class="kw">->></span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]                <span class="cmt">;; (->> thread-last)</span>
+     (<span class="fn">map</span> <span class="builtin">inc</span>)
+     (<span class="fn">filter</span> <span class="builtin">even?</span>))        <span class="cmt">;; (2 4)</span>
+
+<span class="cmt">;; as-> (named threading)</span>
+(<span class="kw">as-></span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>] $
+  (<span class="fn">map</span> <span class="builtin">inc</span> $)
+  (<span class="fn">filter</span> <span class="builtin">even?</span> $))        <span class="cmt">;; (2 4)</span></pre>
+
+                <h3>Predicates</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Type predicates</span>
+(<span class="builtin">string?</span> <span class="str">"hello"</span>)  <span class="cmt">;; true</span>
+(<span class="builtin">number?</span> <span class="num">42</span>)       <span class="cmt">;; true</span>
+(<span class="builtin">keyword?</span> <span class="type">:foo</span>)    <span class="cmt">;; true</span>
+(<span class="builtin">map?</span> {})           <span class="cmt">;; true</span>
+(<span class="builtin">vector?</span> [])       <span class="cmt">;; true</span>
+(<span class="builtin">set?</span> #{})         <span class="cmt">;; true</span>
+
+<span class="cmt">;; Value predicates</span>
+(<span class="builtin">nil?</span> <span class="kw">nil</span>)        <span class="cmt">;; true</span>
+(<span class="builtin">empty?</span> [])        <span class="cmt">;; true</span>
+(<span class="builtin">even?</span> <span class="num">4</span>)          <span class="cmt">;; true</span>
+(<span class="builtin">odd?</span> <span class="num">3</span>)           <span class="cmt">;; true</span>
+(<span class="builtin">pos?</span> <span class="num">5</span>)           <span class="cmt">;; true</span>
+(<span class="builtin">neg?</span> <span class="num">-1</span>)          <span class="cmt">;; true</span></pre>
+            </section>
+
+            <!-- Destructuring -->
+            <section id="destructuring">
+                <h2>Destructuring</h2>
+                <p>Extract values from collections in function parameters and let bindings.</p>
+
+                <h3>Sequential Destructuring</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Vector/list destructuring</span>
+(<span class="kw">let</span> [[a b c] [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]]
+  (<span class="op">+</span> a b c))  <span class="cmt">;; 6</span>
+
+<span class="cmt">;; Rest pattern</span>
+(<span class="kw">let</span> [[first & rest] [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>]]
+  [first rest])  <span class="cmt">;; [1 (2 3 4)]</span>
+
+<span class="cmt">;; As (keep original)</span>
+(<span class="kw">let</span> [[a b <span class="kw">:as</span> all] [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]]
+  [a b all])  <span class="cmt">;; [1 2 [1 2 3]]</span>
+
+<span class="cmt">;; Nested</span>
+(<span class="kw">let</span> [[[a b] c] [[<span class="num">1</span> <span class="num">2</span>] <span class="num">3</span>]]
+  [a b c])  <span class="cmt">;; [1 2 3]</span></pre>
+
+                <h3>Map Destructuring</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Basic map destructuring</span>
+(<span class="kw">let</span> [{name <span class="type">:name</span> age <span class="type">:age</span>} {<span class="type">:name</span> <span class="str">"Alice"</span> <span class="type">:age</span> <span class="num">30</span>}]
+  [name age])  <span class="cmt">;; ["Alice" 30]</span>
+
+<span class="cmt">;; Keys shorthand (when local = keyword)</span>
+(<span class="kw">let</span> [{<span class="kw">:keys</span> [name age]} {<span class="type">:name</span> <span class="str">"Alice"</span> <span class="type">:age</span> <span class="num">30</span>}]
+  [name age])  <span class="cmt">;; ["Alice" 30]</span>
+
+<span class="cmt">;; Strings and symbols</span>
+(<span class="kw">let</span> [{<span class="kw">:strs</span> [name]} {<span class="str">"name"</span> <span class="str">"Bob"</span>}]
+  name)
+
+(<span class="kw">let</span> [{<span class="kw">:syms</span> [x]} {'x <span class="num">42</span>}]
+  x)
+
+<span class="cmt">;; Default values</span>
+(<span class="kw">let</span> [{<span class="kw">:keys</span> [name age] <span class="kw">:or</span> {age <span class="num">0</span>}} {<span class="type">:name</span> <span class="str">"Alice"</span>}]
+  [name age])  <span class="cmt">;; ["Alice" 0]</span>
+
+<span class="cmt">;; As (keep original map)</span>
+(<span class="kw">let</span> [{<span class="kw">:keys</span> [name] <span class="kw">:as</span> person} {<span class="type">:name</span> <span class="str">"Alice"</span> <span class="type">:age</span> <span class="num">30</span>}]
+  [name person])</pre>
+
+                <h3>Function Parameters</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Destructure in parameters</span>
+(<span class="kw">defn</span> <span class="fn">greet</span> [{<span class="kw">:keys</span> [name age]}]
+  (<span class="fn">str</span> <span class="str">"Hello "</span> name <span class="str">", age "</span> age))
+
+(<span class="fn">greet</span> {<span class="type">:name</span> <span class="str">"Alice"</span> <span class="type">:age</span> <span class="num">30</span>})
+
+<span class="cmt">;; Sequential destructuring</span>
+(<span class="kw">defn</span> <span class="fn">distance</span> [[x1 y1] [x2 y2]]
+  (<span class="fn">Math/sqrt</span> (<span class="op">+</span> (<span class="fn">Math/pow</span> (<span class="op">-</span> x2 x1) <span class="num">2</span>)
+                 (<span class="fn">Math/pow</span> (<span class="op">-</span> y2 y1) <span class="num">2</span>))))</pre>
+            </section>
+
+            <!-- Sequences -->
+            <section id="sequences">
+                <h2>Sequences</h2>
+                <p>Sequences are logical lists. All collections can be viewed as sequences.</p>
+
+                <h3>Sequence Operations</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create sequence view</span>
+(<span class="fn">seq</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])       <span class="cmt">;; (1 2 3)</span>
+(<span class="fn">seq</span> {<span class="type">:a</span> <span class="num">1</span> <span class="type">:b</span> <span class="num">2</span>})  <span class="cmt">;; ([:a 1] [:b 2])</span>
+
+<span class="cmt">;; Lazy sequences</span>
+(<span class="fn">range</span>)              <span class="cmt">;; (0 1 2 3 ...) infinite!</span>
+(<span class="fn">range</span> <span class="num">5</span>)           <span class="cmt">;; (0 1 2 3 4)</span>
+(<span class="fn">range</span> <span class="num">1</span> <span class="num">10</span> <span class="num">2</span>)      <span class="cmt">;; (1 3 5 7 9)</span>
+
+(<span class="fn">repeat</span> <span class="num">3</span> <span class="str">"x"</span>)      <span class="cmt">;; ("x" "x" "x")</span>
+(<span class="fn">repeatedly</span> <span class="num">3</span> <span class="builtin">rand</span>) <span class="cmt">;; (0.xxx 0.yyy 0.zzz)</span>
+
+(<span class="fn">cycle</span> [<span class="num">1</span> <span class="num">2</span>])        <span class="cmt">;; (1 2 1 2 1 2 ...) infinite!</span>
+
+<span class="cmt">;; Take/drop</span>
+(<span class="fn">take</span> <span class="num">3</span> (<span class="fn">range</span>))   <span class="cmt">;; (0 1 2)</span>
+(<span class="fn">drop</span> <span class="num">2</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>]) <span class="cmt">;; (3 4)</span>
+(<span class="fn">take-while</span> <span class="builtin">pos?</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">0</span> <span class="num">3</span>])  <span class="cmt">;; (1 2)</span>
+(<span class="fn">drop-while</span> <span class="builtin">neg?</span> [<span class="num">-1</span> <span class="num">-2</span> <span class="num">3</span>])  <span class="cmt">;; (3)</span></pre>
+
+                <h3>Lazy Sequences</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Lazy operations (don't execute until needed)</span>
+(<span class="kw">def</span> big-seq (<span class="fn">map</span> <span class="builtin">inc</span> (<span class="fn">range</span> <span class="num">1000000</span>)))  <span class="cmt">;; instant!</span>
+
+<span class="cmt">;; Force realization</span>
+(<span class="fn">doall</span> (<span class="fn">map</span> <span class="builtin">println</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]))  <span class="cmt">;; realize & retain</span>
+(<span class="fn">dorun</span> (<span class="fn">map</span> <span class="builtin">println</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]))  <span class="cmt">;; realize & discard</span>
+
+<span class="cmt">;; Create lazy seq</span>
+(<span class="kw">defn</span> <span class="fn">fib-seq</span>
+  ([] (<span class="fn">fib-seq</span> <span class="num">0</span> <span class="num">1</span>))
+  ([a b] (<span class="fn">lazy-seq</span> (<span class="fn">cons</span> a (<span class="fn">fib-seq</span> b (<span class="op">+</span> a b))))))
+
+(<span class="fn">take</span> <span class="num">10</span> (<span class="fn">fib-seq</span>))  <span class="cmt">;; (0 1 1 2 3 5 8 13 21 34)</span></pre>
+
+                <h3>Transducers</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Composable transformations (no intermediate seqs)</span>
+(<span class="kw">def</span> xf
+  (<span class="fn">comp</span>
+    (<span class="fn">map</span> <span class="builtin">inc</span>)
+    (<span class="fn">filter</span> <span class="builtin">even?</span>)))
+
+<span class="cmt">;; Apply to collection</span>
+(<span class="fn">transduce</span> xf <span class="op">+</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>])  <span class="cmt">;; 6 (2+4)</span>
+
+<span class="cmt">;; Into (build collection)</span>
+(<span class="fn">into</span> [] xf [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span> <span class="num">4</span>])    <span class="cmt">;; [2 4]</span></pre>
+            </section>
+
+            <!-- Macros -->
+            <section id="macros">
+                <h2>Macros</h2>
+                <p>Macros transform code at compile time. They receive code as data and return new code.</p>
+
+                <h3>Common Macros</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Conditionals</span>
+(<span class="kw">if</span> condition
+  then-expr
+  else-expr)
+
+(<span class="kw">when</span> condition
+  body...)  <span class="cmt">;; implicit do, no else</span>
+
+(<span class="kw">cond</span>
+  (<span class="op">=</span> x <span class="num">1</span>) <span class="str">"one"</span>
+  (<span class="op">=</span> x <span class="num">2</span>) <span class="str">"two"</span>
+  <span class="kw">:else</span> <span class="str">"other"</span>)
+
+(<span class="kw">case</span> x
+  <span class="num">1</span> <span class="str">"one"</span>
+  <span class="num">2</span> <span class="str">"two"</span>
+  <span class="str">"other"</span>)  <span class="cmt">;; constant-time dispatch</span>
+
+(<span class="kw">if-let</span> [x (<span class="fn">get-value</span>)]
+  (<span class="fn">use</span> x)
+  (<span class="fn">default</span>))
+
+(<span class="kw">when-let</span> [x (<span class="fn">get-value</span>)]
+  (<span class="fn">use</span> x))</pre>
+
+                <h3>Loops & Iteration</h3>
+                <pre data-lang="clojure"><span class="cmt">;; doseq - side effects (returns nil)</span>
+(<span class="kw">doseq</span> [x [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]]
+  (<span class="fn">println</span> x))
+
+<span class="cmt">;; for - list comprehension (lazy)</span>
+(<span class="kw">for</span> [x [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>]
+      y [<span class="num">10</span> <span class="num">20</span>]]
+  (<span class="op">+</span> x y))  <span class="cmt">;; (11 21 12 22 13 23)</span>
+
+<span class="cmt">;; with :when guard</span>
+(<span class="kw">for</span> [x (<span class="fn">range</span> <span class="num">10</span>)
+      <span class="kw">:when</span> (<span class="builtin">even?</span> x)]
+  x)  <span class="cmt">;; (0 2 4 6 8)</span>
+
+<span class="cmt">;; loop/recur - tail recursion</span>
+(<span class="kw">loop</span> [i <span class="num">0</span> acc <span class="num">0</span>]
+  (<span class="kw">if</span> (<span class="op">&lt;</span> i <span class="num">5</span>)
+    (<span class="kw">recur</span> (<span class="builtin">inc</span> i) (<span class="op">+</span> acc i))
+    acc))  <span class="cmt">;; 10</span></pre>
+
+                <h3>Defining Macros</h3>
+                <pre data-lang="clojure"><span class="cmt">;; defmacro</span>
+(<span class="kw">defmacro</span> <span class="fn">unless</span> [condition & body]
+  `(<span class="kw">if</span> (<span class="builtin">not</span> ~condition)
+     (<span class="kw">do</span> ~@body)))
+
+(<span class="fn">unless</span> <span class="kw">false</span>
+  (<span class="fn">println</span> <span class="str">"This runs"</span>))
+
+<span class="cmt">;; Syntax quote ` (namespace-qualify)</span>
+<span class="cmt">;; Unquote ~ (evaluate)</span>
+<span class="cmt">;; Unquote-splicing ~@ (splice sequence)</span>
+
+<span class="cmt">;; macroexpand - see expanded code</span>
+(<span class="fn">macroexpand-1</span> '(<span class="fn">unless</span> <span class="kw">false</span> (<span class="fn">println</span> <span class="str">"hi"</span>)))</pre>
+            </section>
+
+            <!-- Java Interop -->
+            <section id="java">
+                <h2>Java Interop</h2>
+                <p>Seamless access to Java classes, methods, and libraries.</p>
+
+                <h3>Calling Java</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Static method</span>
+(<span class="type">Math</span>/sqrt <span class="num">16</span>)                    <span class="cmt">;; 4.0</span>
+(<span class="type">System</span>/currentTimeMillis)        <span class="cmt">;; 1234567890</span>
+
+<span class="cmt">;; Static field</span>
+<span class="type">Math</span>/PI                          <span class="cmt">;; 3.141592653589793</span>
+
+<span class="cmt">;; Constructor</span>
+(<span class="kw">new</span> <span class="type">java.util.Date</span>)
+(<span class="type">java.util.Date.</span>)                 <span class="cmt">;; shorter form</span>
+
+<span class="cmt">;; Instance method</span>
+(<span class="fn">.toUpperCase</span> <span class="str">"hello"</span>)          <span class="cmt">;; "HELLO"</span>
+(<span class="fn">.length</span> <span class="str">"hello"</span>)               <span class="cmt">;; 5</span>
+
+<span class="cmt">;; Instance field</span>
+(<span class="fn">.-x</span> point-object)
+
+<span class="cmt">;; Chained calls (.. macro)</span>
+(<span class="kw">..</span> <span class="str">"hello"</span> (<span class="fn">toUpperCase</span>) (<span class="fn">substring</span> <span class="num">0</span> <span class="num">3</span>))  <span class="cmt">;; "HEL"</span>
+
+<span class="cmt">;; doto - call multiple methods on same object</span>
+(<span class="kw">doto</span> (<span class="kw">new</span> <span class="type">java.util.HashMap</span>)
+  (<span class="fn">.put</span> <span class="str">"a"</span> <span class="num">1</span>)
+  (<span class="fn">.put</span> <span class="str">"b"</span> <span class="num">2</span>))</pre>
+
+                <h3>Importing & Type Hints</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Import classes</span>
+(<span class="kw">import</span> java.util.Date)
+(<span class="kw">import</span> '[java.util Date Calendar])
+(<span class="kw">import</span> '[java.io File InputStream])
+
+<span class="cmt">;; Type hints (avoid reflection)</span>
+(<span class="kw">defn</span> <span class="fn">length</span> [<span class="kw">^String</span> s]
+  (<span class="fn">.length</span> s))
+
+<span class="cmt">;; Array creation</span>
+(<span class="fn">make-array</span> <span class="type">Integer</span>/TYPE <span class="num">10</span>)
+(<span class="fn">int-array</span> <span class="num">10</span>)
+(<span class="fn">into-array</span> [<span class="num">1</span> <span class="num">2</span> <span class="num">3</span>])
+
+<span class="cmt">;; Array access</span>
+(<span class="fn">aget</span> arr <span class="num">0</span>)
+(<span class="fn">aset</span> arr <span class="num">0</span> <span class="num">42</span>)</pre>
+
+                <h3>Exceptions</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Try/catch</span>
+(<span class="kw">try</span>
+  (<span class="op">/</span> <span class="num">1</span> <span class="num">0</span>)
+  (<span class="kw">catch</span> <span class="type">ArithmeticException</span> e
+    (<span class="fn">println</span> <span class="str">"Division by zero!"</span>))
+  (<span class="kw">finally</span>
+    (<span class="fn">println</span> <span class="str">"Cleanup"</span>)))
+
+<span class="cmt">;; Throw</span>
+(<span class="kw">throw</span> (<span class="type">Exception.</span> <span class="str">"Error message"</span>))</pre>
+            </section>
+
+            <!-- Concurrency -->
+            <section id="concurrency">
+                <h2>Concurrency</h2>
+                <p>Clojure provides several reference types for managing state safely in concurrent programs.</p>
+
+                <h3>Atoms (Synchronous, Independent)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create atom</span>
+(<span class="kw">def</span> counter (<span class="fn">atom</span> <span class="num">0</span>))
+
+<span class="cmt">;; Dereference (read)</span>
+<span class="builtin">@</span>counter  <span class="cmt">;; 0</span>
+
+<span class="cmt">;; Update with function (atomic)</span>
+(<span class="fn">swap!</span> counter <span class="builtin">inc</span>)         <span class="cmt">;; 1</span>
+(<span class="fn">swap!</span> counter <span class="op">+</span> <span class="num">10</span>)        <span class="cmt">;; 11</span>
+
+<span class="cmt">;; Reset to value</span>
+(<span class="fn">reset!</span> counter <span class="num">0</span>)          <span class="cmt">;; 0</span>
+
+<span class="cmt">;; Compare and set</span>
+(<span class="fn">compare-and-set!</span> counter <span class="num">0</span> <span class="num">100</span>)</pre>
+
+                <h3>Refs (Coordinated, Transactional)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create refs</span>
+(<span class="kw">def</span> account-a (<span class="fn">ref</span> <span class="num">100</span>))
+(<span class="kw">def</span> account-b (<span class="fn">ref</span> <span class="num">200</span>))
+
+<span class="cmt">;; Software Transactional Memory (STM)</span>
+(<span class="kw">dosync</span>
+  (<span class="fn">alter</span> account-a <span class="op">-</span> <span class="num">50</span>)
+  (<span class="fn">alter</span> account-b <span class="op">+</span> <span class="num">50</span>))
+
+<span class="cmt">;; Read in transaction</span>
+(<span class="kw">dosync</span>
+  (<span class="op">+</span> <span class="builtin">@</span>account-a <span class="builtin">@</span>account-b))
+
+<span class="cmt">;; ref-set (like reset! for atoms)</span>
+(<span class="kw">dosync</span>
+  (<span class="fn">ref-set</span> account-a <span class="num">1000</span>))</pre>
+
+                <h3>Agents (Asynchronous, Independent)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Create agent</span>
+(<span class="kw">def</span> logger (<span class="fn">agent</span> []))
+
+<span class="cmt">;; Send action (async)</span>
+(<span class="fn">send</span> logger <span class="fn">conj</span> <span class="str">"Log entry 1"</span>)
+(<span class="fn">send</span> logger <span class="fn">conj</span> <span class="str">"Log entry 2"</span>)
+
+<span class="cmt">;; Read current value</span>
+<span class="builtin">@</span>logger  <span class="cmt">;; ["Log entry 1" "Log entry 2"]</span>
+
+<span class="cmt">;; Wait for all actions to complete</span>
+(<span class="fn">await</span> logger)
+
+<span class="cmt">;; send-off for blocking operations</span>
+(<span class="fn">send-off</span> logger <span class="builtin">identity</span>)</pre>
+
+                <h3>Futures & Promises</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Future - run in background</span>
+(<span class="kw">def</span> f (<span class="fn">future</span>
+         (<span class="type">Thread</span>/sleep <span class="num">1000</span>)
+         <span class="num">42</span>))
+
+<span class="builtin">@</span>f  <span class="cmt">;; blocks until ready, returns 42</span>
+
+<span class="cmt">;; Promise - placeholder for value</span>
+(<span class="kw">def</span> p (<span class="fn">promise</span>))
+
+<span class="cmt">;; Deliver value (once)</span>
+(<span class="fn">deliver</span> p <span class="num">42</span>)
+
+<span class="builtin">@</span>p  <span class="cmt">;; 42</span>
+
+<span class="cmt">;; pmap - parallel map</span>
+(<span class="fn">pmap</span> slow-function large-collection)</pre>
+
+                <h3>Delays</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Lazy evaluation, run once</span>
+(<span class="kw">def</span> d (<span class="fn">delay</span>
+         (<span class="fn">println</span> <span class="str">"Computing..."</span>)
+         <span class="num">42</span>))
+
+<span class="builtin">@</span>d  <span class="cmt">;; prints "Computing...", returns 42</span>
+<span class="builtin">@</span>d  <span class="cmt">;; just returns 42, doesn't recompute</span></pre>
+            </section>
+
+            <!-- Namespaces -->
+            <section id="namespaces">
+                <h2>Namespaces & Code Organization</h2>
+
+                <h3>Namespace Declaration</h3>
+                <pre data-lang="clojure"><span class="cmt">;; At top of file</span>
+(<span class="kw">ns</span> myapp.core
+  <span class="str">"Namespace docstring"</span>
+  (<span class="kw">:require</span>
+    [clojure.string <span class="kw">:as</span> str]
+    [clojure.set <span class="kw">:as</span> set]
+    [myapp.util <span class="kw">:refer</span> [helper]])
+  (<span class="kw">:import</span>
+    [java.util Date Calendar]))</pre>
+
+                <h3>Require & Use</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Require (recommended)</span>
+(<span class="kw">require</span> '[clojure.string <span class="kw">:as</span> str])
+(<span class="fn">str/upper-case</span> <span class="str">"hello"</span>)
+
+<span class="cmt">;; Refer specific vars</span>
+(<span class="kw">require</span> '[clojure.set <span class="kw">:refer</span> [union intersection]])
+(<span class="fn">union</span> #{<span class="num">1</span> <span class="num">2</span>} #{<span class="num">2</span> <span class="num">3</span>})
+
+<span class="cmt">;; Use (not recommended, pollutes namespace)</span>
+(<span class="kw">use</span> 'clojure.string)  <span class="cmt">;; brings in everything</span>
+
+<span class="cmt">;; Reload namespace</span>
+(<span class="kw">require</span> 'myapp.core <span class="kw">:reload</span>)</pre>
+
+                <h3>Public & Private</h3>
+                <pre data-lang="clojure"><span class="cmt">;; Public function (default)</span>
+(<span class="kw">defn</span> <span class="fn">public-fn</span> [] ...)
+
+<span class="cmt">;; Private function</span>
+(<span class="kw">defn-</span> <span class="fn">private-fn</span> [] ...)
+(<span class="kw">defn</span> <span class="kw">^:private</span> <span class="fn">private-fn</span> [] ...)</pre>
+            </section>
+
+            <!-- Tooling -->
+            <section id="tooling">
+                <h2>Tooling & Project Structure</h2>
+
+                <h3>deps.edn (Clojure CLI)</h3>
+                <pre data-lang="clojure"><span class="cmt">;; deps.edn</span>
+{<span class="type">:paths</span> [<span class="str">"src"</span> <span class="str">"resources"</span>]
+ <span class="type">:deps</span> {org.clojure/clojure {<span class="type">:mvn/version</span> <span class="str">"1.12.4"</span>}
+        compojure/compojure {<span class="type">:mvn/version</span> <span class="str">"1.7.0"</span>}}
+ <span class="type">:aliases</span>
+ {<span class="type">:test</span> {<span class="type">:extra-paths</span> [<span class="str">"test"</span>]
+          <span class="type">:extra-deps</span> {lambdaisland/kaocha {<span class="type">:mvn/version</span> <span class="str">"1.91.1392"</span>}}}}}</pre>
+
+                <h3>Common Commands</h3>
+                <pre data-lang="shell"><span class="cmt"># Clojure CLI</span>
+clj                    <span class="cmt"># Start REPL</span>
+clj -M -m myapp.core   <span class="cmt"># Run main function</span>
+clj -X:test            <span class="cmt"># Run with alias</span>
+
+<span class="cmt"># Leiningen</span>
+lein new app myapp     <span class="cmt"># Create new project</span>
+lein repl              <span class="cmt"># Start REPL</span>
+lein run               <span class="cmt"># Run application</span>
+lein test              <span class="cmt"># Run tests</span>
+lein uberjar           <span class="cmt"># Build standalone JAR</span></pre>
+
+                <h3>Project Structure</h3>
+                <pre data-lang="text">myapp/
+├── deps.edn           <span class="cmt"># Dependencies (CLI)</span>
+├── project.clj        <span class="cmt"># Project config (Lein)</span>
+├── src/
+│   └── myapp/
+│       ├── core.clj
+│       └── util.clj
+├── test/
+│   └── myapp/
+│       └── core_test.clj
+└── resources/         <span class="cmt"># Static files</span></pre>
+
+                <h3>Testing</h3>
+                <pre data-lang="clojure"><span class="cmt">;; test/myapp/core_test.clj</span>
+(<span class="kw">ns</span> myapp.core-test
+  (<span class="kw">:require</span>
+    [clojure.test <span class="kw">:refer</span> [deftest is testing]]
+    [myapp.core <span class="kw">:as</span> core]))
+
+(<span class="kw">deftest</span> <span class="fn">my-test</span>
+  (<span class="fn">testing</span> <span class="str">"Addition"</span>
+    (<span class="fn">is</span> (<span class="op">=</span> <span class="num">4</span> (<span class="op">+</span> <span class="num">2</span> <span class="num">2</span>))))
+  (<span class="fn">testing</span> <span class="str">"Strings"</span>
+    (<span class="fn">is</span> (<span class="op">=</span> <span class="str">"HELLO"</span> (<span class="fn">clojure.string/upper-case</span> <span class="str">"hello"</span>)))))
+
+<span class="cmt">;; Run: lein test or clj -X:test</span></pre>
+
+                <div class="tip">
+                    Use <code>clj-kondo</code> for linting, <code>cljfmt</code> for formatting. Most editors have excellent Clojure support via CIDER (Emacs), Calva (VSCode), or Cursive (IntelliJ).
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                Clojure TLDR — Last updated January 2026 for Clojure 1.12.4<br>
+                <a href="https://clojure.org" target="_blank">Official Site</a> ·
+                <a href="https://clojure.org/guides/learn/syntax" target="_blank">Getting Started</a> ·
+                <a href="https://clojuredocs.org" target="_blank">ClojureDocs</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
