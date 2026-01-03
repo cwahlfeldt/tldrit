@@ -252,6 +252,19 @@
         border-radius: 50%;
       }
 
+      .guide-card.clojure {
+        --card-accent: #63b132;
+      }
+
+      .guide-card.clojure:hover {
+        border-color: #63b132;
+        box-shadow: 0 12px 40px rgba(99, 177, 50, 0.15);
+      }
+
+      .guide-card.clojure .guide-icon {
+        border-radius: 50%;
+      }
+
       .guide-header {
         display: flex;
         align-items: center;
@@ -649,6 +662,23 @@
             </p>
             <div class="guide-meta">
               <span class="guide-version">v4.2.1</span>
+              <span class="guide-arrow">→</span>
+            </div>
+          </a>
+
+          <a href="clojure.html" class="guide-card clojure">
+            <div class="guide-header">
+              <div class="guide-icon">λ</div>
+              <span class="guide-title">Clojure</span>
+            </div>
+            <p class="guide-desc">
+              A modern, functional Lisp for the JVM emphasizing immutability
+              and simplicity. Persistent data structures, powerful macros,
+              seamless Java interop, and built-in concurrency primitives
+              (atoms, refs, agents). Code as data with a REPL-driven workflow.
+            </p>
+            <div class="guide-meta">
+              <span class="guide-version">v1.12.4</span>
               <span class="guide-arrow">→</span>
             </div>
           </a>
